@@ -1,0 +1,61 @@
+@page "/blog"
+
+<nav class="container-fluid">
+    <ul class="pagination">
+        <button class="btn btn-primary mr-3" on:click={reset_categorias}> Limpar </button>
+        {#each data.categorias as categoria}
+        <li class="page-item">
+            <button class="page-link" on:click={()=> hide_other_categories(categoria)}
+                >{categoria.nome_categoria}</button>
+        </li>
+        {/each}
+    </ul>
+</nav>
+
+<div class="my-5 container-fluid text-center">
+    <div class="row row-cols-3">
+        {#each data.blogposts as post}
+        <a href="/blog/post/{post.id_post}"
+            class="container-sm border px-3 py-3 [categoria_{post.id_categoria}] page-link">
+            <p class="fs-4">{post.titulo}</p>
+            <span class="badge bg-primary">{post.nome_categoria}</span>
+        </a>
+        {/each}
+    </div>
+</div>
+@code {
+    
+}
+
+@*
+<script lang="ts">
+function hide_other_categories(categoria_principal: BlogCategoria) {
+data.categorias.forEach((categoria) => {
+if (categoria.id_categoria == categoria_principal.id_categoria) {
+Array.from(
+document.getElementsByClassName(`[categoria_${categoria.id_categoria}]`)
+).forEach((e) => {
+e.classList.remove('d-none');
+});
+return;
+}
+Array.from(
+document.getElementsByClassName(`[categoria_${categoria.id_categoria}]`)
+).forEach((e) => {
+e.classList.add('d-none');
+});
+});
+}
+
+function reset_categorias() {
+data.categorias.forEach((categoria) => {
+Array.from(
+document.getElementsByClassName(`[categoria_${categoria.id_categoria}]`)
+).forEach((e) => {
+e.classList.remove('d-none');
+});
+});
+}
+
+export let data: PageServerData;
+</script> *@

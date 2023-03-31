@@ -1,0 +1,47 @@
+﻿<nav class="navbar navbar-expand-lg navbar-light sticky-top bg-light mb-2">
+    <!-- Imagem logo + botão toggler -->
+    <div class="container-fluid d-flex flex-row justify-content-between">
+        <div>
+            <a href="/">
+                <img src="assets/Logo_Priori_Services.svg" alt="Logo Priori Services" class="navbar-brand img-fluid"
+                    width="60em" height="60em" />
+            </a>
+            <NavLink href="/" class="navbar-text fs-3 fw-bold text-decoration-none">
+                Priori Services
+            </NavLink>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" />
+        </button>
+    </div>
+
+    <!-- Navbar Central -->
+    <div class="navbar-collapse collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            @foreach (KeyValuePair<string, string> route in ValidRoutes)
+            {
+                <li class="nav-item">
+                    <center>
+                        <NavLink href="@route.Key" class="nav-link">
+                            @route.Value
+                        </NavLink>
+                    </center>
+                </li>
+            }
+            <li class="nav-item d-flex flex-row me-3">
+                <LoginModal />
+            </li>
+        </ul>
+    </div>
+</nav>
+
+@code {
+    private Dictionary<String, String> ValidRoutes = new Dictionary<String, String> {
+{ "/blog", "Blog" },
+{ "/cliente", "Cliente"},
+{ "/simulacao", "Simulação"},
+{"/about", "Nós"},
+{"/suporte", "Suporte"}
+};
+}
