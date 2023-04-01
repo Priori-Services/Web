@@ -16,7 +16,7 @@
             <span class="fw-bold fs-3 card-title text-center text-break text-capitalize">Por: @PeriodoAtual
                 anos</span>
             <input type="range" class="form-range card-body" id="SdrPeriodo" min="2" max="100" step="1" @oninput="(ChangeEventArgs e) => {
-                    PeriodoPercent = Convert.ToInt32(e.Value);
+                    PeriodoPercent = Convert.ToDecimal(e.Value);
                     PeriodoAtual = Math.Round(Convert.ToDecimal(e.Value) * ((decimal)0.3));
                     AtualizarGraphs();
                     AtualizarDinheiro();
@@ -62,8 +62,8 @@
     public string VariableGraph(int percent) => $"width: {percent}%";
     public async void AtualizarGraphs()
     {
-        PoupancaGraph = MIN_GRAPH_PERCENT + (PeriodoPercent + DinheiroPercent) / 2;
-        InvestimentoGraph = MIN_GRAPH_PERCENT + (PeriodoPercent + DinheiroPercent + 85) / 3;
+        PoupancaGraph = MIN_GRAPH_PERCENT + (PeriodoPercent + DinheiroPercent) / 4;
+        InvestimentoGraph = MIN_GRAPH_PERCENT + (PeriodoPercent + DinheiroPercent) / 3;
         await JS.InvokeAsync<string>("widthGraphUpdate",
         "GraphPoupanca", $"{PoupancaGraph}%");
         await JS.InvokeAsync<string>("widthGraphUpdate",
@@ -76,6 +76,6 @@
             return;
 
         PoupancaValue = Math.Round(DinheiroAtual.Value * PeriodoAtual.Value * ((decimal)0.065));
-        InvestimentoValue = Math.Round(DinheiroAtual.Value * PeriodoAtual.Value * ((decimal)0.065));
+        InvestimentoValue = Math.Round(DinheiroAtual.Value * PeriodoAtual.Value * ((decimal)0.135));
     }
 }
