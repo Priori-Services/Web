@@ -4,16 +4,16 @@
 @code {
     private HashSet<FaqItem> FaqGeral = new HashSet<FaqItem>
 {
-new FaqItem {Header = "Quem pode investir no produto?"},
-new FaqItem {Header = "Tenho conta na Priori, estou elegível?"},
-new FaqItem {Header = "Eu posso abrir conta em qualquer canal da Priori para ter acesso à oferta ou existe um link mais especifico para me tornar elegível"},
-new FaqItem {Header = "Quanto posso investir neste produto?"},
-new FaqItem {Header = "Até quando posso investir nesse produto?"}
+new FaqItem { Header = "Quem pode investir no produto?"},
+new FaqItem { Header = "Tenho conta na Priori, estou elegível?"},
+new FaqItem { Header = "Eu posso abrir conta em qualquer canal da Priori para ter acesso à oferta ou existe um link mais especifico para me tornar elegível"},
+new FaqItem { Header = "Quanto posso investir neste produto?"},
+new FaqItem { Header = "Até quando posso investir nesse produto?"}
 };
 private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
 {
-    new FaqItem {Header = "O que é a priori?" },
-    new FaqItem { Header = "Quanto custa para investir na Priori?" },
+    new FaqItem { Header = "O que é a Priori?" },
+    new FaqItem { Header = "Quanto custa investir na Priori?" },
     new FaqItem { Header = "Como entrar em contato com a Priori?" },
     new FaqItem { Header = "Como funciona a assessoria na Priori?" },
     new FaqItem { Header = "Como abrir uma conta na Priori Investimentos?" }
@@ -21,8 +21,14 @@ private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
 
 }
 
-<div class="container-fluid my-3">
-    <h1 class="text-primary">
+<style>
+    .titulo-priori {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+
+<div class="text-center container-fluid my-3">
+    <h1 class="titulo-priori">
         Transformando o mercado financeiro para melhorar a vida das pessoas.
     </h1>
     <hr>
@@ -48,7 +54,7 @@ private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
         </div>
     </div>
     <div class="card m-2" style="max-width: 20rem">
-        <img class="card-img-top" src="assets/bele.webp" alt="Imagem de uma mão fazendo 'V' zinho" />
+        <img class="card-img-top" src="assets/bele.webp" alt="Imagem de uma mão fazendo 'V'" />
         <div class="card-body">
             <h2 class="card-title">Tudo em um lugar</h2>
             <p class="card-text">
@@ -151,5 +157,5 @@ private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
         <hr />
     </div>
     <Faq Faqs=@FaqEmpresa/>
-    <a class="nav-link m-3" href="mailto:priorimail@priori.com">Tire outras dúvidas</a>
+    <a class="nav-link m-3" href="mailto:priori@cyberservices.com">Tire outras dúvidas</a>
 </div>

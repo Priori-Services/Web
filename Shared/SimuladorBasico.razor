@@ -3,7 +3,7 @@
 <div class="container-fluid d-flex flex-row flex-wrap flex-lg-nowrap">
     <div class="container-fluid">
         <div class="container my-3 card p-3">
-            <span class="fw-bold fs-3 card-title text-center text-break text-capitalize">Aplicar R$:
+            <span class="fw-bold fs-3 card-title text-center text-break text-capitalize">Eu tenho: R$ 
                 @DinheiroAtual</span>
             <input type="range" class="form-range card-body" id="SdrDinheiro" min="2" max="100" step="0.2" @oninput="(ChangeEventArgs e) => {
                     DinheiroPercent = Convert.ToDecimal(e.Value);
@@ -13,7 +13,7 @@
                     }" />
         </div>
         <div class="container my-3 card p-3">
-            <span class="fw-bold fs-3 card-title text-center text-break text-capitalize">Por: @PeriodoAtual
+            <span class="fw-bold fs-3 card-title text-center text-break text-capitalize">Para aplicar durante: @PeriodoAtual
                 anos</span>
             <input type="range" class="form-range card-body" id="SdrPeriodo" min="2" max="100" step="1" @oninput="(ChangeEventArgs e) => {
                     PeriodoPercent = Convert.ToDecimal(e.Value);
@@ -28,7 +28,7 @@
             <div class="row row-cols-2">
                 <span class="text-secondary px-2">Poupança</span>
                 <span class="text-secondary px-2 fw-italic">R$@PoupancaValue</span>
-                <span class="text-primary px-2 fw-bold fs-5">Investimento</span>
+                <span class="text-primary px-2 fw-bold fs-5">LCI 12% a.a.</span>
                 <span class="text-primary px-2 fw-bold fs-5">R$@InvestimentoValue</span>
             </div>
         </div>
@@ -45,14 +45,14 @@
 </div>
 
 @code {
-    private decimal? DinheiroAtual { get; set; } = 200000;
+    private decimal? DinheiroAtual { get; set; } = 100000;
     private decimal? PeriodoAtual { get; set; } = 10;
 
     private decimal? DinheiroPercent { get; set; } = 25;
     private decimal? PeriodoPercent { get; set; } = 10;
 
-    private decimal? PoupancaValue { get; set; } = 10;
-    private decimal? InvestimentoValue { get; set; } = 10;
+    private decimal? PoupancaValue { get; set; } = 62500;
+    private decimal? InvestimentoValue { get; set; } = 121000;
 
     private decimal? PoupancaGraph { get; set; } = 10;
     private decimal? InvestimentoGraph { get; set; } = 10;
