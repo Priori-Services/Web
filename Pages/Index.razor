@@ -21,22 +21,17 @@ private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
 
 }
 
-<style>
-    .titulo-priori {
-        font-family: 'Times New Roman', Times, serif;
-    }
-</style>
 
 <div class="text-center container-fluid my-3">
-    <h1 class="titulo-priori">
+    <h1 style="font-family: 'Times New Roman';">
         Transformando o mercado financeiro para melhorar a vida das pessoas.
     </h1>
-    <hr>
 </div>
+<hr>
 
 <div class="container-fluid d-flex flex-row flex-wrap flex-lg-nowrap my-3 justify-content-center">
-    <div class="card m-2" style="max-width: 20rem">
-        <img class="card-img-top" src="assets/hands.webp" alt="Imagem de um aperto de mão" />
+    <div class="card bg-dark border text-white m-2" style="max-width: 20rem">
+        <img class="card-img-top bg-light" src="assets/hands.webp" alt="Imagem de um aperto de mão" />
         <div class="card-body">
             <h4 class="card-title">Pioneiros em assessoria</h4>
             <p class="card-text">
@@ -45,16 +40,16 @@ private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
             </p>
         </div>
     </div>
-    <div class="card m-2" style="max-width: 20rem">
-        <img class="card-img-top" src="assets/cellphone.webp" alt="Imagem de mão segurando um celular" />
+    <div class="card bg-dark text-light border m-2" style="max-width: 20rem">
+        <img class="card-img-top bg-light" src="assets/cellphone.webp" alt="Imagem de mão segurando um celular" />
         <div class="card-body" style="max-width: 20rem; max-height: 30rem">
             <h4 class="card-title">Desafiamos padrões</h4>
             <p class="card-text">Nosso time de tecnologia antecipa tendência do mercado, para tornar a experiência de
             investir mais simples e acessivel para todas as pessoas</p>
         </div>
     </div>
-    <div class="card m-2" style="max-width: 20rem">
-        <img class="card-img-top" src="assets/bele.webp" alt="Imagem de uma mão fazendo 'V'" />
+    <div class="card m-2 bg-dark border text-light" style="max-width: 20rem">
+        <img class="card-img-top bg-light" src="assets/bele.webp" alt="Imagem de uma mão fazendo 'V'" />
         <div class="card-body">
             <h2 class="card-title">Tudo em um lugar</h2>
             <p class="card-text">
@@ -64,98 +59,107 @@ private HashSet<FaqItem> FaqEmpresa = new HashSet<FaqItem>
         </div>
     </div>
 </div>
-<!-- Simulação -->
-<div class="container-fluid d-flex flex-column my-3">
-    <div class="container-fluid">
-        <h1 class="fs-1 fw-bold">Simule seu investimento</h1>
-        <hr />
+
+<div class="margin-index">
+
+<style> 
+.margin-index {
+    margin: 6.5%;
+}
+</style>
+    <!-- Simulação -->
+    <div class="container-fluid d-flex flex-column my-3">
+        <div class="container-fluid">
+            <h2 class="fs-1 fw-bold">Simule seu investimento</h2>
+            <hr />
+        </div>
+        <SimuladorBasico />
     </div>
-    <SimuladorBasico />
-</div>
-<!-- Informativo sobre investimentos -->
-<div class="container-fluid d-flex flex-column my-3">
-    <div class="container-fluid">
-        <h1 class="fs-1 fw-bold">Vale a pena investir em renda fixa?</h1>
-        <hr />
-    </div>
-    <div class="d-flex flex-row">
-        <div class="container-fluid d-flex flex-column">
-            <div class="container-fluid">
-                <p>
-                    <span class="fs-3 bold">O investimento em renda fixa</span>
-                    é uma opção que se encaixa na carteira de investidores conservadores pois envolve
-                    <span class="fw-bold">risco menor</span>, tem a
-                    <span class="fw-bold">mesma segurança</span>
-                    da poupança, mas
-                    <span class="fw-bold">podendo oferecer rentabilidades muito mais atraentes</span>. Um CDB tem duas
-                    datas importantes que você deve se atentar:
+    <!-- Informativo sobre investimentos -->
+    <div class="container-fluid d-flex flex-column my-3">
+        <div class="container-fluid">
+            <h2 class="fs-1 fw-bold">Vale a pena investir em renda fixa?</h2>
+            <hr />
+        </div>
+        <div class="d-flex flex-row">
+            <div class="container-fluid d-flex flex-column">
+                <div class="container-fluid">
+                    <p>
+                        <span class="fs-3 bold">O investimento em renda fixa</span>
+                        é uma opção que se encaixa na carteira de investidores conservadores pois envolve
+                        <span class="fw-bold">risco menor</span>, tem a
+                        <span class="fw-bold">mesma segurança</span>
+                        da poupança, mas
+                        <span class="fw-bold">podendo oferecer rentabilidades muito mais atraentes</span>. Um CDB tem duas
+                        datas importantes que você deve se atentar:
+                    </p>
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="container">
+                        <h3>Prazo</h3>
+                        <p>
+                            É a data máxima que seu dinheiro pode ficar investido. Os prazos de
+                            vencimento após a aplicação variam dependendo do emissor
+                        </p>
+                    </div>
+                    <div class="container">
+                        <h3>Carência</h3>
+                        <p>
+                            Data a partir da qual o CDB pode ser resgatado, caso o investidor solicite.
+                            Ou seja, somente a partir dessa data que o investidor tem flexibilidade para
+                            sacar o investimento
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <center class="fs-5 fw-bold my-3 py-3">
+            O CDB oferece poucos riscos aos investidores. Porém, mesmo com essa segurança, é importante
+            observar os seguintes riscos:
+        </center>
+        <div class="d-flex flex-row flex-wrap flex-lg-nowrap">
+            <div class="container-sm card mx-3 px-3 py-3">
+                <span class="fw-bold fs-4 card-title text-center">Risco de liquidez</span>
+                <p class="fs-5 card-body text-center">
+                    Caso o investidor necessite vender seu ativo antes do vencimento, poderá
+                    incorrer uma perda devido à indisponibilidade de um comprador ou de uma
+                    contraparte que esteja disposta a pagar o preço pedido.
                 </p>
             </div>
-            <div class="d-flex flex-row">
-                <div class="container">
-                    <h3>Prazo</h3>
-                    <p>
-                        É a data máxima que seu dinheiro pode ficar investido. Os prazos de
-                        vencimento após a aplicação variam dependendo do emissor
-                    </p>
-                </div>
-                <div class="container">
-                    <h3>Carência</h3>
-                    <p>
-                        Data a partir da qual o CDB pode ser resgatado, caso o investidor solicite.
-                        Ou seja, somente a partir dessa data que o investidor tem flexibilidade para
-                        sacar o investimento
-                    </p>
-                </div>
+            <div class="container-sm card mx-3 px-3 py-3">
+                <span class="fw-bold fs-4 card-title text-center">Risco de mercado</span>
+                <p class="fs-5 card-body">
+                    É o risco de ocorrência de perdas resultantes da flutuação nos índices de preço,
+                    câmbio e taxas de juros. Está atrelado a variações no mercado macroeconômico,
+                    mais especificamente a mudanças conjunturais, na política monetária e fiscal
+                </p>
+            </div>
+            <div class="container-sm card mx-3 px-3 py-3">
+                <span class="card-title fw-bold fs-4 text-center">Risco de crédito</span>
+                <p class="fs-5 card-body">
+                    O risco de crédito está relacionado à saúde financeira do emissor dos titulos e
+                    está atrelado à possibilidade de perdas resultantes da incapacidade do devedor
+                    de cumprir com suas obrigações ou a algum outro evento que venha a deteriorar o
+                    crédito da empresa durante o prazo de duração do papel
+                </p>
             </div>
         </div>
     </div>
-    <center class="fs-5 fw-bold my-3 py-3">
-        O CDB oferece poucos riscos aos investidores. Porém, mesmo com essa segurança, é importante
-        observar os seguintes riscos:
-    </center>
-    <div class="d-flex flex-row flex-wrap flex-lg-nowrap">
-        <div class="container-sm card mx-3 px-3 py-3">
-            <span class="fw-bold fs-4 card-title text-center">Risco de liquidez</span>
-            <p class="fs-5 card-body text-center">
-                Caso o investidor necessite vender seu ativo antes do vencimento, poderá
-                incorrer uma perda devido à indisponibilidade de um comprador ou de uma
-                contraparte que esteja disposta a pagar o preço pedido.
-            </p>
+    <!-- FAQ -->
+    <div class="container-fluid d-flex flex-column my-3">
+        <div class="container-fluid">
+            <h1 class="fs-1 fw-bold">FAQ</h1>
+            <hr />
         </div>
-        <div class="container-sm card mx-3 px-3 py-3">
-            <span class="fw-bold fs-4 card-title text-center">Risco de mercado</span>
-            <p class="fs-5 card-body">
-                É o risco de ocorrência de perdas resultantes da flutuação nos índices de preço,
-                câmbio e taxas de juros. Está atrelado a variações no mercado macroeconômico,
-                mais especificamente a mudanças conjunturais, na política monetária e fiscal
-            </p>
+        <Faq Faqs=@FaqGeral/>
+    </div>
+    <!-- FAQ Empresa -->
+    <div class="container-fluid d-flex flex-column my-3">
+        <div class="container-fluid">
+            <h1 class="fs-1 fw-bold">Ficou alguma dúvida?</h1>
+            <hr />
         </div>
-        <div class="container-sm card mx-3 px-3 py-3">
-            <span class="card-title fw-bold fs-4 text-center">Risco de crédito</span>
-            <p class="fs-5 card-body">
-                O risco de crédito está relacionado à saúde financeira do emissor dos titulos e
-                está atrelado à possibilidade de perdas resultantes da incapacidade do devedor
-                de cumprir com suas obrigações ou a algum outro evento que venha a deteriorar o
-                crédito da empresa durante o prazo de duração do papel
-            </p>
-        </div>
+        <Faq Faqs=@FaqEmpresa/>
+        <a class="nav-link m-3" href="mailto:priori@cyberservices.com">Tire outras dúvidas</a>
     </div>
-</div>
-<!-- FAQ -->
-<div class="container-fluid d-flex flex-column my-3">
-    <div class="container-fluid">
-        <h1 class="fs-1 fw-bold">FAQ</h1>
-        <hr />
-    </div>
-    <Faq Faqs=@FaqGeral/>
-</div>
-<!-- FAQ Empresa -->
-<div class="container-fluid d-flex flex-column my-3">
-    <div class="container-fluid">
-        <h1 class="fs-1 fw-bold">Ficou alguma dúvida?</h1>
-        <hr />
-    </div>
-    <Faq Faqs=@FaqEmpresa/>
-    <a class="nav-link m-3" href="mailto:priori@cyberservices.com">Tire outras dúvidas</a>
 </div>

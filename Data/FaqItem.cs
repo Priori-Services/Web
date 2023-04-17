@@ -11,5 +11,4 @@ public class FaqItem
     public Guid UniqueId { get; }
     public String? Header { get; set; }
     public String? Body { get; set; }
-
 }
