@@ -1,4 +1,5 @@
 namespace PRIORI_SERVICES_WEB.Data;
+
 public class PostBlog
 {
     public int id_post { get; set; }
