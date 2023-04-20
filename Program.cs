@@ -1,4 +1,3 @@
-using PRIORI_SERVICES_WEB.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

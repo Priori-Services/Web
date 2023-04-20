@@ -7,15 +7,15 @@
             @foreach (var Faq in Faqs)
             {
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id=@Faq.HeadingId>
+                    <h2 class="accordion-header bg-dark" id=@Faq.HeadingId>
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#@Faq.UniqueId" aria-expanded="true" aria-controls="@Faq.UniqueId">
                             @Faq.Header
                         </button>
                     </h2>
-                    <div id=@Faq.UniqueId class="accordion-collapse collapse" aria-labelledby="@Faq.HeadingId"
+                    <div id=@Faq.UniqueId class="bg-dark accordion-collapse collapse" aria-labelledby="@Faq.HeadingId"
                         data-bs-parent="#@AccordionRoot">
-                        <div class="accordion-body">
+                        <div class="accordion-body text-light">
                             <p>@Faq.Body</p>
                         </div>
                     </div>
