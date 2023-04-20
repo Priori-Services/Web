@@ -1,38 +1,58 @@
-﻿<nav class="navbar navbar-expand navbar-dark mb-4 p-3 text-white border-bottom border-secondary rounded-4 sticky-top"
+﻿<div>
+
+<nav class="navbar navbar-expand navbar-dark mb-4 p-3 text-white border-bottom border-secondary rounded-4 sticky-top"
     style="background-color: #000;">
-    <div class="container">
+    <div class="container PrioriHeader">
         <a href="/">
             <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid"
                 width="65em" height="60em" />
         </a>
+
+    </div>
+
+<style>
+    .PrioriHeader {
+        font-family: 'Times New Roman', Times, serif;
+    }
+    .MarginHeader {
+        margin-left: 13ex;
+        text-align: center;
+    }
+</style>
 
         <ul class="navbar-nav">
             <li class="nav-item d-flex flex-row me-3 justify-content-center">
                 <Routes ValidRoutes=@amogus2avinganca></Routes>
             </li>
         </ul>
+
+        <a href="/" class="PrioriHeader fs-2 fw-bold text-nowrap text-decoration-none text-white m-1-15">Priori Services</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" />
+        </button>
+
+        <div class="PrioriHeader container-fluid navbar-collapse collapse" id="navbarNav">
+            <ul class="PrioriHeader navbar-nav">
+                <li class="nav-item d-flex flex-row me-3 justify-content-center">
+                    <Routes ValidRoutes=@amogus></Routes>
+                </li>
+            </ul>
+        </div>
+
+    <div class="MarginHeader">
+
+        <a href="/login">
+            <img data-bs-toggle="modal" data-bs-target="#modalLogin" src="assets/bootstrap-icons-1.10.4/person-circle.svg"
+                alt="Login" width="50em" class="bg-light border rounded-5 mx-3">
+        </a>
+
     </div>
-
-    <a href="/" class="fs-2 fw-bold text-nowrap text-decoration-none text-white m-l-15">Priori Services</a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon" />
-    </button>
-
-    <div class="container-fluid navbar-collapse collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item d-flex flex-row me-3 justify-content-center">
-                <Routes ValidRoutes=@amogus></Routes>
-            </li>
-        </ul>
-    </div>
-    <a href="/login">
-        <img data-bs-toggle="modal" data-bs-target="#modalLogin" src="assets/bootstrap-icons-1.10.4/person-circle.svg"
-            alt="Login" width="50em" class="bg-light border rounded-5 mx-3">
-    </a>
 
 </nav>
+
+</div>
 
 @code {
     private Dictionary<string, string> amogus = new Dictionary<string, string> { { "/about", "A Priori" }, { "/suporte",
