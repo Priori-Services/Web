@@ -1,125 +1,69 @@
 @page "/login"
 
-<div class="MarginLogin">
-
-    <style>
-        .MarginLogin {
-            padding-right: 30ex;
-            padding-left: 30ex;
-            padding-top: 5ex;
-        }
-    </style>
-
-<!-- Pills navs -->
-<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-  <li class="nav-item" role="presentation">
-    <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
-      aria-controls="pills-login" aria-selected="true">Login</a>
-  </li>
-  <li class="nav-item" role="presentation">
-    <a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
-      aria-controls="pills-register" aria-selected="false">Cadastro</a>
-  </li>
-</ul>
-<!-- Pills navs -->
-
-<!-- Pills content -->
-<div class="tab-content">
-  <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-    <form>
-
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="emailLogin" class="form-control" />
-        <label class="form-label" for="loginName">Email</label>
+<section class="vh-101">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="assets/inv1Img.png" width="85%"
+          class="img-fluid" alt="Sample image">
       </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="loginPassword" class="form-control" />
-        <label class="form-label" for="loginPassword">Senha</label>
-      </div>
-
-      <!-- 2 column grid layout -->
-      <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
-          <!-- Checkbox -->
-          <div class="form-check mb-3 mb-md-0">
-            <input class="form-check-input" type="checkbox" value="" id="loginCheck" />
-            <label class="form-check-label" for="loginCheck"> Permanecer conectado </label>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form>
+          <div class="d-flex m-3 flex-row align-items-center justify-content-center justify-content-lg-start">
+            <p class="PrioriHeader lead fw-normal mb-0 me-3 ">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+              fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 
+                6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+              </svg>
+               Login
+            </p>
           </div>
-        </div>
 
-        <div class="col-md-6 d-flex justify-content-center">
-          <!-- Simple link -->
-          <a href="#!">Esqueceu a senha?</a>
-        </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example3">E-mail</label>
+            <input type="email" id="emailLogin" class="form-control form-control-lg" />
+            
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+            <label class="form-label" for="form3Example4">Senha</label>
+            <input type="password" id="senhaLogin" class="form-control form-control-lg" />
+            
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-0">
+              <input class="form-check-input me-2" type="checkbox" value="" id="permanecerConectado" />
+              <label class="form-check-label" for="form2Example3">
+                Permanecer conectado
+              </label>
+            </div>
+            <a href="#!" class="text-light">Esqueceu sua senha?</a>
+          </div>
+
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="button" class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem; margin-bottom: 1.0rem;">Acessar</button>
+            <p class="small fw-bold mt-2 pt-1 mb-0">Não possui cadastro? <a href="/cadastro"
+                class="link-danger">Registre-se</a></p>
+          </div>
+
+        </form>
       </div>
-
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-
-      <!-- Register buttons -->
-      <div class="text-center">
-        <p>Não é cliente? <a href="#!">Cadastre-se</a></p>
-      </div>
-    </form>
+    </div>
   </div>
-  <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-    <form>
-
-      <!-- Name input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerName" class="form-control" />
-        <label class="form-label" for="registerName">Nome</label>
-      </div>
-
-      <!-- CPF input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerUsername" class="form-control" />
-        <label class="form-label" for="registerUsername">CPF</label>
-      </div>
-
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="registerEmail" class="form-control" />
-        <label class="form-label" for="registerEmail">Email</label>
-      </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerPassword" class="form-control" />
-        <label class="form-label" for="registerPassword">Senha</label>
-      </div>
-
-      <!-- Repeat Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerRepeatPassword" class="form-control" />
-        <label class="form-label" for="registerRepeatPassword">Confirme sua senha</label>
-      </div>
-
-      <!-- Checkbox -->
-      <div class="form-check d-flex justify-content-center mb-4">
-        <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
-          aria-describedby="registerCheckHelpText" />
-        <label class="form-check-label" for="registerCheck">
-          Li e concordo com os termos de uso
-        </label>
-      </div>
-
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-3">Login</button>
-    </form>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary; margin-top: 2.0rem;">
+    <!-- Copyright -->
+    <div class="text-white mb-3 mb-md-0" style="margin-top: 1.0rem;">
+      <i>Priori Services</i> © 2023. Todos os direitos reservados.
+    </div>
   </div>
-</div>
-
-</div>
-
-<style>
-     .imageBack{
-    @*vodarblurnaimgmesmoqseFODA*@background-image: url(assets/grafico-background.jpg);
-    }
-</style>
+</section>
 
 @code {
     private bool CADASTRO_FLAG { get; set; } = false;
