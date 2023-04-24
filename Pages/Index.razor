@@ -1,5 +1,22 @@
 ﻿@page "/"
+@using PRIORI_SERVICES_WEB.Data.Model
 
+@code {
+    public FaqItem[] fallback_faqs = new FaqItem[] {
+new FaqItem {
+Header = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam hic harum eos incidunt quod consequatur nostrum, vitae saepe dolores doloribus, nobis ut consequuntur nihil veniam debitis esse similique modi reiciendis.",
+Body = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam hic harum eos incidunt quod consequatur nostrum, vitae saepe dolores doloribus, nobis ut consequuntur nihil veniam debitis esse similique modi reiciendis"
+},
+new FaqItem {
+Header = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam hic harum eos incidunt quod consequatur nostrum, vitae saepe dolores doloribus, nobis ut consequuntur nihil veniam debitis esse similique modi reiciendis.",
+Body = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam hic harum eos incidunt quod consequatur nostrum, vitae saepe dolores doloribus, nobis ut consequuntur nihil veniam debitis esse similique modi reiciendis"
+},
+new FaqItem {
+Header = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam hic harum eos incidunt quod consequatur nostrum, vitae saepe dolores doloribus, nobis ut consequuntur nihil veniam debitis esse similique modi reiciendis.",
+Body = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam hic harum eos incidunt quod consequatur nostrum, vitae saepe dolores doloribus, nobis ut consequuntur nihil veniam debitis esse similique modi reiciendis"
+},
+};
+}
 <style>
     ::-webkit-scrollbar {
         display: none;
@@ -55,8 +72,9 @@
     </div>
 </section>
 
-<section class="d-flex p-3 align-items-center container-fluid text-center"
-    style="background-image: linear-gradient(75deg, rgb(245, 152, 232) rgb(219, 143, 255));">
+
+<section class="d-flex align-items-center text-white text-center p-3 py-5"
+    style="background-image: linear-gradient(75deg, rgb(224, 139, 213), rgb(167, 143, 255));">
     <div class="d-flex flex-column p-5 align-items-center container-fluid">
         <div>&ensp;</div>
         <div class="container">
@@ -89,4 +107,97 @@
         </div>
         <div>&ensp;</div>
     </div>
+</section>
+
+<section class="d-flex flex-column container-fluid bg-white text-dark py-5">
+    <h1 class="text-center fw-bold">Segurança</h1>
+    <hr>
+    <p class="text-center">Seguimos os mais altos padrões de segurança na contratação de nossos investimentos.</p>
+    <div class="d-flex flex-row align-items-center containerr-fluid">
+        <div class="d-flex flex-column container-fluid">
+            <div class="container d-flex flex-row">
+                <i class="bi bi-safe2-fill mx-3" style="font-size: 50px;" />
+                <div class="container">
+                    <h3>Padrão Internacional</h3>
+                    <p>Utilizamos o padrão disponibilizado pelo FED</p>
+                </div>
+            </div>
+            <div class="container d-flex flex-row">
+                <i class="bi bi-box mx-3" style="font-size: 50px;" />
+                <div class="container">
+                    <h3>Servidor AWS</h3>
+                    <p>Dispõe dos melhores recursos oferecidos pela Amazon</p>
+                </div>
+            </div>
+            <div class="container d-flex flex-row">
+                <i class="bi bi-shield-shaded mx-3" style="font-size: 50px;" />
+                <div class="container">
+                    <span class="fs-3">Criptografia de Ponta-a-Ponta</span>
+                    <p>Criptogramaos as informações dos nossos clientes para uma maior proteção</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid">
+            <img src="assets/features.svg" height="500em" width="500em">
+        </div>
+    </div>
+</section>
+
+<section class="d-flex flex-column align-items-center text-center py-5 bg-light text-dark">
+    <h1 class="fw-bold">Relatos</h1>
+    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt quam, sapiente quo sunt necessitatibus
+        ratione? Aliquam, porro facere eum totam inventore consectetur tempora, sapiente, corporis repellendus odit
+        laudantium culpa rerum.</p>
+    <div class="d-flex flex-row container-fluid align-items-center my-3">
+        <div class="card container-fluid py-4 mx-3">
+            <div class="card-header bg-white">
+                <span class="fw-bold fs-5">Gus Fring</span>
+                <span class="text-bg-secondary badge bg-secondary" style="font-size: x-small;">That guy</span>
+            </div>
+            <div class="card-body">
+                <i class="bi bi-quote" />
+                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat perspiciatis officiis quam qui
+                    laboriosam possimus totam aut, quas velit doloribus laudantium nisi corrupti ut? Exercitationem cum
+                    harum dolores hic? Recusandae!</span>
+                <i class="bi bi-quote" />
+            </div>
+        </div>
+        <div class="card container-fluid py-4 mx-3">
+            <div class="card-header bg-white">
+                <span class="fw-bold fs-5">Saul Goodman</span>
+                <span class="text-bg-secondary badge bg-secondary" style="font-size: x-small;">Lawyer</span>
+            </div>
+            <div class="card-body">
+                <i class="bi bi-quote" />
+                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat perspiciatis officiis quam qui
+                    laboriosam possimus totam aut, quas velit doloribus laudantium nisi corrupti ut? Exercitationem cum
+                    harum dolores hic? Recusandae!</span>
+                <i class="bi bi-quote" />
+            </div>
+        </div>
+        <div class="card container-fluid py-4 mx-3">
+            <div class="card-header bg-white">
+                <span class="fw-bold fs-5">Walter White</span>
+                <span class="text-bg-secondary badge bg-secondary" style="font-size: x-small;">From Breaking Bad</span>
+            </div>
+            <div class="card-body">
+                <i class="bi bi-quote" />
+                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat perspiciatis officiis quam qui
+                    laboriosam possimus totam aut, quas velit doloribus laudantium nisi corrupti ut? Exercitationem cum
+                    harum dolores hic? Recusandae!</span>
+                <i class="bi bi-quote" />
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="d-flex flex-column align-items-center text-white text-center p-3 py-5"
+    style="background-image: linear-gradient(75deg, rgb(171, 0, 177), rgb(114, 0, 167));">
+    <h1>FAQ</h1>
+    <hr>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem nam dicta repellendus fuga cum aut consequatur,
+        optio distinctio, voluptas amet saepe dolorem. Dicta eaque consequuntur debitis qui quam aperiam quo?</p>
+    <Faq Faqs=@fallback_faqs />
 </section>
