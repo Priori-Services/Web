@@ -1,6 +1,6 @@
-namespace PRIORI_SERVICES_WEB.Data;
+namespace PRIORI_SERVICES_WEB.Data.Model;
 
-public class CategoriaBlog
+public sealed class CategoriaBlog
 {
     public int id_categoria { get; set; }
     public string? nome_categoria { get; set; } = null;
