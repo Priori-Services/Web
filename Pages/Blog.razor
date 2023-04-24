@@ -1,71 +1,72 @@
 @page "/blog"
-@using System.Text;
-@inject HttpClient HttpClient
-@using System.Text.Json;
-@using PRIORI_SERVICES_WEB.Data
+@using PRIORI_SERVICES_WEB.Data.Model
+@using PRIORI_SERVICES_WEB.Data.API
 
 <nav class="container-fluid">
     <ul class="pagination">
         <button class="btn btn-primary mr-3" on:click={reset_categorias}> Limpar </button>
-        {#each data.categorias as categoria}
-        <li class="page-item">
-            <button class="page-link" on:click={()=> hide_other_categories(categoria)}
-                >{categoria.nome_categoria}</button>
-        </li>
-        {/each}
+        @foreach (CategoriaBlog item in PageBlogCategoria)
+        {
+            <li class="page-item">
+                <button class="page-link" aria-label="">@item.nome_categoria</button>
+            </li>
+        }
     </ul>
 </nav>
 
-<div class="my-5 container-fluid text-center">
+<div class="my-5 container-sm text-center">
     <div class="row row-cols-3">
+        <h1 style="z-index: -1;" class="d-none">Carregando...</h1>
         @foreach (var item in PageBlogPosts)
         {
-            <a href="/blog/post/@item.id_post"
-                class="container-sm border px-3 py-3 [categoria_{post.id_categoria}] page-link">
-                <span class="fs-4">@item.titulo</span>
-                <p class="fw-italic">@item.descricao</p>
-                <span class="badge bg-primary">@item.data_criacao</span>
-                <span class="badge bg-primary">@GetCategoriaNomeFromID(@item.id_categoria)</span>
-                <span class="badge bg-primary"></span>
-            </a>
+            <div class="card px-3 py-4 m-1 bg-light border rounded-4">
+                <a href="/blog/post/@item.id_post" style="text-decoration: none;" class="text-dark">
+                    <h3 class="fs-4">@item.titulo</h3>
+                    <p class="fw-italic">@item.descricao</p>
+                    <span class="badge bg-primary rounded-pill">@item.data_criacao</span>
+
+                    <span
+                        class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
+                </a>
+            </div>
         }
     </div>
 </div>
 
 @code {
-
     public PostBlog[] PageBlogPosts = new PostBlog[0];
 
-    public async Task<PostBlog[]?> GetPostsAsync() {
-        return await JsonSerializer.DeserializeAsync<PostBlog[]>(await FetchAbstractJsonObjectAsync(null, "api/Blog/Posts"));
-    }
+    public CategoriaBlog[] PageBlogCategoria = new CategoriaBlog[0];
 
-    public string GetCategoriaNomeFromID(int id_categoria) {
-        CategoriaBlog? amogus = JsonSerializer.Deserialize<CategoriaBlog>(FetchAbstractJsonObject(null, $"api/Blog/Categorias/{id_categoria}"));
-        if (amogus == null || amogus.nome_categoria == null) {
-            throw new NullReferenceException("Failure to parse categoria from API JSON object");
+    public CategoriaBlog GetCategoriaBlogFromID(int id)
+    {
+        foreach (var categoria in PageBlogCategoria)
+        {
+            if (categoria.id_categoria == id)
+            {
+                return categoria;
+            }
         }
-        return amogus.nome_categoria;
-    }
-
-    public MemoryStream FetchAbstractJsonObject(string? api_endpoint, string target_url) {
-        Console.WriteLine($"http://{api_endpoint ?? DefaultConfig.API_ENDPOINT}/{target_url}");
-        string? response = new HttpClient().GetStringAsync($"http://{api_endpoint ?? DefaultConfig.API_ENDPOINT}/{target_url}").Result;
-        return new MemoryStream(Encoding.UTF8.GetBytes(response));
-    }
-
-    public async Task<MemoryStream> FetchAbstractJsonObjectAsync(string? api_endpoint, string target_url) {
-        Console.WriteLine($"http://{api_endpoint ?? DefaultConfig.API_ENDPOINT}/{target_url}");
-        string? response = await new HttpClient().GetStringAsync($"http://{api_endpoint ?? DefaultConfig.API_ENDPOINT}/{target_url}");
-        return new MemoryStream(Encoding.UTF8.GetBytes(response));
+        return new CategoriaBlog
+            {
+                nome_categoria = "Falha ao encontrar categoria"
+            };
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var blogposts = await GetPostsAsync();
-        if (blogposts == null) {
-            throw new NullReferenceException("Failure to find API call thing fodase");
-        }
-        PageBlogPosts = blogposts;
+        PageBlogPosts = await APIHandler.FetchOrFallbackAsync<PostBlog[]>(
+        "api/Blog/Posts",
+        new PostBlog[] { new PostBlog { titulo = "Falha ao encontrar posts" } }
+        );
+
+        PageBlogCategoria = await APIHandler.FetchOrFallbackAsync<CategoriaBlog[]>(
+        "api/Blog/Categorias",
+        new CategoriaBlog[]{
+new CategoriaBlog {
+id_categoria = 999,
+nome_categoria = "Falha ao encontrar categoria"
+}
+        });
     }
 }
