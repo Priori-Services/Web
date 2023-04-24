@@ -1,6 +1,6 @@
-namespace PRIORI_SERVICES_WEB.Data;
+namespace PRIORI_SERVICES_WEB.Data.Model;
 
-public class PostBlog
+public sealed class PostBlog
 {
     public int id_post { get; set; }
     public int id_autor { get; set; }

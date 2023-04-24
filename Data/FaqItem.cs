@@ -1,6 +1,6 @@
-namespace PRIORI_SERVICES_WEB.Data;
+namespace PRIORI_SERVICES_WEB.Data.Model;
 
-public class FaqItem
+public sealed class FaqItem
 {
     public FaqItem()
     {
