@@ -18,8 +18,7 @@
                 "EditorConfig.EditorConfig",
                 "ms-vsliveshare.vsliveshare",
                 "GitHub.vscode-pull-request-github",
-                "ms-mssql.mssql",
-                "rangav.vscode-thunder-client",
+                "ms-mssql.mssql"
             ]
         }
     },
