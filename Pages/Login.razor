@@ -1,67 +1,69 @@
 @page "/login"
 
+<NavMenu additional_classes="sticky-top" />
+
 <section class="vh-101">
-  <div class="container-fluid h-custom">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-md-9 col-lg-6 col-xl-5">
-        <img src="assets/inv1Img.png" width="85%"
-          class="img-fluid" alt="Sample image">
-      </div>
-      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <form>
-          <div class="d-flex m-3 flex-row align-items-center justify-content-center justify-content-lg-start">
-            <p class="PrioriHeader lead fw-normal mb-0 me-3 ">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
-              fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 
-                6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
-              </svg>
-               Login
-            </p>
-          </div>
-
-          <!-- Email input -->
-          <div class="form-outline mb-4">
-            <label class="form-label" for="form3Example3">E-mail</label>
-            <input type="email" id="emailLogin" class="form-control form-control-lg" />
-          </div>
-
-          <!-- Password input -->
-          <div class="form-outline mb-3">
-            <label class="form-label" for="form3Example4">Senha</label>
-            <input type="password" id="senhaLogin" class="form-control form-control-lg" />
-            
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center">
-            <!-- Checkbox -->
-            <div class="form-check mb-0">
-              <input class="form-check-input me-2" type="checkbox" value="" id="permanecerConectado" />
-              <label class="form-check-label" for="form2Example3">
-                Permanecer conectado
-              </label>
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="assets/inv1Img.png" width="85%" class="img-fluid" alt="Sample image">
             </div>
-            <a href="#!" class="text-light">Esqueceu sua senha?</a>
-          </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <form>
+                    <div class="d-flex m-3 flex-row align-items-center justify-content-center justify-content-lg-start">
+                        <p class="PrioriHeader lead fw-normal mb-0 me-3 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-lock" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 
+                6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
+                            </svg>
+                            Login
+                        </p>
+                    </div>
 
-          <div class="text-center text-lg-start mt-4 pt-2">
-            <button type="button" class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem; margin-bottom: 1.0rem;">Acessar</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Não possui cadastro? <a href="/cadastro"
-                class="link-danger">Registre-se</a></p>
-          </div>
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example3">E-mail</label>
+                        <input type="email" id="emailLogin" class="form-control form-control-lg" />
+                    </div>
 
-        </form>
-      </div>
+                    <!-- Password input -->
+                    <div class="form-outline mb-3">
+                        <label class="form-label" for="form3Example4">Senha</label>
+                        <input type="password" id="senhaLogin" class="form-control form-control-lg" />
+
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Checkbox -->
+                        <div class="form-check mb-0">
+                            <input class="form-check-input me-2" type="checkbox" value="" id="permanecerConectado" />
+                            <label class="form-check-label" for="form2Example3">
+                                Permanecer conectado
+                            </label>
+                        </div>
+                        <a href="#!" class="text-light">Esqueceu sua senha?</a>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <button type="button" class="btn btn-primary btn-lg"
+                            style="padding-left: 2.5rem; padding-right: 2.5rem; margin-bottom: 1.0rem;">Acessar</button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Não possui cadastro? <a href="/cadastro"
+                                class="link-danger">Registre-se</a></p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-  <div
-    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary; margin-top: 2.0rem;">
-    <!-- Copyright -->
-    <div class="text-white mb-3 mb-md-0" style="margin-top: 1.0rem;">
-      <i>Priori Services</i> © 2023. Todos os direitos reservados.
+    <div
+        class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary; margin-top: 2.0rem;">
+        <!-- Copyright -->
+        <div class="text-white mb-3 mb-md-0" style="margin-top: 1.0rem;">
+            <i>Priori Services</i> © 2023. Todos os direitos reservados.
+        </div>
     </div>
-  </div>
 </section>
 
 @code {
