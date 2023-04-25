@@ -2,7 +2,7 @@
 @using PRIORI_SERVICES_WEB.Data.Model
 @using PRIORI_SERVICES_WEB.Data.API
 
-<NavMenu additional_classes="sticky-top" />
+<NavMenu nav_classes="sticky-top" />
 
 <nav class="container-fluid">
     <ul class="pagination">
@@ -18,7 +18,7 @@
 
 <div class="my-5 container-sm text-center">
     <div class="row row-cols-3">
-        <h1 style="z-index: -1;" class="d-none">Carregando...</h1>
+        <h1 style="z-index: -1;">Carregando...</h1>
         @foreach (var item in PageBlogPosts)
         {
             <div class="card px-3 py-4 m-1 bg-light border rounded-4">

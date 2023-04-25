@@ -1,8 +1,4 @@
-﻿<style>
-    ul#navbarNav li:hover {}
-</style>
-
-<nav id="mainNav" class="navbar navbar-expand px-2 text-white rounded-1 bg-dark @additional_classes">
+﻿<nav id="mainNav" class="navbar navbar-expand px-2 text-white rounded-1 bg-dark @nav_classes" style="@nav_style">
     <div class="container fs-2 fw-bold text-nowrap text-decoration-none text-white m-1-15">
         <NavLink href="/" style="text-decoration: none;" class="text-white">
             <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid"
@@ -39,7 +35,6 @@
     private Dictionary<string, string> amogus2avinganca =
     new Dictionary<string, string> {
 { "/about", "Sobre Nós" },
-{"/recursos","Recursos"},
 {"/blog","Blog"},
 {"/simulador","Simulador"},
 {"/investimentos-disponiveis", "Investimentos"},
@@ -47,5 +42,8 @@
         };
 
     [Parameter]
-    public string additional_classes { get; set; } = "";
+    public string nav_classes { get; set; } = "";
+
+    [Parameter]
+    public string nav_style { get; set; } = "";
 }
