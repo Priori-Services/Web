@@ -1,4 +1,30 @@
-﻿<nav id="mainNav" class="navbar navbar-expand px-2 text-white rounded-1 bg-dark @nav_classes" style="@nav_style">
+﻿<style>
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+  color: #ffffff;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ffffff;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+</style>
+
+<nav id="mainNav" class="navbar navbar-expand px-2 text-white rounded-1 bg-dark @nav_classes" style="@nav_style">
     <div class="container fs-2 fw-bold text-nowrap text-decoration-none text-white m-1-15">
         <NavLink href="/" style="text-decoration: none;" class="text-white">
             <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid"
@@ -18,7 +44,7 @@
     <ul id="navbarNav" class="navbar-nav navbar-collapse collapse">
         @foreach (KeyValuePair<string, string> route in amogus2avinganca)
         {
-            <li class="nav-item d-flex flex-row me-3 justify-content-center">
+            <li class="nav-item d-flex flex-row me-3 justify-content-center hover-underline-animation">
                 <NavLink href="@route.Key" class="nav-link text-white text-nowrap fs-5">
                     @route.Value
                 </NavLink>
