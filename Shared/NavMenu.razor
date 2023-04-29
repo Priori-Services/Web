@@ -24,14 +24,47 @@
 }
 </style>
 
-<nav id="mainNav" class="navbar navbar-expand px-2 text-white rounded-1 bg-dark @nav_classes" style="@nav_style">
-    <div class="container fs-2 fw-bold text-nowrap text-decoration-none text-white m-1-15">
+<nav id="mainNav" class="navbar navbar-expand text-white rounded-1 bg-dark @nav_classes" style="@nav_style">
+    <div class="container text-nowrap text-decoration-none text-white m-1-15 fonte2">
         <NavLink href="/" style="text-decoration: none;" class="text-white">
-            <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid"
+            <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid margem3"
                 width="65em" height="60em" />
             Priori
             Services
         </NavLink>
+
+        <style>
+            .fonte {
+                font-size: 15px;
+                font-family: "Poppins", sans-serif;
+                margin: 0;
+                padding: 0;
+                line-height: 1;
+                font-weight: 400;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+            .fonte2 {
+                font-size: 30px;
+                font-family: "Poppins", sans-serif;
+                margin: 0;
+                padding: 0;
+                line-height: 1;
+                font-weight: 400;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+            .fonte3 {
+                font-size: 25px;
+                font-family: "Poppins", sans-serif;
+                margin: 0;
+                padding: 0;
+                line-height: 1;
+                font-weight: 400;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+        </style>
 
         <a href="/" class=""></a>
     </div>
@@ -41,18 +74,33 @@
         <span class="navbar-toggler-icon" />
     </button>
 
-    <ul id="navbarNav" class="navbar-nav navbar-collapse collapse">
+    <ul id="navbarNav" class="navbar-nav navbar-collapse collapse fonte">
         @foreach (KeyValuePair<string, string> route in amogus2avinganca)
         {
-            <li class="nav-item d-flex flex-row me-3 justify-content-center hover-underline-animation">
-                <NavLink href="@route.Key" class="nav-link text-white text-nowrap fs-5">
+            <li class="nav-item d-flex flex-row me-3 justify-content-center hover-underline-animation margem">
+                <NavLink href="@route.Key" class="nav-link text-white text-nowrap">
                     @route.Value
                 </NavLink>
             </li>
+            <style>
+                .margem {
+                    padding-right: 0.5rem;
+                }
+                .margem2 {
+                    margin-right: 1.5rem;
+                    margin-left: 1rem;
+                }
+                .margem3 {
+                    margin-left: 1.5rem;
+                }
+                nav {
+                    background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));">
+                }
+            </style>
         }
 
     </ul>
-    <a href="/login" class="text-center btn btn-outline-light px-4 py-2 fs-5">
+    <a href="/login" class="text-center btn btn-outline-light px-4 py-2 fs-5 margem2">
         Login
     </a>
 </nav>
@@ -60,7 +108,6 @@
 @code {
     private Dictionary<string, string> amogus2avinganca =
     new Dictionary<string, string> {
-{ "/about", "Sobre Nós" },
 {"/blog","Blog"},
 {"/simulador","Simulador"},
 {"/investimentos-disponiveis", "Investimentos"},
