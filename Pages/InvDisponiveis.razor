@@ -18,13 +18,22 @@
     Investimentos Disponíveis
 </p>
 
+@code {
+    public void teste() {
+        @*if(teste == "28") {
+            teste de inserção de condição para exibição de informação em linhas/colunas
+            caso não seja possível, adicionar a coluna "tipo investimento"
+        } *@
+    }
+}
+
 <div class="margin">
     <table class="table table-hover bg-light rounded-3">
         <thead>
             <tr>
                 <th scope="col">Título</th>
                 <th scope="col">Rentabilidade anual</th>
-                <th scope="col">Investimento mínimo</th>
+                <th scope="col" id="teste">Investimento mínimo</th>
                 <th scope="col">Vencimento</th>
                 <th scope="col"><a href="#!" class="text-decoration-none">Simule</a></th>
             </tr>
@@ -86,4 +95,6 @@
         </tbody>
     </table>
 
-</div>
+    
+
+</div> @*div margem*@
