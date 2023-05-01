@@ -10,65 +10,94 @@
             padding-left: 60ex;
             padding-top: 4ex;
         }
-    </style>
+        .centralizar {
+        justify-content: center;
+        text-align: center;
+    }
+    .fonteInfo {
+        font-size: 1.3rem;
+    }
+    .detalhes {
+        font-size: 0.8rem;
+        padding-left: 0.8rem;
+    }
+    .fonteCadastro {
+        font-family: "Poppins", sans-serif;
+        letter-spacing: 1px;
+    }
+    html, body {
+        background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
+    }
+</style>
 
     <!-- Pills navs -->
     <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-        <li class="PrioriHeader nav-item" role="presentation" type="text"
-            style="font-size: 2.4em; margin-top: -1.5rem; margin-bottom: 3rex;">
+        <li class="nav-item fonteCadastro" role="presentation" type="text"
+            style="font-size: 2.4em; margin-top: -1rem; margin-bottom: 1.5rex;">
             Cadastro
         </li>
     </ul>
     <!-- Pills navs -->
 
+    
     <!-- Pills content -->
     <div class="tab-pane" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+
         <form>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="registrarNome">Nome Completo</label>
-                <input type="text" id="nomeCadastro" class="form-control" />
+                <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
+                <input type="text" id="nomeCadastro" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="registrarCPF">CPF</label>
-                <input type="text" id="cpfCadastro" class="form-control" />
+                <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
+                <input type="text" id="cpfCadastro" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="registrarDataNASCIMENTO">Data de Nascimento</label>
-                <input type="date" id="dataNascimentoCadastro" class="form-control" />
+                <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
+                <span class="detalhes">necessária pra identificar a maioridade</span>
+                <input type="date" id="dataNascimentoCadastro" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="registrarEmail">Email</label>
-                <input type="email" id="emailCadastro" class="form-control" />
+                <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
+                <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
+                <input type="email" id="emailCadastro" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="registerPassword">Senha</label>
-                <input type="password" id="senhaLogin" class="form-control" />
+                <label class="form-label fonteInfo" for="registrarEmail">Celular</label>
+                <span class="detalhes">para o caso de precisarmos entrar em contato</span>
+                <input type="tel" id="telefoneCadastro" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="registerRepeatPassword">Confirme sua senha</label>
-                <input type="password" id="confirmacaoSenhaLogin" class="form-control" />
+                <label class="form-label fonteInfo" for="registerPassword">Senha</label>
+                <input type="password" id="senhaLogin" class="form-control" required/> <br>
+            </div>
+
+            <div class="form-outline mb-3">
+                <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
+                <input type="password" id="confirmacaoSenhaLogin" class="form-control" required/> <br>
             </div>
 
             <!-- Checkbox -->
             <div class="form-check d-flex justify-content-center mb-4">
-                <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
-                    aria-describedby="registerCheckHelpText" />
+                <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck"
+                    aria-describedby="registerCheckHelpText" required/>
                 <label class="form-check-label" for="registerCheck">
-                    Li e concordo com os termos de uso
+                    Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
                 </label>
             </div>
 
-            <!-- Submit button -->
-            <div class="form-check d-flex justify-content-center mb-4">
-                <button type="submit" class="btn btn-primary btn-block">CADASTRAR</button>
-            </div>
-
         </form>
+
+            <!-- Submit button -->
+            <a href="/login" class="text-center btn btn-outline-light px-4 py-2 fs-5 mb-4 centralizar">
+                CADASTRAR
+            </a>
+
     </div>
 </div>
