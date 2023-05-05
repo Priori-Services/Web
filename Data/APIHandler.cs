@@ -34,4 +34,13 @@ public static class APIHandler
         }
         return initial_object;
     }
+
+    public static async Task<HttpContent> PostApiRequestAsync(Dictionary<string, string> json_object, string target_url, string? api_endpoint = null) {
+        if (api_endpoint == null)
+            api_endpoint = DefaultConfig.API_ENDPOINT;
+
+        var content = new FormUrlEncodedContent(json_object);
+        var response = await new HttpClient().PostAsync($"http://{api_endpoint}/{target_url}", content);
+        return response.Content;
+    }
 }
