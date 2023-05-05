@@ -1,12 +1,8 @@
 @page "/investimentos-disponiveis"
+@using PRIORI_SERVICES_WEB.Data.Model;
+@using PRIORI_SERVICES_WEB.Data.API;
 
 <style>
-    .margin {
-        padding-left: 6rem;
-        padding-right: 6rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
     html, body {
         background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
     }
@@ -14,87 +10,38 @@
 
 <NavMenu nav_classes="sticky-top" />
 
-<p class="text-light fonte3 text-center" style="margin-top: 1rem; margin-bottom: 1rem;">
-    Investimentos Disponíveis
-</p>
+<div class="my-5 row row-cols-3 container-fluid text-center">
+        @foreach (Investimento investimento in invDisponiveis)
+        {
+            <div class="card p-2 m-1 bg-white text-dark">
+                <div class="card-header">
+                    <h2>@investimento.nome</h2>
+                </div>
+                <div class="card-body">
+                    
+                    <ul class="list-group" style="list-style-type: none;">
+                        <li class="list-group-item">Investimento Minimo: R$ @investimento.valor_minimo</li>
+                        <li class="list-group-item">Vencimento: @investimento.vencimento</li>
+                        <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
+                        <li class="list-group-item">Simule: XXX</li>
+                    </ul>
+                </div>
+            </div>
+        }
+</div>
+
+<Footer></Footer>
+
 
 @code {
-    public void teste() {
-        @*if(teste == "28") {
-            teste de inserção de condição para exibição de informação em linhas/colunas
-            caso não seja possível, adicionar a coluna "tipo investimento"
-        } *@
+    public Investimento[] invDisponiveis = new Investimento[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        invDisponiveis = await APIHandler.FetchOrFallbackAsync<Investimento[]>("api/investimento", new Investimento[] {
+           new Investimento {
+            nome = "Falha ao encontrar investimentos."
+           } 
+        });
     }
 }
-
-<div class="margin">
-    <table class="table table-hover bg-light rounded-3">
-        <thead>
-            <tr>
-                <th scope="col">Título</th>
-                <th scope="col">Rentabilidade anual</th>
-                <th scope="col" id="teste">Investimento mínimo</th>
-                <th scope="col">Vencimento</th>
-                <th scope="col"><a href="#!" class="text-decoration-none">Simule</a></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">Tesouro 1</th>
-                <td>18,492%</td>
-                <td>R$ 228</td>
-                <td>03/25</td>
-                <td>XXX</td>
-            </tr>
-            <tr>
-                <th scope="row">Tesouro 2</th>
-                <td>
-                    <span class="text-danger">
-                        <i class="fas fa-caret-down me-0"></i><span>15.8%%</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="text-success">
-                        <i class="fas fa-caret-up me-0"></i><span>R$ 110</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="text">
-                        <i class="fas fa-caret-up me-0"></i><span>05/26</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="text-success">
-                        <i class="fas fa-caret-up me-0"></i><span>XXX</span>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">LCI</th>
-                <td>
-                    <span class="text-danger">
-                        <i class="fas fa-caret-down me-0"></i><span>-17,654</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="text-success">
-                        <i class="fas fa-caret-up me-0"></i><span>28</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="text-success">
-                        <i class="fas fa-caret-up me-0"></i><span>111</span>
-                    </span>
-                </td>
-                <td>
-                    <span class="text-success">
-                        <i class="fas fa-caret-up me-0"></i><span>XXXX</span>
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    
-
-</div> @*div margem*@
