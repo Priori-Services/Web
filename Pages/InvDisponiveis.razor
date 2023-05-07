@@ -18,8 +18,20 @@
             @foreach (Investimento investimento in invDisponiveis)
             {
                 <div class="card p-2 m-5 bg-white text-dark">
-                    <div class="card-header">
-                        <h3 class="text-success">@investimento.nome</h3>
+                    <div class="card-header d-flex flex-row bd-highlight">
+                        <div class="bd-highlight risco">
+                            <style>
+                                .risco {
+                                    background-color: red; @*alterar de acordo com o risco*@
+                                    margin-right: 1rem;
+                                    width: 0.65rem;
+                                    border-radius: 1rem;
+                                }
+                            </style>
+                        </div>
+                        <div class="bd-highlight">
+                            <h3 class="text-success">@investimento.nome</h3>
+                            </div>
                     </div>
                     <div class="card-body">
                         
