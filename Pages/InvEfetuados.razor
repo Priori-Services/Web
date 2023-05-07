@@ -1,0 +1,48 @@
+@page "/investimentos-efetuados"
+@using PRIORI_SERVICES_WEB.Data.Model;
+@using PRIORI_SERVICES_WEB.Data.API;
+
+<style>
+    html, body {
+        background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
+    }
+</style>
+
+<NavMenu nav_classes="sticky-top" />
+
+<div class="my-5 row row-cols-3 container-fluid text-center">
+        @foreach (Carteira carteira in invEfetuados)
+        {
+            <div class="card p-2 m-1 bg-white text-dark">
+                <div class="card-header">
+                    <h2>@carteira.id_investimento</h2> @*nome investimento c/ inner*@
+                </div>
+                <div class="card-body">
+                    
+                    <ul class="list-group" style="list-style-type: none;">
+                        <li class="list-group-item">Data de contratação: R$ @carteira.data_efetuacao</li>
+                        <li class="list-group-item">Valor aplicado: R$ @carteira.valor_aplicado</li>
+                        <li class="list-group-item">Rentabilidade (a.a.): @carteira.rentabilidade_variavel</li> @*somar fixa com variável p/ exibir*@
+                        <li class="list-group-item">Data de Resgate: @carteira.data_encerramento</li>
+                        <li class="list-group-item">Status do Investimento: @carteira.status</li>
+                    </ul>
+                </div>
+            </div>
+        }
+</div>
+
+<Footer></Footer>
+
+
+@code {
+    public Carteira[] invEfetuados = new Carteira[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        invEfetuados = await APIHandler.FetchOrFallbackAsync<Carteira[]>("api/CarteiraInvestimento", new Carteira[] {
+           new Carteira {
+            status = "Não encontrado"
+           } 
+        });
+    }
+}
