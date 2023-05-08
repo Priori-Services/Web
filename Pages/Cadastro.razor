@@ -1,90 +1,73 @@
 @page "/cadastro"
+@using PRIORI_SERVICES_WEB.Data.Model
+@using PRIORI_SERVICES_WEB.Data.API
+@inject IJSRuntime JSInterop
 
 <NavMenu nav_classes="sticky-top" />
 
-<div class="MarginLogin">
-
-    <style>
-    .MarginLogin {
-            padding-right: 60ex;
-            padding-left: 60ex;
-            padding-top: 4ex;
-    }
-    .BtnCadastrar {
-        margin-left: 15rem;
-    }
-    .fonteInfo {
+<style>
+   .fonteInfo {
         font-size: 1.3rem;
     }
     .detalhes {
         font-size: 0.8rem;
         padding-left: 0.8rem;
     }
-    .fonteCadastro {
-        font-family: "Poppins", sans-serif;
-        letter-spacing: 1px;
-    }
-    html, body {
+   html, body {
         background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
     }
 </style>
 
-    <!-- Pills navs -->
-    <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-        <li class="nav-item fonteCadastro" role="presentation" type="text"
-            style="font-size: 2.4em; margin-top: -1rem; margin-bottom: 1.5rex;">
-            Cadastro
-        </li>
-    </ul>
-    <!-- Pills navs -->
 
-    
+<div class="container-fluid d-flex align-items-center flex-column">
+
+    <div class="container-fluid text-center">
+        <h1 class="fs-1 fw-bold" style="font-family: 'Poppins', sans-serif; letter-spacing: 1px;">Cadastro</h1>
+    </div>
+
     <!-- Pills content -->
-    <div class="tab-pane" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-
-        <form>
-
+    <div class="tab-pane d-flex flex-column" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
             <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
-                <input type="text" id="nomeCadastro" class="form-control" required/> <br>
+                <input type="text" @bind="target_cliente.nome" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
-                <input type="text" id="cpfCadastro" class="form-control" required/> <br>
+                <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
                 <span class="detalhes">necessária pra identificar a maioridade</span>
-                <input type="date" id="dataNascimentoCadastro" class="form-control" required/> <br>
+                <input type="date" @bind="dataNasc" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
                 <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
-                <input type="email" id="emailCadastro" class="form-control" required/> <br>
+                <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registrarEmail">Celular</label>
                 <span class="detalhes">para o caso de precisarmos entrar em contato</span>
-                <input type="tel" id="telefoneCadastro" class="form-control" required/> <br>
+                <input type="tel" @bind="target_cliente.telefone" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
             <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registerPassword">Senha</label>
-                <input type="password" id="senhaLogin" class="form-control" required/> <br>
+                <input type="password" @bind="target_cliente.senha" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
-            <div class="form-outline mb-3">
+            <div class="form-outline mb-4">
                 <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
-                <input type="password" id="confirmacaoSenhaLogin" class="form-control" required/> <br>
+                <input type="password" @bind="confirmacaoSenhaLogin" @bind:event="oninput" class="form-control" required/> <br>
             </div>
 
             <!-- Checkbox -->
             <div class="form-check d-flex justify-content-center mb-4">
-                <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck"
+                <input class="form-check-input me-2" type="checkbox" value="" @bind="registerCheck"
                     aria-describedby="registerCheckHelpText" required/>
                 <label class="form-check-label" for="registerCheck">
                     Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
@@ -92,12 +75,112 @@
                 
             </div>
             
-                    <!-- Submit button -->
-        <a href="/login" class="text-center btn btn-outline-light px-4 py-2 fs-5 mb-4 BtnCadastrar">
+            <button @onclick="() => {CadastroUser();}" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
                 CADASTRAR
-        </a>
+            </button>
+    </div>
 
-        </form>
-
+    <div class="card d-@error_status mt-3 bg-transparent border text-white">
+        <div class="card-header p-3">
+            <h2 class="">@error_message</h2>
+        </div>
+        <div class="card-body p-2 text-center">
+            <p>@error_description</p>
+        </div>
     </div>
 </div>
+
+@code {
+    public string error_status {get;set;} = "none";
+    public string error_message {get;set;} = String.Empty;
+    public string error_description {get;set;} = String.Empty;
+    public ClienteDBO target_cliente = new ClienteDBO();
+    public DateTime dataNasc = DateTime.Now;
+    public string confirmacaoSenhaLogin {get;set;} = String.Empty;
+
+    public bool registerCheck {get;set;} = true;
+
+    public void CadastroUser()
+    {
+        if (!registerCheck) {
+            error_status = "block";
+            error_message = "Termos não aceitos";
+            error_description = "O usuário deve aceitar os termos de condições antes de prossegir com o cadastro";
+            return;
+        }
+
+        if (DateTime.Now.Year - dataNasc.Year <= 18) {
+            error_status = "block";
+            error_message = "Você deve ser maior de 18";
+            error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos";
+            return;
+        }
+
+        if (target_cliente.senha != confirmacaoSenhaLogin) {
+            error_status = "block";
+            error_message = "Falha ao verificar senha";
+            error_description = "A senha e sua confirmação não são iguais";
+            return;
+        }
+        
+        if (target_cliente.senha.Length <= 8) {
+            error_status = "block";
+            error_message = "Falha ao verificar senha";
+            error_description= "Senha deve ter mais de 8 caractéres";
+            return;
+        }
+
+        if (!target_cliente.senha.Any(char.IsSymbol)) {
+            error_status = "block";
+            error_message = "Falha ao verificar senha";
+            error_description = "Senha deve conter símbolos";
+            return;
+        }
+
+        if (!target_cliente.senha.Any(char.IsNumber)) {
+            error_status = "block";
+            error_message = "Falha ao verificar senha";
+            error_description= "Senha deve ter pelo menos um número";
+            return;
+        }
+
+        if (!target_cliente.senha.Any(char.IsUpper)) {
+            error_status = "block";
+            error_message = "Falha ao verificar senha";
+            error_description= "Senha deve ter pelo menos um caractére maiúsculo";
+            return;
+        }
+ 
+        error_status = "none";
+        try
+        {
+            var t = CadastroUserAsync(target_cliente);
+            t.RunSynchronously();
+        }
+        catch (Exception)
+        {
+            
+        }
+    }
+
+    public async Task CadastroUserAsync(ClienteDBO request)
+    {
+        var response = await APIHandler.PostApiRequestAsync(new Dictionary<string, string> {
+{"nome", request.nome!},
+{"senha", request.senha!},
+{"cpf", request.cpf!},
+{"email", request.email!},
+{"telefone", request.telefone!}
+}, "api/Auth/Cliente/registrar");
+
+        if (response.IsSuccessStatusCode) {
+            error_status = "block";
+            error_message = "Cadastro bem sucedido!";
+            error_description= "Você pode agora acessar sua conta Priori!";
+        } else {
+            error_status = "block";
+            error_message = "Falha ao cadastrar";
+            error_description= "Tente novamente :(";
+        }
+    }
+}
