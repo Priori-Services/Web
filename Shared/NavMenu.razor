@@ -74,7 +74,7 @@ nav {
 
 
 <nav id="mainNav" class="navbar navbar-expand text-white rounded-1 bg-dark d-flex flex-row @nav_classes" style="@nav_style">
-    <div class="container text-nowrap text-decoration-none text-white m-1-15 fonte2">
+    <div class="container-fluid text-nowrap text-decoration-none text-white m-1-15 fonte2">
         <NavLink href="/" style="text-decoration: none;" class="text-white">
             <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid margem3"
                 width="65em" height="60em" />
@@ -90,7 +90,7 @@ nav {
         <span class="navbar-toggler-icon" />
     </button>
 
-    <div class="container">
+    <div class="container-fluid text-nowrap">
         <ul id="navbarNav" class="navbar-nav navbar-collapse collapse fonte">
             @foreach (KeyValuePair<string, string> route in amogus2avinganca)
             {
@@ -101,15 +101,8 @@ nav {
                 </li>
             }
         </ul>
-
-        <a href="/login" class="text-center btn btn-outline-light px-3 py-2 fs-5 margem2 fonte4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                                class="bi bi-lock" viewBox="12 -1 1 22">
-                                <path
-                                    d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 
-                6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0
-                 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                            </svg>
+        <a href="/login" class="text-center btn btn-outline-light px-3 py-2 fs-5 margem2">
+        <i class="bi bi-lock"></i>
             Login
         </a>
 
