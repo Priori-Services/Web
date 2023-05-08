@@ -2,6 +2,7 @@
 @using PRIORI_SERVICES_WEB.Data.Model
 @using PRIORI_SERVICES_WEB.Data.API
 @inject IJSRuntime JSInterop
+@inject NavigationManager NavigationManager 
 
 <NavMenu nav_classes="sticky-top" />
 
@@ -174,13 +175,12 @@
 }, "api/Auth/Cliente/registrar");
 
         if (response.IsSuccessStatusCode) {
-            error_status = "block";
-            error_message = "Cadastro bem sucedido!";
-            error_description= "Você pode agora acessar sua conta Priori!";
-        } else {
+            NavigationManager.NavigateTo("/login"); 
+            return;
+        }
             error_status = "block";
             error_message = "Falha ao cadastrar";
             error_description= "Tente novamente :(";
-        }
+        
     }
 }
