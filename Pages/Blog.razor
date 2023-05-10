@@ -56,7 +56,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Fuck");
         PageBlogPosts = await APIHandler.FetchOrFallbackAsync<PostBlog[]>(
         "api/Blog/Posts",
         new PostBlog[] { new PostBlog { titulo = "Falha ao encontrar posts" } }
