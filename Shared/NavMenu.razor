@@ -121,10 +121,10 @@ nav {
 {"/contato","Contato"}
         };
 
-    public async void AreaRedirect() {
-        var app_key = await JSInterop.InvokeAsync<string>("localStorage.getItem","app_key");
-        
-        NavigationManager.NavigateTo((app_key == String.Empty || app_key == "") ? "login" : "areausuario"); 
+    public void AreaRedirect() {
+        //var app_key = JSInterop.InvokeAsync<string>("localStorage.getItem","app_key");
+
+        //NavigationManager.NavigateTo((app_key == String.Empty || app_key == "") ? "login" : "areausuario"); 
     }
 
     [Parameter]

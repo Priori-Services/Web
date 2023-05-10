@@ -1,22 +1,5 @@
 ﻿@page "/"
-@using PRIORI_SERVICES_WEB.Data.Model
 
-@code {
-    public FaqItem[] fallback_faqs = new FaqItem[] {
-new FaqItem {
-Header = "Há taxas de manutenção na Priori?",
-Body = "Não! Na Priori, você não paga taxas para contratar e nem manter nenhum investimento."
-},
-new FaqItem {
-Header = "Como posso saber o quanto terei de retorno nos meus investimentos?",
-Body = "Você pode efetuar uma simulação antes de contratar qualquer investimento. Basta acessar a aba 'Simulador' no topo da página."
-},
-new FaqItem {
-Header = "E se eu precisar retirar o dinheiro que apliquei, como faço?",
-Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, só podem ser sacados na data de vencimento. Portanto, planeje-se antes de investir."
-},
-};
-}
 <style>
     ::-webkit-scrollbar {
         display: none;
@@ -219,16 +202,3 @@ Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, s�
         </div>
     </div>
 </section>
-
-<section class="d-flex flex-column align-items-center text-white text-center p-5 py-5"
-    style="background-image: linear-gradient(75deg, rgb(171, 0, 177), rgb(114, 0, 167));">
-    <h1>FAQ</h1>
-    <hr>
-    <h3>
-        Veja abaixo as dúvidas mais comuns:
-    </h3>
-    <Faq Faqs=@fallback_faqs />
-</section>
-
-<Footer>
-</Footer>

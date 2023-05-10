@@ -85,7 +85,11 @@
 }, "api/Auth/Cliente/login");
         if (response.IsSuccessStatusCode) {
             display_errorlabel = "none";
-            await JSInterop.InvokeVoidAsync("localStorage.setItem", app_token, await response.Content.ReadAsStringAsync());
+            await JSInterop.InvokeVoidAsync(
+                "localStorage.setItem", 
+                "app_token", 
+                await response.Content.ReadAsStringAsync()
+            );
             NavigationManager.NavigateTo("/");
         } else {
             display_errorlabel = "block";

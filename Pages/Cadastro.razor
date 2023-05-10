@@ -2,19 +2,22 @@
 @using PRIORI_SERVICES_WEB.Data.Model
 @using PRIORI_SERVICES_WEB.Data.API
 @inject IJSRuntime JSInterop
-@inject NavigationManager NavigationManager 
+@inject NavigationManager NavigationManager
 
 <NavMenu nav_classes="sticky-top" />
 
 <style>
-   .fonteInfo {
+    .fonteInfo {
         font-size: 1.3rem;
     }
+
     .detalhes {
         font-size: 0.8rem;
         padding-left: 0.8rem;
     }
-   html, body {
+
+    html,
+    body {
         background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
     }
 </style>
@@ -28,57 +31,60 @@
 
     <!-- Pills content -->
     <div class="tab-pane d-flex flex-column" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
-                <input type="text" @bind="target_cliente.nome" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
+            <input type="text" @bind="target_cliente.nome" @bind:event="oninput" class="form-control" required /> <br>
+        </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
-                <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
+            <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required /> <br>
+        </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
-                <span class="detalhes">necessária pra identificar a maioridade</span>
-                <input type="date" @bind="dataNasc" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
+            <span class="detalhes">necessária pra identificar a maioridade</span>
+            <input type="date" @bind="dataNasc" @bind:event="oninput" class="form-control" required /> <br>
+        </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
-                <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
-                <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
+            <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
+            <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required /> <br>
+        </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registrarEmail">Celular</label>
-                <span class="detalhes">para o caso de precisarmos entrar em contato</span>
-                <input type="tel" @bind="target_cliente.telefone" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarEmail">Celular</label>
+            <span class="detalhes">para o caso de precisarmos entrar em contato</span>
+            <input type="tel" @bind="target_cliente.telefone" @bind:event="oninput" class="form-control" required />
+            <br>
+        </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registerPassword">Senha</label>
-                <input type="password" @bind="target_cliente.senha" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registerPassword">Senha</label>
+            <input type="password" @bind="target_cliente.senha" @bind:event="oninput" class="form-control" required />
+            <br>
+        </div>
 
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
-                <input type="password" @bind="confirmacaoSenhaLogin" @bind:event="oninput" class="form-control" required/> <br>
-            </div>
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
+            <input type="password" @bind="confirmacaoSenhaLogin" @bind:event="oninput" class="form-control" required />
+            <br>
+        </div>
 
-            <!-- Checkbox -->
-            <div class="form-check d-flex justify-content-center mb-4">
-                <input class="form-check-input me-2" type="checkbox" value="" @bind="registerCheck"
-                    aria-describedby="registerCheckHelpText" required/>
-                <label class="form-check-label" for="registerCheck">
-                    Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
-                </label>
-                
-            </div>
-            
-            <button @onclick="() => {CadastroUser();}" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
-                CADASTRAR
-            </button>
+        <!-- Checkbox -->
+        <div class="form-check d-flex justify-content-center mb-4">
+            <input class="form-check-input me-2" type="checkbox" value="" @bind="registerCheck"
+                aria-describedby="registerCheckHelpText" required />
+            <label class="form-check-label" for="registerCheck">
+                Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
+            </label>
+
+        </div>
+
+        <button @onclick="() => {CadastroUser();}" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
+            CADASTRAR
+        </button>
     </div>
 
     <div class="card d-@error_status mt-3 bg-transparent border text-white">
@@ -92,66 +98,73 @@
 </div>
 
 @code {
-    public string error_status {get;set;} = "none";
-    public string error_message {get;set;} = String.Empty;
-    public string error_description {get;set;} = String.Empty;
+    public string error_status { get; set; } = "none";
+    public string error_message { get; set; } = String.Empty;
+    public string error_description { get; set; } = String.Empty;
     public ClienteDBO target_cliente = new ClienteDBO();
     public DateTime dataNasc = DateTime.Now;
-    public string confirmacaoSenhaLogin {get;set;} = String.Empty;
+    public string confirmacaoSenhaLogin { get; set; } = String.Empty;
 
-    public bool registerCheck {get;set;} = true;
+    public bool registerCheck { get; set; } = true;
 
     public void CadastroUser()
     {
-        if (!registerCheck) {
+        if (!registerCheck)
+        {
             error_status = "block";
             error_message = "Termos não aceitos";
             error_description = "O usuário deve aceitar os termos de condições antes de prossegir com o cadastro";
             return;
         }
 
-        if (DateTime.Now.Year - dataNasc.Year <= 18) {
+        if (DateTime.Now.Year - dataNasc.Year <= 18)
+        {
             error_status = "block";
             error_message = "Você deve ser maior de 18";
             error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos";
             return;
         }
 
-        if (target_cliente.senha != confirmacaoSenhaLogin) {
+        if (target_cliente.senha != confirmacaoSenhaLogin)
+        {
             error_status = "block";
             error_message = "Falha ao verificar senha";
             error_description = "A senha e sua confirmação não são iguais";
             return;
         }
-        
-        if (target_cliente.senha.Length <= 8) {
+
+        if (target_cliente.senha.Length <= 8)
+        {
             error_status = "block";
             error_message = "Falha ao verificar senha";
-            error_description= "Senha deve ter mais de 8 caractéres";
+            error_description = "Senha deve ter mais de 8 caractéres";
             return;
         }
 
-        if (!target_cliente.senha.Any(char.IsSymbol)) {
+        if (!target_cliente.senha.Any(char.IsSymbol))
+        {
             error_status = "block";
             error_message = "Falha ao verificar senha";
             error_description = "Senha deve conter símbolos";
             return;
         }
 
-        if (!target_cliente.senha.Any(char.IsNumber)) {
+        if (!target_cliente.senha.Any(char.IsNumber))
+        {
             error_status = "block";
             error_message = "Falha ao verificar senha";
-            error_description= "Senha deve ter pelo menos um número";
+            error_description = "Senha deve ter pelo menos um número";
             return;
         }
 
-        if (!target_cliente.senha.Any(char.IsUpper)) {
+        if (!target_cliente.senha.Any(char.IsUpper))
+        {
             error_status = "block";
             error_message = "Falha ao verificar senha";
-            error_description= "Senha deve ter pelo menos um caractére maiúsculo";
+            error_description = "Senha deve ter pelo menos um caractére maiúsculo";
             return;
         }
- 
+
         error_status = "none";
         try
         {
@@ -160,7 +173,7 @@
         }
         catch (Exception)
         {
-            
+
         }
     }
 
@@ -174,13 +187,14 @@
 {"telefone", request.telefone!}
 }, "api/Auth/Cliente/registrar");
 
-        if (response.IsSuccessStatusCode) {
-            NavigationManager.NavigateTo("/login"); 
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/login");
             return;
         }
-            error_status = "block";
-            error_message = "Falha ao cadastrar";
-            error_description= "Tente novamente :(";
-        
+        error_status = "block";
+        error_message = "Falha ao cadastrar";
+        error_description = "Tente novamente :(";
+
     }
 }
