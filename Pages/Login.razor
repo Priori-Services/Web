@@ -1,7 +1,6 @@
 @page "/login"
-@using PRIORI_SERVICES_WEB.Data.Model
 @using PRIORI_SERVICES_WEB.Data.API
-@inject IJSRuntime JS
+@inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 
 <style>
@@ -86,7 +85,7 @@
 }, "api/Auth/Cliente/login");
         if (response.IsSuccessStatusCode) {
             display_errorlabel = "none";
-            await JS.InvokeVoidAsync("localStorage.setItem","app_token",await response.Content.ReadAsStringAsync());
+            await JSInterop.InvokeVoidAsync("localStorage.setItem", app_token, await response.Content.ReadAsStringAsync());
             NavigationManager.NavigateTo("/");
         } else {
             display_errorlabel = "block";

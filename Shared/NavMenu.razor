@@ -1,4 +1,7 @@
-﻿<style>
+﻿@inject IJSRuntime JSInterop
+@inject NavigationManager NavigationManager
+
+<style>
 .hover-underline-animation {
   display: inline-block;
   position: relative;
@@ -72,8 +75,7 @@ nav {
 }
 </style>
 
-
-<nav id="mainNav" class="navbar navbar-expand text-white rounded-1 bg-dark d-flex flex-row @nav_classes" style="@nav_style">
+<nav id="mainNav" class="navbar navbar-expand text-white bg-dark d-flex flex-row @nav_classes" style="@nav_style">
     <div class="container-fluid text-nowrap text-decoration-none text-white m-1-15 fonte2">
         <NavLink href="/" style="text-decoration: none;" class="text-white">
             <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid margem3"
@@ -92,7 +94,7 @@ nav {
 
     <div class="container-fluid text-nowrap">
         <ul id="navbarNav" class="navbar-nav navbar-collapse collapse fonte">
-            @foreach (KeyValuePair<string, string> route in amogus2avinganca)
+            @foreach (KeyValuePair<string, string> route in paginas_sistema)
             {
                 <li class="nav-item d-flex flex-row me-3 justify-content-center hover-underline-animation margem">
                     <NavLink href="@route.Key" class="nav-link text-white text-nowrap">
@@ -101,36 +103,29 @@ nav {
                 </li>
             }
         </ul>
-        <a href="/login" class="text-center btn btn-outline-light px-3 py-2 fs-5 margem2">
-        <i class="bi bi-lock"></i>
-            Login
+
+        <a @onclick="() => { AreaRedirect(); }" class="text-center btn btn-outline-light px-3 py-2 fs-5">
+            <i class="bi bi-lock"></i>
+            Área do Usuário
         </a>
-
-        @*
-        <div class="btn-group">
-            <button type="button" class="btn btn-light dropdown-toggle fonte4 margem2" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle"></i> SELECT nome C/ ID
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Minha Conta</a></li>
-                <li><a class="dropdown-item" href="#">Meus Investimentos</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Sair</a></li>
-            </ul>
-        </div> *@
-
     </div>
-
 </nav>
 
 @code {
-    private Dictionary<string, string> amogus2avinganca =
+
+    private Dictionary<string, string> paginas_sistema =
     new Dictionary<string, string> {
 {"/blog","Blog"},
 {"/simulador","Simulador"},
 {"/investimentos-disponiveis", "Investimentos"},
 {"/contato","Contato"}
         };
+
+    public async void AreaRedirect() {
+        var app_key = await JSInterop.InvokeAsync<string>("localStorage.getItem","app_key");
+        
+        NavigationManager.NavigateTo((app_key == String.Empty || app_key == "") ? "login" : "areausuario"); 
+    }
 
     [Parameter]
     public string nav_classes { get; set; } = "";
