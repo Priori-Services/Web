@@ -1,0 +1,66 @@
+@page "/simulador"
+
+@using PRIORI_SERVICES_WEB.Data.Model;
+@using PRIORI_SERVICES_WEB.Data.API;
+
+<style>
+    html, body {
+        background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
+    }
+    .margemInv {
+        margin-left: 4rem;
+    }
+</style>
+
+<NavMenu nav_classes="sticky-top" />
+
+<div class="margemInv">
+    <div class="my-5 row row-cols-4 container-fluid text-center">
+            @foreach (Investimento investimento in invDisponiveis)
+            {
+                <div class="card p-2 m-5 bg-white text-dark">
+                    <div class="card-header d-flex flex-row bd-highlight">
+                        <div class="bd-highlight risco">
+                            <style>
+                                .risco {
+                                    background-color: red; @*alterar de acordo com o risco*@
+                                    margin-right: 1rem;
+                                    width: 0.65rem;
+                                    border-radius: 1rem;
+                                }
+                            </style>
+                        </div>
+                        <div class="bd-highlight">
+                            <h3 class="text-success">@investimento.nome</h3>
+                            </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <ul class="list-group" style="list-style-type: none;">
+                            <li class="list-group-item">Investimento Minimo: R$ @investimento.valor_minimo</li>
+                            <li class="list-group-item">Vencimento: @investimento.vencimento</li>
+                            <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li> 
+                            <br>
+                            <button type="button" class="btn btn-outline-success"><a>Simule</a></button>
+                        </ul>
+                    </div>
+                </div>
+            }
+    </div>
+</div>
+
+<Footer></Footer>
+
+
+@code {
+    public Investimento[] invDisponiveis = new Investimento[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        invDisponiveis = await APIHandler.FetchOrFallbackAsync<Investimento[]>("api/investimento", new Investimento[] {
+           new Investimento {
+            nome = "Falha ao encontrar investimentos."
+           } 
+        });
+    }
+}
