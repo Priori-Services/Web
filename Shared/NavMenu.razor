@@ -104,7 +104,7 @@ nav {
             }
         </ul>
 
-        <a @onclick="() => { AreaRedirect().ConfigureAwait(false).GetAwaiter().GetResult(); }" class="text-center btn btn-outline-light px-3 py-2 fs-5">
+        <a @onclick="() => { AreaRedirect(); }" class="text-center btn btn-outline-light px-3 py-2 fs-5">
             <i class="bi bi-lock"></i>
             Área do Usuário
         </a>
@@ -122,9 +122,9 @@ nav {
         };
 
     public async Task AreaRedirect() {
-        var app_key = await JSInterop.InvokeAsync<string>("localStorage.getItem","app_token");
+        var app_key = await JSInterop.InvokeAsync<string?>("localStorage.getItem","app_token");
         Console.WriteLine(app_key);
-        NavigationManager.NavigateTo((app_key == String.Empty || app_key == "") ? "/login" : "/areausuario"); 
+        NavigationManager.NavigateTo((app_key == String.Empty || app_key == "" || app_key == null) ? "/login" : "/areausuario"); 
     }
 
     [Parameter]
