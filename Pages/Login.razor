@@ -1,5 +1,6 @@
 @page "/login"
 @using PRIORI_SERVICES_WEB.Data.API
+@using PRIORI_SERVICES_WEB.Data.Model
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 
@@ -69,11 +70,7 @@
 
     public void LoginUser()
     {
-        try
-        {
-            var t = LoginUserAsync(emailUser, senhaUser);
-            t.RunSynchronously();
-        }
+        try { LoginUserAsync(emailUser, senhaUser).RunSynchronously(); }
         catch (Exception){}
     }
 
@@ -83,16 +80,27 @@
 {"email", emailUser},
 {"senha", senhaUser}
 }, "api/Auth/Cliente/login");
-        if (response.IsSuccessStatusCode) {
-            display_errorlabel = "none";
-            await JSInterop.InvokeVoidAsync(
-                "localStorage.setItem", 
-                "app_token", 
-                await response.Content.ReadAsStringAsync()
-            );
-            NavigationManager.NavigateTo("/");
-        } else {
+        if (!response.IsSuccessStatusCode) {
             display_errorlabel = "block";
+            return;
         }
+        
+        display_errorlabel = "none";
+        MemoryStream stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(await response.Content.ReadAsStringAsync()));
+
+        var JWTOBJ = await System.Text.Json.JsonSerializer.DeserializeAsync<JWTReturn>(stream); 
+
+        
+        await JSInterop.InvokeVoidAsync(
+            "localStorage.setItem",
+            "user_id",
+            JWTOBJ!.id
+        );
+        await JSInterop.InvokeVoidAsync(
+            "localStorage.setItem", 
+            "app_token", 
+            JWTOBJ!.jwt_key 
+        );
+        NavigationManager.NavigateTo("/");
     }
 }

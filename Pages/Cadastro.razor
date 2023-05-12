@@ -166,15 +166,8 @@
         }
 
         error_status = "none";
-        try
-        {
-            var t = CadastroUserAsync(target_cliente);
-            t.RunSynchronously();
-        }
-        catch (Exception)
-        {
-
-        }
+        try { CadastroUserAsync(target_cliente).RunSynchronously(); }
+        catch (Exception){}
     }
 
     public async Task CadastroUserAsync(ClienteDBO request)
