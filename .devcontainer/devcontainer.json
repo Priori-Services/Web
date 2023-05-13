@@ -15,10 +15,7 @@
         "vscode": {
             "extensions": [
                 "ms-dotnettools.csharp",
-                "EditorConfig.EditorConfig",
-                "ms-vsliveshare.vsliveshare",
-                "GitHub.vscode-pull-request-github",
-                "ms-mssql.mssql"
+                "EditorConfig.EditorConfig"
             ]
         }
     },
