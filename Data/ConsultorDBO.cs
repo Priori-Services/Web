@@ -1,6 +1,6 @@
 namespace PRIORI_SERVICES_WEB.Data.Model;
 
-public class ConsultorDBO
+public sealed class ConsultorDBO
 {
     public string? nome { get; set; }
     public string? cpf { get; set; }
