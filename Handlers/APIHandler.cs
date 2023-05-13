@@ -5,12 +5,11 @@ namespace PRIORI_SERVICES_WEB.Data.API;
 
 public static class APIHandler
 {
-    public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url, string? api_endpoint = null)
-    {
-        if (api_endpoint == null)
-            api_endpoint = DefaultConfig.API_ENDPOINT;
+    private static string api_endpoint { get; set; } = DefaultConfig.API_ENDPOINT;
 
-        string? response = await new HttpClient().GetStringAsync($"http://{api_endpoint}/{target_url}");
+    public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
+    {
+        string? response = await new HttpClient().GetStringAsync($"http://{api_endpoint}/api{target_url}");
 
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(response));
 
@@ -35,15 +34,24 @@ public static class APIHandler
         return initial_object;
     }
 
-    public static async Task<HttpResponseMessage> PostApiRequestAsync(Dictionary<string, string> json_object, string target_url, string? api_endpoint = null)
+    public static async Task<HttpResponseMessage> PostApiRequestAsync(Dictionary<string, string> json_object, string target_url)
     {
-        if (api_endpoint == null)
-            api_endpoint = DefaultConfig.API_ENDPOINT;
 
-        string json_string = Encoding.UTF8.GetString(JsonSerializer.SerializeToUtf8Bytes(json_object));
-        
-        var content = new StringContent(json_string, UnicodeEncoding.UTF8, "application/json");
-        var response = await new HttpClient().PostAsync($"http://{api_endpoint}/{target_url}", content);
+        string json_string = Encoding.UTF8.GetString(
+            JsonSerializer.SerializeToUtf8Bytes(json_object)
+        );
+
+        var content = new StringContent(
+            json_string, 
+            UnicodeEncoding.UTF8, 
+            "application/json"
+        );
+
+
+        var response = await new HttpClient().PostAsync(
+            $"http://{api_endpoint}/api{target_url}", 
+            content
+        );
 
         return response;
     }
