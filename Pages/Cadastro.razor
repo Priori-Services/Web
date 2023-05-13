@@ -38,7 +38,8 @@
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
-            <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required /> <br>
+            <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required
+                maxlength="11" /> <br>
         </div>
 
         <div class="form-outline mb-4">
@@ -53,121 +54,123 @@
             <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required /> <br>
         </div>
 
+        @*TODO: remover isso aqui miau miau*@
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarEmail">Celular</label>
             <span class="detalhes">para o caso de precisarmos entrar em contato</span>
-            <input type="tel" @bind="target_cliente.telefone" @bind:event="oninput" class="form-control" required />
+            <input type="tel" @bind="target_cliente.telefone" @bind:event="oninput" class="form-control" required
+                maxlength="20" />
             <br>
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registerPassword">Senha</label>
             <input type="password" @bind="target_cliente.senha" @bind:event="oninput" class="form-control" required />
-            <br>
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
             <input type="password" @bind="confirmacaoSenhaLogin" @bind:event="oninput" class="form-control" required />
-            <br>
         </div>
 
-        <!-- Checkbox -->
         <div class="form-check d-flex justify-content-center mb-4">
             <input class="form-check-input me-2" type="checkbox" value="" @bind="registerCheck"
                 aria-describedby="registerCheckHelpText" required />
             <label class="form-check-label" for="registerCheck">
                 Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
             </label>
-
         </div>
 
-        <button @onclick="() => {CadastroUser();}" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
+        <button formaction="post" @onclick="() => { CadastroUser(); }"
+            class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
             CADASTRAR
         </button>
     </div>
 
-    <div class="card d-@error_status mt-3 bg-transparent border text-white">
+    <div class="card mt-3 bg-transparent border text-white d-@error_msg.displaytype">
         <div class="card-header p-3">
-            <h2 class="">@error_message</h2>
+            <h2 class="">@error_msg.title</h2>
         </div>
         <div class="card-body p-2 text-center">
-            <p>@error_description</p>
+            <p>@error_msg.description</p>
         </div>
     </div>
 </div>
 
 @code {
-    public string error_status { get; set; } = "none";
-    public string error_message { get; set; } = String.Empty;
-    public string error_description { get; set; } = String.Empty;
+    public ErrorMessageBox error_msg = new ErrorMessageBox();
     public ClienteDBO target_cliente = new ClienteDBO();
     public DateTime dataNasc = DateTime.Now;
     public string confirmacaoSenhaLogin { get; set; } = String.Empty;
 
-    public bool registerCheck { get; set; } = true;
+    public bool registerCheck { get; set; } = false;
 
     public void CadastroUser()
     {
-        if (!registerCheck)
+        foreach (var prop in target_cliente.GetType().GetProperties())
         {
-            error_status = "block";
-            error_message = "Termos não aceitos";
-            error_description = "O usuário deve aceitar os termos de condições antes de prossegir com o cadastro";
-            return;
+            if (prop.GetValue(target_cliente, null) == null)
+            {
+                error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
+                error_msg.title = "Campo obrigatório não preenchido";
+                error_msg.description = "É necessário preencher todos os campos com suas informação para proceder.";
+                return;
+            }
         }
 
-        if (DateTime.Now.Year - dataNasc.Year <= 18)
+        var main_checks = new List<ErrorEntry> {
+new ErrorEntry {
+is_error_valid = (DateTime.Now.Year - dataNasc.Year <= 18),
+error_title = "Você deve ser maior de 18",
+error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos"
+},
+new ErrorEntry {
+is_error_valid = (target_cliente.senha != confirmacaoSenhaLogin),
+error_title = "Falha ao verificar senha",
+error_description = "A senha e sua confirmação não são iguais"
+},
+new ErrorEntry {
+is_error_valid = (!target_cliente.senha!.Any(char.IsSymbol)),
+error_title = "Falha ao verificar senha",
+error_description = "Senha deve conter símbolos"
+},
+new ErrorEntry {
+is_error_valid = (target_cliente.senha!.Length <= 8),
+error_title = "Falha ao verificar senha",
+error_description = "Senha deve ter mais de 8 caractéres"
+},
+new ErrorEntry {
+is_error_valid = (!target_cliente.senha.Any(char.IsNumber)),
+error_title = "Falha ao verificar senha",
+error_description = "Senha deve ter pelo menos um número"
+},
+new ErrorEntry {
+is_error_valid = (!target_cliente.senha.Any(char.IsUpper)),
+error_title = "Falha ao verificar senha",
+error_description = "Senha deve ter pelo menos um caractére maiúsculo"
+},
+new ErrorEntry {
+is_error_valid = (target_cliente.cpf!.Length > 11),
+error_title = "Falha ao verificar o CPF",
+error_description = "CPF do usuário deve ter menos de 11 caractéres"
+}
+};
+
+        foreach (var check in main_checks)
         {
-            error_status = "block";
-            error_message = "Você deve ser maior de 18";
-            error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos";
-            return;
+            if (check.is_error_valid)
+            {
+                Console.WriteLine("echo hi");
+                error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
+                error_msg.title = check.error_title;
+                error_msg.description = check.error_description;
+                return;
+            }
         }
 
-        if (target_cliente.senha != confirmacaoSenhaLogin)
-        {
-            error_status = "block";
-            error_message = "Falha ao verificar senha";
-            error_description = "A senha e sua confirmação não são iguais";
-            return;
-        }
-
-        if (target_cliente.senha.Length <= 8)
-        {
-            error_status = "block";
-            error_message = "Falha ao verificar senha";
-            error_description = "Senha deve ter mais de 8 caractéres";
-            return;
-        }
-
-        if (!target_cliente.senha.Any(char.IsSymbol))
-        {
-            error_status = "block";
-            error_message = "Falha ao verificar senha";
-            error_description = "Senha deve conter símbolos";
-            return;
-        }
-
-        if (!target_cliente.senha.Any(char.IsNumber))
-        {
-            error_status = "block";
-            error_message = "Falha ao verificar senha";
-            error_description = "Senha deve ter pelo menos um número";
-            return;
-        }
-
-        if (!target_cliente.senha.Any(char.IsUpper))
-        {
-            error_status = "block";
-            error_message = "Falha ao verificar senha";
-            error_description = "Senha deve ter pelo menos um caractére maiúsculo";
-            return;
-        }
-
-        error_status = "none";
+        error_msg.displaytype = ErrorMessageBoxDisplay.none.ToString();
         try { CadastroUserAsync(target_cliente).RunSynchronously(); }
-        catch (Exception){}
+        catch (Exception) { }
     }
 
     public async Task CadastroUserAsync(ClienteDBO request)
@@ -178,16 +181,18 @@
 {"cpf", request.cpf!},
 {"email", request.email!},
 {"telefone", request.telefone!}
-}, "api/Auth/Cliente/registrar");
-
-        if (response.IsSuccessStatusCode)
+}, "/Auth/Cliente/registrar");
+       Console.WriteLine(response.StatusCode); 
+        if (!(response.StatusCode == System.Net.HttpStatusCode.BadRequest))
         {
             NavigationManager.NavigateTo("/login");
             return;
         }
-        error_status = "block";
-        error_message = "Falha ao cadastrar";
-        error_description = "Tente novamente :(";
-
+        else
+        {
+            error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
+            error_msg.title = "Falha ao cadastrar";
+            error_msg.description = "Tente novamente :(";
+        }
     }
 }
