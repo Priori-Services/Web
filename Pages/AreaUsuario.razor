@@ -1,6 +1,7 @@
 @page "/areausuario"
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
+@using PRIORI_SERVICES_WEB.Data
 
 <style>
     ::-webkit-scrollbar {
@@ -26,7 +27,7 @@
         <a href="/investimentos-efetuados" class="btn container-fluid btn-outline-light text-light p-3 fs-2">
             Meus Investimentos
         </a>
-        <button onclick="() => { SairUser();}" class="btn container-fluid btn-outline-light text-light p-3 fs-2">
+        <button @onclick="SairUser" class="btn container-fluid btn-outline-light text-light p-3 fs-2">
             Sair
         </button>
    </div>
@@ -34,7 +35,7 @@
 
 @code {
     public async void SairUser() {
-        await JSInterop.InvokeVoidAsync("localStorage.setItem", "app_key", "");
+        await JSInterop.InvokeVoidAsync("localStorage.setItem", LocalStorageTypes.app_token, "");
         NavigationManager.NavigateTo("/");
     }
 }

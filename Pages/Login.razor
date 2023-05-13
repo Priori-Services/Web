@@ -79,7 +79,7 @@
         var response = await APIHandler.PostApiRequestAsync(new Dictionary<string, string> {
 {"email", emailUser},
 {"senha", senhaUser}
-}, "api/Auth/Cliente/login");
+}, "/Auth/Cliente/login");
         if (!response.IsSuccessStatusCode) {
             display_errorlabel = "block";
             return;

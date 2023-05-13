@@ -50,7 +50,7 @@ html, body {
     {
         Console.WriteLine(await JSInterop.InvokeAsync<string>("localStorage.getItem","user_id"));
         invEfetuados = await APIHandler.FetchOrFallbackAsync<Carteira[]>(
-            $"api/CarteiraInvestimento/{await JSInterop.InvokeAsync<string>("localStorage.getItem","user_id")}", 
+            $"/CarteiraInvestimento/{await JSInterop.InvokeAsync<string>("localStorage.getItem","user_id")}", 
             new Carteira[] {
                 new Carteira {
                     status = "Não encontrado"

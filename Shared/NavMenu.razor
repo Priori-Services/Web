@@ -1,5 +1,6 @@
 ﻿@inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
+@using PRIORI_SERVICES_WEB.Data
 
 <style>
 .hover-underline-animation {
@@ -104,10 +105,10 @@ nav {
             }
         </ul>
 
-        <a @onclick="() => { AreaRedirect(); }" class="text-center btn btn-outline-light px-3 py-2 fs-5">
+        <button @onclick="AreaRedirect" class="text-center btn btn-outline-light px-3 py-2 fs-5">
             <i class="bi bi-lock"></i>
             Área do Usuário
-        </a>
+        </button>
     </div>
 </nav>
 
@@ -122,9 +123,16 @@ nav {
         };
 
     public async Task AreaRedirect() {
-        var app_key = await JSInterop.InvokeAsync<string?>("localStorage.getItem","app_token");
-        Console.WriteLine(app_key);
-        NavigationManager.NavigateTo((app_key == String.Empty || app_key == "" || app_key == null) ? "/login" : "/areausuario"); 
+        var app_key = await JSInterop.InvokeAsync<string?>(
+            "localStorage.getItem",
+            LocalStorageTypes.app_token
+        );
+
+        NavigationManager.NavigateTo(
+            (app_key == String.Empty || app_key == "" || app_key == null) 
+            ? "/login" 
+            : "/areausuario"
+        ); 
     }
 
     [Parameter]

@@ -57,12 +57,12 @@
     protected override async Task OnInitializedAsync()
     {
         PageBlogPosts = await APIHandler.FetchOrFallbackAsync<PostBlog[]>(
-        "api/Blog/Posts",
+        "/Blog/Posts",
         new PostBlog[] { new PostBlog { titulo = "Falha ao encontrar posts" } }
         );
 
         PageBlogCategoria = await APIHandler.FetchOrFallbackAsync<CategoriaBlog[]>(
-        "api/Blog/Categorias",
+        "/Blog/Categorias",
         new CategoriaBlog[]{
 new CategoriaBlog {
 id_categoria = 999,
