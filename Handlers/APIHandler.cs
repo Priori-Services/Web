@@ -6,14 +6,16 @@ namespace PRIORI_SERVICES_WEB.Data.API;
 public static class APIHandler
 {
     private static string api_endpoint { get; set; } = DefaultConfig.API_ENDPOINT;
+    public static HttpClient static_client = new HttpClient(); 
 
     public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
     {
-        string? response = await new HttpClient().GetStringAsync($"http://{api_endpoint}/api{target_url}");
+        string? response = await static_client.GetStringAsync($"http://{api_endpoint}/api{target_url}");
 
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(response));
 
         return await JsonSerializer.DeserializeAsync<T>(stream);
+
     }
 
     public static async Task<T> FetchOrFallbackAsync<T>(string target_url, T fallback_object)
@@ -48,7 +50,7 @@ public static class APIHandler
         );
 
 
-        var response = await new HttpClient().PostAsync(
+        var response = await static_client.PostAsync(
             $"http://{api_endpoint}/api{target_url}", 
             content
         );
