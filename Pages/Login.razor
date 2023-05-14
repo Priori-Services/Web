@@ -1,6 +1,6 @@
 @page "/login"
 @using PRIORI_SERVICES_WEB.Data.API
-@using PRIORI_SERVICES_WEB.Data.Model
+@using PRIORI_SERVICES_WEB.Data
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 
@@ -80,6 +80,7 @@
 {"email", emailUser},
 {"senha", senhaUser}
 }, "/Auth/Cliente/login");
+
         if (!response.IsSuccessStatusCode)
         {
             display_errorlabel = "block";
@@ -87,21 +88,33 @@
         }
 
         display_errorlabel = "none";
-        MemoryStream stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(await response.Content.ReadAsStringAsync()));
 
-        var JWTOBJ = await System.Text.Json.JsonSerializer.DeserializeAsync<JWTReturn>(stream);
-
-
-        await JSInterop.InvokeVoidAsync(
-        "localStorage.setItem",
-        "user_id",
-        JWTOBJ!.id
+        var JWTOBJ = await System.Text.Json.JsonSerializer.DeserializeAsync<Dictionary<string, string>?>(
+        await response.Content.ReadAsStreamAsync()
         );
-        await JSInterop.InvokeVoidAsync(
-        "localStorage.setItem",
-        "app_token",
-        JWTOBJ!.jwt_key
-        );
+        if (JWTOBJ == null)
+        {
+            display_errorlabel = "block";
+            return;
+        }
+
+        try
+        {
+            await JSInterop.InvokeVoidAsync(
+            "localStorage.setItem",
+            LocalStorageTypes.user_id.ToString(),
+            JWTOBJ["id"]
+            );
+            await JSInterop.InvokeVoidAsync(
+            "localStorage.setItem",
+            LocalStorageTypes.app_token.ToString(),
+            JWTOBJ["jwt_key"]
+            );
+        }
+        catch (KeyNotFoundException)
+        {
+            display_errorlabel = "block";
+        }
         NavigationManager.NavigateTo("/");
     }
 }
