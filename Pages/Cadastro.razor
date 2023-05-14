@@ -182,7 +182,7 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 {"email", request.email!},
 {"telefone", request.telefone!}
 }, "/Auth/Cliente/registrar");
-       Console.WriteLine(response.StatusCode); 
+        Console.WriteLine(response.StatusCode);
         if (!(response.StatusCode == System.Net.HttpStatusCode.BadRequest))
         {
             NavigationManager.NavigateTo("/login");

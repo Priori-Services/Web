@@ -3,107 +3,88 @@
 @using PRIORI_SERVICES_WEB.Data
 
 <style>
-.hover-underline-animation {
-  display: inline-block;
-  position: relative;
-  color: #ffffff;
-}
+    .hover-underline-animation {
+        display: inline-block;
+        position: relative;
+        color: #ffffff;
+    }
 
-.hover-underline-animation::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: #ffffff;
-  transform-origin: bottom right;
-  transition: transform 0.25s ease-out;
-}
+    .hover-underline-animation::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        transform: scaleX(0);
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #ffffff;
+        transform-origin: bottom right;
+        transition: transform 0.25s ease-out;
+    }
 
-.hover-underline-animation:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
+    .hover-underline-animation:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
 
-.margem {
-    padding-right: 0.5rem;
-}
-.margem2 {
-    margin-right: 1.5rem;
-    margin-left: 0.1rem;
-}
-.margem3 {
-    margin-left: 1.5rem;
-}
-nav {
-    background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));"
-}
-.fonte {
-    font-size: 15px;
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    font-weight: 400;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-.fonte2 {
-    font-size: 30px;
-    font-family: "Poppins", sans-serif;
-    line-height: 1;
-    font-weight: 400;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-.fonte3 {
-    font-size: 25px;
-    font-family: "Poppins", sans-serif;
-    line-height: 1;
-    font-weight: 400;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-.fonte4 {
-    font-size: 20px;
-    font-family: "Poppins", sans-serif;
-    line-height: 1;
-    font-size: medium;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
+    .margem {
+        padding-right: 0.5rem;
+    }
+
+    .margem2 {
+        margin-right: 1.5rem;
+        margin-left: 0.1rem;
+    }
+
+    .margem3 {
+        margin-left: 1.5rem;
+    }
+
+    .fonte-nav-lista {
+        font-size: 15px;
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .fonte-titulo {
+        font-family: "Poppins", sans-serif;
+        line-height: 1;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
 </style>
 
-<nav id="mainNav" class="navbar navbar-expand text-white bg-dark d-flex flex-row @nav_classes" style="@nav_style">
-    <div class="container-fluid text-nowrap text-decoration-none text-white m-1-15 fonte2">
-        <NavLink href="/" style="text-decoration: none;" class="text-white">
-            <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid margem3"
+<nav class="navbar navbar-expand text-white bg-dark d-flex flex-row @nav_classes"
+    style="background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167)); @nav_style">
+    <div class="container-fluid text-nowrap text-decoration-none text-white m-1-15">
+        <NavLink href="/" class="text-white fonte-titulo fs-3"
+            style="font-family: Poppins, sans-serif; text-decoration: none">
+            <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid"
                 width="65em" height="60em" />
-            Priori
-            Services
+            PRIORI
+            SERVICES
         </NavLink>
-        
-        <a href="/" class=""></a>
     </div>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon" />
-    </button>
-
     <div class="container-fluid text-nowrap">
-        <ul id="navbarNav" class="navbar-nav navbar-collapse collapse fonte">
-            @foreach (KeyValuePair<string, string> route in paginas_sistema)
-            {
-                <li class="nav-item d-flex flex-row me-3 justify-content-center hover-underline-animation margem">
-                    <NavLink href="@route.Key" class="nav-link text-white text-nowrap">
-                        @route.Value
-                    </NavLink> 
-                </li>
-            }
-        </ul>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav fonte-nav-lista">
+                @foreach (KeyValuePair<string, string> route in paginas_sistema)
+                {
+                    <li class="nav-item d-flex flex-row me-3 justify-content-center hover-underline-animation">
+                        <NavLink href="@route.Key" class="nav-link text-white text-nowrap">
+                            @route.Value
+                        </NavLink>
+                    </li>
+                }
+            </ul>
+        </div>
 
         <button @onclick="AreaRedirect" class="text-center btn btn-outline-light px-3 py-2 fs-5">
             <i class="bi bi-lock"></i>
@@ -122,17 +103,18 @@ nav {
 {"/contato","Contato"}
         };
 
-    public async Task AreaRedirect() {
+    public async Task AreaRedirect()
+    {
         var app_key = await JSInterop.InvokeAsync<string?>(
-            "localStorage.getItem",
-            LocalStorageTypes.app_token
+        "localStorage.getItem",
+        LocalStorageTypes.app_token
         );
 
         NavigationManager.NavigateTo(
-            (app_key == String.Empty || app_key == "" || app_key == null) 
-            ? "/login" 
-            : "/areausuario"
-        ); 
+        (app_key == String.Empty || app_key == "" || app_key == null)
+        ? "/login"
+        : "/areausuario"
+        );
     }
 
     [Parameter]
