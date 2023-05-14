@@ -81,7 +81,7 @@
             </label>
         </div>
 
-        <button formaction="post" @onclick="() => { CadastroUser(); }"
+        <button formaction="post" @onclick="CadastroUser"
             class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
             CADASTRAR
         </button>
@@ -160,7 +160,6 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
         {
             if (check.is_error_valid)
             {
-                Console.WriteLine("echo hi");
                 error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
                 error_msg.title = check.error_title;
                 error_msg.description = check.error_description;
@@ -168,7 +167,6 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
             }
         }
 
-        error_msg.displaytype = ErrorMessageBoxDisplay.none.ToString();
         try { CadastroUserAsync(target_cliente).RunSynchronously(); }
         catch (Exception) { }
     }
@@ -182,17 +180,15 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 {"email", request.email!},
 {"telefone", request.telefone!}
 }, "/Auth/Cliente/registrar");
-        Console.WriteLine(response.StatusCode);
+
         if (!(response.StatusCode == System.Net.HttpStatusCode.BadRequest))
         {
             NavigationManager.NavigateTo("/login");
             return;
         }
-        else
-        {
-            error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
-            error_msg.title = "Falha ao cadastrar";
-            error_msg.description = "Tente novamente :(";
-        }
+ 
+        error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
+        error_msg.title = "Falha ao cadastrar";
+        error_msg.description = "Tente novamente";        
     }
 }
