@@ -1,7 +1,8 @@
 @page "/simulador"
 
 @using PRIORI_SERVICES_WEB.Data.Model;
-@using PRIORI_SERVICES_WEB.Data.API;
+@using PRIORI_SERVICES_WEB.Handler;
+@inject NavigationManager NavigationManager
 
 <style>
     html,
@@ -68,213 +69,15 @@
                         <h4 class="p-1" style="text-align: center;">@investimento.nome</h4>
                     </div>
                 </div>
+                <div class="card-body">
 
-                <div class="card-body shadow-lg">
-                    @switch (investimento.id_riscoInvestimento)
-                        {
-                            case 1:
-                                @switch (investimento.tipo_investimento)
-                                {
-                                    case "SELIC":
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-4" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-                                    
-                                    case "IPCA":
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-4" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-
-                                    default:
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-                                }
-                                break;
-                            case 2:
-                                @switch (investimento.tipo_investimento)
-                                {
-                                    case "SELIC":
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-4" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-                                    
-                                    case "IPCA":
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-4" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-
-                                    default:
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-                                }
-                                break;
-                            case 3:
-                                @switch (investimento.tipo_investimento)
-                                {
-                                    case "SELIC":
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-4" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-                                    
-                                    case "IPCA":
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-4" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-
-                                    default:
-                                    <ul style="list-style-type: none;  margin-left: -1.7rem;">
-                                        <div class="d-flex flex-row container-fluid my-3">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Investimento Minimo:⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @investimento.valor_minimo</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.vencimento.ToShortDateString()</B></li></div>
-                                        </div>
-                                        <div class="d-flex flex-row container-fluid my-4">
-                                            <div><li class="list-group-item mt-2" style="font-size: Large; text-align: left;">Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀</li></div>
-                                            <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@investimento.rentabilidade_fixa%</B></li></div>
-                                        </div>
-                                        <br>
-                                        <a href="/PosSimulacao">
-                                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
-                                        </a>
-                                    </ul>
-                                    break;
-                                }
-                                break;
-                        }
-                    
+                    <ul class="list-group" style="list-style-type: none;">
+                        <li class="list-group-item">Investimento Minimo: R$ @investimento.valor_minimo</li>
+                        <li class="list-group-item">Vencimento: @investimento.vencimento</li>
+                        <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
+                        <br>
+                        <button type="button" class="btn btn-outline-success"><a>Simule</a></button>
+                    </ul>
                 </div>
 
             </div>
@@ -287,10 +90,6 @@
 
 @code {
     public Investimento[] invDisponiveis = new Investimento[0];
-
-    public void idSelecionado(int id_investimento) {
-        SimulacaoID.id_selecionado = id_investimento;
-    }
 
     protected override async Task OnInitializedAsync()
     {
