@@ -12,26 +12,58 @@
     .margemInv {
         margin-left: 4rem;
     }
+
+    .risco {
+        margin-right: 1rem;
+        width: 0.65rem;
+        border-radius: 1rem;
+    }
 </style>
 
 <NavMenu nav_classes="sticky-top" />
 
+<div class="d-flex flex-row align-items-center mt-">
+    <div class="container-fluid">&ensp;</div>
+    <div class="d-flex flex-row container-fluid text-center bg-white rounded-4 p-2 mt-4" style="width: fit-content; text-align: center;">
+         
+        <div class="bg-success mx-3 p-2 mt-2  rounded-4 my-2"></div>
+        <p class="fonte-titulo fs-7 text-dark mt-3" style="margin-right: 1rem;">Baixo risco</p>
+
+        <div class="bg-warning mx-3 p-2 mt-2  rounded-4 my-2"></div>
+        <p class="fonte-titulo fs-7 text-dark mt-3" style="margin-right: 1rem;">Médio risco</p>
+
+        <div class="bg-danger mx-3 p-2 mt-2  rounded-4 my-2"></div>
+        <p class="fonte-titulo fs-7 text-dark mt-3" style="margin-right: 1rem;">Alto risco</p>
+        
+    </div>
+    <div class="container-fluid">&ensp;</div>
+</div>
+
 <div class="margemInv">
-    <div class="my-5 row row-cols-4 container-fluid text-center">
+    <div class="my-3 row row-cols-4 container-fluid text-center">
         @foreach (Investimento investimento in invDisponiveis)
         {
             <div class="card p-2 m-5 bg-white text-dark">
                 <div class="card-header d-flex flex-row bd-highlight">
-                    <div class="bd-highlight risco">
-                        <style>
-                            .risco {
-                                background-color: red;
-                            @*alterardeacordocomorisco*@margin-right: 1rem;
-                                width: 0.65rem;
-                                border-radius: 1rem;
-                            }
-                        </style>
-                    </div>
+                     @switch (investimento.id_riscoInvestimento)
+                        {
+                            case 1:
+                                <div class="bg-success risco">
+                                    &ensp;
+                                </div>
+                                break;
+                            case 2:
+                                <div class="bg-warning risco">
+                                    &ensp;
+                                </div>
+                                break;
+                            case 3:
+                                <div class="bg-danger risco">
+                                    &ensp;
+                                </div>
+                                break;
+                        }
+                    
                     <div class="bd-highlight">
                         <h3 class="text-success">@investimento.nome</h3>
                     </div>
@@ -43,7 +75,9 @@
                         <li class="list-group-item">Vencimento: @investimento.vencimento</li>
                         <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
                         <br>
-                        <button type="button" class="btn btn-outline-success"><a>Simule</a></button>
+                        <a href="/PosSimulacao">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="() => {idSelecionado(investimento.id_investimento); }">Simule</button>
+                        </a>
                     </ul>
                 </div>
             </div>
@@ -56,6 +90,10 @@
 
 @code {
     public Investimento[] invDisponiveis = new Investimento[0];
+
+    public void idSelecionado(int id_investimento) {
+        SimulacaoID.id_selecionado = id_investimento;
+    }
 
     protected override async Task OnInitializedAsync()
     {
