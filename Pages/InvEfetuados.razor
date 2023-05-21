@@ -1,7 +1,9 @@
 @page "/investimentos-efetuados"
 @inject IJSRuntime JSInterop
 @using PRIORI_SERVICES_WEB.Data.Model
-@using PRIORI_SERVICES_WEB.Data.API
+@using PRIORI_SERVICES_WEB.Data.Types
+@using PRIORI_SERVICES_WEB.Handler
+@using System.Net.Http.Headers
 
 <style>
     html,
@@ -52,15 +54,24 @@
 
     public async Task InitializeInvestimentos()
     {
-        Console.WriteLine(await JSInterop.InvokeAsync<string>("localStorage.getItem", "user_id"));
+        string? user_id = await JSInterop.InvokeAsync<string?>("localStorage.getItem", LocalStorageKeys.user_id.ToString());
+        string? app_token = await JSInterop.InvokeAsync<string?>("localStorage.getItem",
+        LocalStorageKeys.app_token.ToString());
+
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
+
         invEfetuados = await APIHandler.FetchOrFallbackAsync<Carteira[]>(
-        $"/CarteiraInvestimento/{await JSInterop.InvokeAsync<string>("localStorage.getItem", "user_id")}",
+        $"/CarteiraInvestimento/{user_id}",
         new Carteira[] {
 new Carteira {
 status = "Não encontrado"
 }
         }
         );
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+
         visible_main = true;
     }
 }

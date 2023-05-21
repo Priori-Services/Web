@@ -1,6 +1,6 @@
 @page "/login"
-@using PRIORI_SERVICES_WEB.Data.API
-@using PRIORI_SERVICES_WEB.Data
+@using PRIORI_SERVICES_WEB.Handler
+@using PRIORI_SERVICES_WEB.Data.Types
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 
@@ -102,12 +102,12 @@
         {
             await JSInterop.InvokeVoidAsync(
             "localStorage.setItem",
-            LocalStorageTypes.user_id.ToString(),
+            LocalStorageKeys.user_id.ToString(),
             JWTOBJ["id"]
             );
             await JSInterop.InvokeVoidAsync(
             "localStorage.setItem",
-            LocalStorageTypes.app_token.ToString(),
+            LocalStorageKeys.app_token.ToString(),
             JWTOBJ["jwt_key"]
             );
         }

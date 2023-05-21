@@ -1,6 +1,6 @@
 @page "/cadastro"
 @using PRIORI_SERVICES_WEB.Data.Model
-@using PRIORI_SERVICES_WEB.Data.API
+@using PRIORI_SERVICES_WEB.Handler
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 
@@ -81,8 +81,7 @@
             </label>
         </div>
 
-        <button formaction="post" @onclick="CadastroUser"
-            class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
+        <button formaction="post" @onclick="CadastroUser" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
             CADASTRAR
         </button>
     </div>
@@ -186,9 +185,9 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
             NavigationManager.NavigateTo("/login");
             return;
         }
- 
+
         error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
         error_msg.title = "Falha ao cadastrar";
-        error_msg.description = "Tente novamente";        
+        error_msg.description = "Tente novamente";
     }
 }

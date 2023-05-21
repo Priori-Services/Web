@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
-@using PRIORI_SERVICES_WEB.Data
+@using PRIORI_SERVICES_WEB.Data.Types
 
 <style>
     .hover-underline-animation {
@@ -96,7 +96,7 @@
     {
         var app_key = await JSInterop.InvokeAsync<string?>(
         "localStorage.getItem",
-        LocalStorageTypes.app_token
+        LocalStorageKeys.app_token.ToString()
         );
 
         NavigationManager.NavigateTo(

@@ -1,12 +1,12 @@
 using System.Text;
 using System.Text.Json;
 
-namespace PRIORI_SERVICES_WEB.Data.API;
+namespace PRIORI_SERVICES_WEB.Handler;
 
 public static class APIHandler
 {
-    private static string api_endpoint { get; set; } = DefaultConfig.API_ENDPOINT;
-    public static HttpClient static_client = new HttpClient(); 
+    private static string api_endpoint { get; set; } = ConfigHandler.API_ENDPOINT;
+    public static HttpClient static_client = new HttpClient();
 
     public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
     {
@@ -44,14 +44,14 @@ public static class APIHandler
         );
 
         var content = new StringContent(
-            json_string, 
-            UnicodeEncoding.UTF8, 
+            json_string,
+            UnicodeEncoding.UTF8,
             "application/json"
         );
 
 
         var response = await static_client.PostAsync(
-            $"http://{api_endpoint}/api{target_url}", 
+            $"http://{api_endpoint}/api{target_url}",
             content
         );
 
