@@ -36,7 +36,7 @@ public static class APIHandler
         return initial_object;
     }
 
-    public static async Task<HttpResponseMessage> PostApiRequestAsync(Dictionary<string, string> json_object, string target_url)
+    public static async Task<HttpResponseMessage> PostApiRequestAsync(Dictionary<string, object> json_object, string target_url)
     {
 
         string json_string = Encoding.UTF8.GetString(

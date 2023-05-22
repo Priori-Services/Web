@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PRIORI_SERVICES_API.Model;
+namespace PRIORI_SERVICES_WEB.Data.Model;
 
 public enum Status { ATIVO, INATIVO }
 public enum RespostaAssessoria { aceitou, recusou, cancelou }

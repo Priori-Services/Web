@@ -3,6 +3,7 @@
 @using PRIORI_SERVICES_WEB.Handler
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
+@inject IToastService Toast
 
 <NavMenu nav_classes="sticky-top" />
 
@@ -45,22 +46,14 @@
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
             <span class="detalhes">necessária pra identificar a maioridade</span>
-            <input type="date" @bind="dataNasc" @bind:event="oninput" class="form-control" required /> <br>
+            <input type="date" @bind="target_cliente.dataNascimento" @bind:event="oninput" class="form-control"
+                required />
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
             <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
             <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required /> <br>
-        </div>
-
-        @*TODO: remover isso aqui miau miau*@
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registrarEmail">Celular</label>
-            <span class="detalhes">para o caso de precisarmos entrar em contato</span>
-            <input type="tel" @bind="target_cliente.telefone" @bind:event="oninput" class="form-control" required
-                maxlength="20" />
-            <br>
         </div>
 
         <div class="form-outline mb-4">
@@ -85,23 +78,17 @@
             CADASTRAR
         </button>
     </div>
-
-    <div class="card mt-3 bg-transparent border text-white d-@error_msg.displaytype">
-        <div class="card-header p-3">
-            <h2 class="">@error_msg.title</h2>
-        </div>
-        <div class="card-body p-2 text-center">
-            <p>@error_msg.description</p>
-        </div>
-    </div>
 </div>
 
 @code {
-    public ErrorMessageBox error_msg = new ErrorMessageBox();
-    public ClienteDBO target_cliente = new ClienteDBO();
-    public DateTime dataNasc = DateTime.Now;
-    public string confirmacaoSenhaLogin { get; set; } = String.Empty;
 
+    public struct ErrorEntry
+    {
+        public bool is_error_valid;
+        public string error_description;
+    }
+    public ClienteDBO target_cliente = new ClienteDBO();
+    public string confirmacaoSenhaLogin { get; set; } = String.Empty;
     public bool registerCheck { get; set; } = false;
 
     public void CadastroUser()
@@ -110,47 +97,38 @@
         {
             if (prop.GetValue(target_cliente, null) == null)
             {
-                error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
-                error_msg.title = "Campo obrigatório não preenchido";
-                error_msg.description = "É necessário preencher todos os campos com suas informação para proceder.";
+                Toast.ShowError("É necessário preencher todos os campos com suas informação para proceder.");
                 return;
             }
         }
 
         var main_checks = new List<ErrorEntry> {
 new ErrorEntry {
-is_error_valid = (DateTime.Now.Year - dataNasc.Year <= 18),
-error_title = "Você deve ser maior de 18",
+is_error_valid = (DateTime.Now.Year - target_cliente.dataNascimento!.Value.Year <= 18),
 error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos"
 },
 new ErrorEntry {
 is_error_valid = (target_cliente.senha != confirmacaoSenhaLogin),
-error_title = "Falha ao verificar senha",
 error_description = "A senha e sua confirmação não são iguais"
 },
 new ErrorEntry {
 is_error_valid = (!target_cliente.senha!.Any(char.IsSymbol)),
-error_title = "Falha ao verificar senha",
 error_description = "Senha deve conter símbolos"
 },
 new ErrorEntry {
 is_error_valid = (target_cliente.senha!.Length <= 8),
-error_title = "Falha ao verificar senha",
 error_description = "Senha deve ter mais de 8 caractéres"
 },
 new ErrorEntry {
 is_error_valid = (!target_cliente.senha.Any(char.IsNumber)),
-error_title = "Falha ao verificar senha",
 error_description = "Senha deve ter pelo menos um número"
 },
 new ErrorEntry {
 is_error_valid = (!target_cliente.senha.Any(char.IsUpper)),
-error_title = "Falha ao verificar senha",
 error_description = "Senha deve ter pelo menos um caractére maiúsculo"
 },
 new ErrorEntry {
 is_error_valid = (target_cliente.cpf!.Length > 11),
-error_title = "Falha ao verificar o CPF",
 error_description = "CPF do usuário deve ter menos de 11 caractéres"
 }
 };
@@ -159,9 +137,7 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
         {
             if (check.is_error_valid)
             {
-                error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
-                error_msg.title = check.error_title;
-                error_msg.description = check.error_description;
+                Toast.ShowError(check.error_description);
                 return;
             }
         }
@@ -172,22 +148,36 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 
     public async Task CadastroUserAsync(ClienteDBO request)
     {
-        var response = await APIHandler.PostApiRequestAsync(new Dictionary<string, string> {
+        HttpResponseMessage response = null!;
+        try
+        {
+            response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
 {"nome", request.nome!},
 {"senha", request.senha!},
 {"cpf", request.cpf!},
 {"email", request.email!},
-{"telefone", request.telefone!}
-}, "/Auth/Cliente/registrar");
+{"dataNascimento", new Dictionary<string, string> {
+    {"Day", request.dataNascimento!.Value.Day.ToString()},
+    {"Month", request.dataNascimento!.Value.Month.ToString()},
+    {"Year", request.dataNascimento!.Value.Year.ToString()},
+    {"DayOfWeek", request.dataNascimento!.Value.DayOfWeek.ToString()},
+    {"DayOfYear", request.dataNascimento!.Value.DayOfYear.ToString()},
+    {"DayNumber", request.dataNascimento!.Value.DayNumber.ToString()}
+    }}
+},"/Auth/Cliente/registrar");
+        }
+        catch (Exception)
+        {
+            Toast.ShowError("Houve um erro ao cadastrar, tente novamente");
+            return;
+        }
 
-        if (!(response.StatusCode == System.Net.HttpStatusCode.BadRequest))
+        if (response.IsSuccessStatusCode)
         {
             NavigationManager.NavigateTo("/login");
             return;
         }
 
-        error_msg.displaytype = ErrorMessageBoxDisplay.block.ToString();
-        error_msg.title = "Falha ao cadastrar";
-        error_msg.description = "Tente novamente";
+        Toast.ShowError($"Falha ao cadastrar, tente novamente {response.StatusCode}");
     }
 }
