@@ -14,46 +14,59 @@
 
 <NavMenu nav_classes="sticky-top" />
 
-<div class="d-flex flex-column align-items-center text-center fs-1 fw-bold">
-    <h1></h1>
-    <button class="btn btn-outline-white text-center" @onclick="InitializeInvestimentos">Veja seus investimentos
-        efetuados e disponíveis</button>
-</div>
+<div class="container">
+    @if (invEfetuados == null)
+    {
+        <div class="container d-flex flex-row">
+            <div class="container">&ensp;</div>
+            <div class="container-fluid">
+                <h1>Carregando, um momento por favor...</h1>
+                <button class="btn btn-primary" @onclick="@(() => Console.WriteLine(invEfetuados!.ToString()))">
+                    Clique aqui se demorar para carregar!
+                </button>
+            </div>
+            <div class="container">&ensp;</div>
+        </div>
 
-@if (invEfetuados != null || visible_main == true)
-{
-    <div class="my-5 row row-cols-3 container-fluid text-center">
-    @foreach (Carteira carteira in invEfetuados!)
+    }
+    else
+    {
+        @foreach (var investimento_efetuado in invEfetuados!)
         {
-            <div class="card p-2 m-1 bg-white text-dark">
-                <div class="card-header">
-                    <h2>@carteira.id_investimento</h2> @*nome investimento c/ inner*@
-                </div>
-                <div class="card-body">
-                    <ul class="list-group" style="list-style-type: none;">
-                        <li class="list-group-item">Data de contratação: R$ @carteira.data_efetuacao</li>
-                        <li class="list-group-item">Valor aplicado: R$ @carteira.valor_aplicado</li>
-                        <li class="list-group-item">Rentabilidade (a.a.): @carteira.rentabilidade_variavel</li> @*somar fixa com
-                variável p/ exibir*@
-                        <li class="list-group-item">Data de Resgate: @carteira.data_encerramento</li>
-                        <li class="list-group-item">Status do Investimento: @carteira.status</li>
-                    </ul>
+            <div class="my-5 row row-cols-3 container-fluid text-center">
+                <div class="card p-2 m-1 bg-white text-dark">
+                    <div class="card-header">
+                        <h2>@(investimento_efetuado.id_investimento) NOME DO INVESTIMENTO AQUI</h2> @*nome investimento c/ inner*@
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" style="list-style-type: none;">
+                            <li class="list-group-item">Data de contratação: @investimento_efetuado.data_efetuacao</li>
+                            <li class="list-group-item">Valor aplicado: R$ @investimento_efetuado.valor_aplicado</li>
+                            <li class="list-group-item">Rentabilidade (a.a.): @(investimento_efetuado.rentabilidade_fixa + investimento_efetuado.rentabilidade_variavel)</li>
+                
+                            <li class="list-group-item">Data de Resgate: @investimento_efetuado.data_encerramento</li>
+                            <li class="list-group-item">Status do Investimento: @investimento_efetuado.status</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+
         }
-    </div>
-}
-<Footer></Footer>
+    }
+
+</div>
+
+<Footer />
 
 
 @code {
-    public string buttonstatus { get; set; } = "block";
-    public bool visible_main { get; set; } = false;
+    public CarteiraInvestimento[]? invEfetuados = null;
 
-    public Carteira[]? invEfetuados = new Carteira[0];
-
-    public async Task InitializeInvestimentos()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (!firstRender)
+            return;
+
         string? user_id = await JSInterop.InvokeAsync<string?>("localStorage.getItem", LocalStorageKeys.user_id.ToString());
         string? app_token = await JSInterop.InvokeAsync<string?>("localStorage.getItem",
         LocalStorageKeys.app_token.ToString());
@@ -61,17 +74,9 @@
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
-        invEfetuados = await APIHandler.FetchOrFallbackAsync<Carteira[]>(
-        $"/CarteiraInvestimento/{user_id}",
-        new Carteira[] {
-new Carteira {
-status = "Não encontrado"
-}
-        }
-        );
+        invEfetuados = await
+        APIHandler.FetchAbstractJsonObjectAsync<CarteiraInvestimento[]?>($"/CarteiraInvestimento/ByUserID/{user_id}");
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
-
-        visible_main = true;
     }
 }
