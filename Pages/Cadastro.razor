@@ -46,8 +46,7 @@
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
             <span class="detalhes">necessária pra identificar a maioridade</span>
-            <input type="date" @bind="target_cliente.dataNascimento" @bind:event="oninput" class="form-control"
-                required />
+            <input type="date" @bind="dataNascimento" @bind:event="oninput" class="form-control" required />
         </div>
 
         <div class="form-outline mb-4">
@@ -81,13 +80,13 @@
 </div>
 
 @code {
-
     public struct ErrorEntry
     {
         public bool is_error_valid;
         public string error_description;
     }
     public ClienteDBO target_cliente = new ClienteDBO();
+    public DateTime dataNascimento { get; set; } = DateTime.Now;
     public string confirmacaoSenhaLogin { get; set; } = String.Empty;
     public bool registerCheck { get; set; } = false;
 
@@ -102,9 +101,9 @@
             }
         }
 
-        var main_checks = new List<ErrorEntry> {
+        var main_checks = new ErrorEntry[] {
 new ErrorEntry {
-is_error_valid = (DateTime.Now.Year - target_cliente.dataNascimento!.Value.Year <= 18),
+is_error_valid = ((DateTime.Now.Year - dataNascimento.Year) <= 18),
 error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos"
 },
 new ErrorEntry {
@@ -156,15 +155,7 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 {"senha", request.senha!},
 {"cpf", request.cpf!},
 {"email", request.email!},
-{"dataNascimento", new Dictionary<string, string> {
-    {"Day", request.dataNascimento!.Value.Day.ToString()},
-    {"Month", request.dataNascimento!.Value.Month.ToString()},
-    {"Year", request.dataNascimento!.Value.Year.ToString()},
-    {"DayOfWeek", request.dataNascimento!.Value.DayOfWeek.ToString()},
-    {"DayOfYear", request.dataNascimento!.Value.DayOfYear.ToString()},
-    {"DayNumber", request.dataNascimento!.Value.DayNumber.ToString()}
-    }}
-},"/Auth/Cliente/registrar");
+{"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"}}, "/Auth/Cliente/registrar");
         }
         catch (Exception)
         {
@@ -178,6 +169,6 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
             return;
         }
 
-        Toast.ShowError($"Falha ao cadastrar, tente novamente {response.StatusCode}");
+        Toast.ShowError("Falha ao cadastrar, tente novamente");
     }
 }

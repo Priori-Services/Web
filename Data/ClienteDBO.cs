@@ -9,7 +9,7 @@ public sealed class ClienteDBO
     public RespostaAssessoria? respostaAssessoria { get; set; } = RespostaAssessoria.recusou;
     public SituacaoAssessoria? situacaoAssessoria { get; set; } = SituacaoAssessoria.ativa;
     public string? endereco { get; set; } = String.Empty;
-    public DateOnly? dataNascimento { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+    public string? dataNascimento { get; set; } = "00/00/0000";
     public string? email { get; set; } = String.Empty;
     public string? senha { get; set; } = String.Empty;
 }
