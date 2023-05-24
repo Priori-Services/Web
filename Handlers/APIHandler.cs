@@ -15,7 +15,6 @@ public static class APIHandler
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(response));
 
         return await JsonSerializer.DeserializeAsync<T>(stream);
-
     }
 
     public static async Task<T> FetchOrFallbackAsync<T>(string target_url, T fallback_object)
@@ -27,13 +26,10 @@ public static class APIHandler
         }
         catch (HttpRequestException)
         {
-            initial_object = fallback_object;
-        }
-        if (initial_object == null)
-        {
             return fallback_object;
         }
-        return initial_object;
+
+        return (initial_object != null) ? initial_object : fallback_object;
     }
 
     public static async Task<HttpResponseMessage> PostApiRequestAsync(Dictionary<string, object> json_object, string target_url)

@@ -69,7 +69,8 @@
                     </li>
                     <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
                     <br>
-                    <button class="btn btn-outline-success">Simule</button>
+                    <button class="btn btn-outline-success"
+                    @onclick="@(() => ModalSimulacao(investimento.id_investimento))">Simule</button>
                     <button class="btn btn-outline-primary mt-2">Contrate</button>
                 </ul>
             </div>
@@ -82,6 +83,25 @@
 
 @code {
     public Investimento[] invDisponiveis = new Investimento[0];
+
+    [CascadingParameter]
+    public IModalService Modal_Simulacao { get; set; } = default!;
+
+    public async Task ModalSimulacao(int id_investimento)
+    {
+        SimulacaoID.id_selecionado = id_investimento;
+        var moviesModal = Modal_Simulacao.Show<PosSimulacao>("My Movies");
+        var result = await moviesModal.Result;
+
+        if (result.Cancelled)
+        {
+            Console.WriteLine("Modal was cancelled");
+        }
+        else if (result.Confirmed)
+        {
+            Console.WriteLine("Modal was closed");
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {

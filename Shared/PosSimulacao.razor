@@ -1,0 +1,26 @@
+@using PRIORI_SERVICES_WEB.Data.Model;
+@using PRIORI_SERVICES_WEB.Handler;
+
+<div class="bg-light m-5 border rounded-3">
+
+    <p class="fonte-nav-lista text-dark fonte-titulo fs-4 p-1 mt-3 mb-3" style="text-align: center;">VEJA O QUE
+        ENCONTRAMOS PARA VOCÊ</p>
+    <div class="card-body">
+        <ul class="list-group" style="list-style-type: none;">
+            <li class="list-group-item">Nome: @posSimulacao.nome</li>
+            <li class="list-group-item">Investimento Minimo: R$ @posSimulacao.valor_minimo</li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    public Investimento posSimulacao = new Investimento { nome = "Falha ao encontrar investimentos." };
+
+    protected override async Task OnInitializedAsync()
+    {
+        posSimulacao = await APIHandler.FetchOrFallbackAsync<Investimento>(
+        $"/investimento/{SimulacaoID.id_selecionado}",
+        new Investimento { nome = "Falha ao encontrar investimentos." });
+    }
+}
