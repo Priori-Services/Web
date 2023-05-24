@@ -1,4 +1,23 @@
 ﻿@page "/"
+@using PRIORI_SERVICES_WEB.Data.Model
+
+@code {
+    public FaqItem[] fallback_faqs = new FaqItem[] {
+new FaqItem {
+Header = "Há taxas de manutenção na Priori?",
+Body = "Não! Na Priori, você não paga taxas para contratar e nem manter nenhum investimento."
+},
+new FaqItem {
+Header = "Como posso saber o quanto terei de retorno nos meus investimentos?",
+Body = "Você pode efetuar uma simulação antes de contratar qualquer investimento. Basta acessar a aba 'Simulador' no topo da página."
+},
+new FaqItem {
+Header = "E se eu precisar retirar o dinheiro que apliquei, como faço?",
+Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, só podem ser sacados na data de vencimento. Portanto, planeje-se antes de investir."
+},
+};
+}
+
 
 <style>
     ::-webkit-scrollbar {
@@ -34,6 +53,8 @@
 
 <NavMenu nav_classes="sticky-top bg-transparent" />
 
+<a href="#" class="btn d-flex back-to-top"><i class="bi bi-arrow-up-short"></i></a>
+
 <section class="d-flex flex-wrap flex-lg-nowrap align-items-center text-white py-5"
     style="background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));">
     <div class="container-xl d-flex flex-column">
@@ -43,7 +64,7 @@
         <div class="container-xl text-center">
             <h1 class="fs-1">Inovação Financeira</h1>
             <p>Usamos a tecnologia a favor dos nossos clientes</p>
-            <NavLink href="#conhecaPriori" class="btn btn-outline-light p-2">Conheça a Priori</NavLink>
+            <a href="#conhecaPriori" class="btn btn-outline-light p-2">Conheça a Priori</a>
         </div>
         <div>
             &ensp;
@@ -54,8 +75,6 @@
         <img src="assets/hero-img.png" width="500em" height="500em">
     </div>
 </section>
-
-<a href="#" class="btn d-flex back-to-top"><i class="bi bi-arrow-up-short"></i></a>
 
 <section class="d-flex flex-wrap flex-lg-nowrap align-items-center bg-white text-dark p-3 py-5" id="conhecaPriori">
     <div class="container-xl d-flex flex-column pl-3">
@@ -201,4 +220,14 @@
             </div>
         </div>
     </div>
+</section>
+
+<section class="d-flex flex-column align-items-center text-white text-center p-5 py-5"
+    style="background-image: linear-gradient(75deg, rgb(171, 0, 177), rgb(114, 0, 167));">
+    <h1 class="text-center">FAQ</h1>
+    <hr>
+    <h3>
+        Veja abaixo as dúvidas mais comuns:
+    </h3>
+    <Faq Faqs=@fallback_faqs />
 </section>
