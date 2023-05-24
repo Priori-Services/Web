@@ -15,20 +15,20 @@
 </style>
 
 
-<NavMenu nav_classes="sticky-top" nav_style="" />
+<NavMenu nav_classes="fixed-top" nav_style="" />
 
-<section class="bg-transparent py-5 container-fluid row d-flex flex-row justify-content-center align-items-center">
-    <div class="col-md-9 col-lg-6 col-xl-5">
-        <img src="assets/inv1Img.png" width="85%" class="img-fluid" alt="Sample image">
+<section class="container-fluid mt-5 d-flex flex-row justify-content-center align-items-center">
+    <div class="">
+        <i class="bi bi-person-circle" style="font-size: 400px;" alt="Sample image" />
     </div>
     <div class="d-flex flex-column align-items-center col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <a href="/dados-cadastrados" class="btn container-fluid btn-outline-light text-light p-3 fs-2">
+        <a href="/perfil-usuario" class="btn container-fluid btn-outline-light p-3 fs-2">
             Minha Conta
         </a>
-        <a href="/investimentos-efetuados" class="btn container-fluid btn-outline-light text-light p-3 fs-2">
+        <a href="/investimentos-efetuados" class="btn container-fluid btn-outline-light p-3 my-4 fs-2">
             Meus Investimentos
         </a>
-        <button @onclick="SairUser" class="btn container-fluid btn-outline-light text-light p-3 fs-2">
+        <button @onclick="SairUser" class="btn container-fluid btn-outline-light p-3 fs-2">
             Sair
         </button>
     </div>
@@ -38,6 +38,16 @@
     public async void SairUser()
     {
         await ProtectedLocalStorage.SetAsync(LocalStorageKeys.app_token.ToString(), "");
+        await ProtectedLocalStorage.SetAsync(LocalStorageKeys.user_id.ToString(), "");
         NavigationManager.NavigateTo("/");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        if ((await ProtectedLocalStorage.GetAsync<string?>(LocalStorageKeys.app_token.ToString())).Value == null)
+            NavigationManager.NavigateTo("/");
     }
 }
