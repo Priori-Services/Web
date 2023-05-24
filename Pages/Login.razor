@@ -4,6 +4,7 @@
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
+@inject ProtectedLocalStorage ProtectedLocalStorage
 
 <style>
     ::-webkit-scrollbar {
@@ -75,7 +76,7 @@
     public void login_user_wrapper()
     {
         try { LoginUserAsync().RunSynchronously(); }
-        catch (Exception){}
+        catch (Exception) { }
     }
 
     public async Task LoginUserAsync()
@@ -111,16 +112,8 @@
 
         try
         {
-            await JSInterop.InvokeVoidAsync(
-            "localStorage.setItem",
-            LocalStorageKeys.user_id.ToString(),
-            JWTOBJ["id"]
-            );
-            await JSInterop.InvokeVoidAsync(
-            "localStorage.setItem",
-            LocalStorageKeys.app_token.ToString(),
-            JWTOBJ["jwt_key"]
-            );
+            await ProtectedLocalStorage.SetAsync(LocalStorageKeys.user_id.ToString(), JWTOBJ["id"]);
+            await ProtectedLocalStorage.SetAsync(LocalStorageKeys.app_token.ToString(), JWTOBJ["jwt_key"]);
         }
         catch (KeyNotFoundException)
         {
@@ -129,4 +122,5 @@
         }
         NavigationManager.NavigateTo("/");
     }
+}
 }

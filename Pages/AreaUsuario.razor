@@ -1,6 +1,7 @@
 @page "/areausuario"
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
+@inject ProtectedLocalStorage ProtectedLocalStorage
 @using PRIORI_SERVICES_WEB.Data.Types
 
 <style>
@@ -36,7 +37,7 @@
 @code {
     public async void SairUser()
     {
-        await JSInterop.InvokeVoidAsync("localStorage.setItem", LocalStorageKeys.app_token.ToString(), "");
+        await ProtectedLocalStorage.SetAsync(LocalStorageKeys.app_token.ToString(), "");
         NavigationManager.NavigateTo("/");
     }
 }
