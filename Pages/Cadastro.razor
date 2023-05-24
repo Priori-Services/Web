@@ -142,7 +142,8 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
         }
 
         try { CadastroUserAsync(target_cliente).RunSynchronously(); }
-        catch (Exception) { }
+        catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
+        {}
     }
 
     public async Task CadastroUserAsync(ClienteDBO request)
@@ -155,7 +156,8 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 {"senha", request.senha!},
 {"cpf", request.cpf!},
 {"email", request.email!},
-{"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"}}, "/Auth/Cliente/registrar");
+{"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
+{"respostaAssessoria", $"{Convert.ToInt32(registerCheck)}"}}, "/Auth/Cliente/registrar");
         }
         catch (Exception)
         {
