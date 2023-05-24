@@ -9,24 +9,15 @@
     body {
         background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
     }
-
-    .margemInv {
-        margin-left: 4rem;
-    }
-
-    .risco {
-        margin-right: 1rem;
-        width: 0.65rem;
-        border-radius: 1rem;
-    }
 </style>
 
 <NavMenu nav_classes="sticky-top" />
 
 <div class="d-flex flex-row align-items-center mt-">
     <div class="container-fluid">&ensp;</div>
-    <div class="d-flex flex-row container-fluid text-center bg-white rounded-4 p-2 mt-4" style="width: fit-content; text-align: center;">
-         
+    <div class="d-flex flex-row container-fluid text-center bg-white rounded-4 p-2 mt-4"
+        style="width: fit-content; text-align: center;">
+
         <div class="bg-success mx-3 p-2 mt-2  rounded-4 my-2"></div>
         <p class="fonte-titulo fs-7 text-dark mt-3" style="margin-right: 1rem;">Baixo risco</p>
 
@@ -35,57 +26,58 @@
 
         <div class="bg-danger mx-3 p-2 mt-2  rounded-4 my-2"></div>
         <p class="fonte-titulo fs-7 text-dark mt-3" style="margin-right: 1rem;">Alto risco</p>
-        
+
     </div>
     <div class="container-fluid">&ensp;</div>
 </div>
 
-<div class="margemInv">
-    <div class="my-3 row row-cols-4 container-fluid text-center">
-        @foreach (Investimento investimento in invDisponiveis)
-        {
-            <div class="card p-2 m-5 bg-white text-dark">
-                <div class="card-header d-flex flex-row bd-highlight">
-                     @switch (investimento.id_riscoInvestimento)
-                        {
-                            case 1:
-                                <div class="bg-success risco">
-                                    &ensp;
-                                </div>
-                                break;
-                            case 2:
-                                <div class="bg-warning risco">
-                                    &ensp;
-                                </div>
-                                break;
-                            case 3:
-                                <div class="bg-danger risco">
-                                    &ensp;
-                                </div>
-                                break;
-                        }
-                    
-                    <div class="bd-highlight">
-                        <h4 class="p-1" style="text-align: center;">@investimento.nome</h4>
-                    </div>
-                </div>
-                <div class="card-body">
 
-                    <ul class="list-group" style="list-style-type: none;">
-                        <li class="list-group-item">Investimento Minimo: R$ @investimento.valor_minimo</li>
-                        <li class="list-group-item">Vencimento: @investimento.vencimento</li>
-                        <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
-                        <br>
-                        <button type="button" class="btn btn-outline-success"><a>Simule</a></button>
-                    </ul>
-                </div>
+<div class="my-3 d-flex flex-row flex-wrap text-center justify-content-center align-items-center">
+    @foreach (Investimento investimento in invDisponiveis)
+    {
+        <div class="card p-2 m-5 bg-white text-dark">
+            <div class="card-header bg-white d-flex flex-row ">
+                @switch (investimento.id_riscoInvestimento)
+                {
+                    case 1:
+                        <div class="bg-success rounded-4">
+                            &ensp;
+                        </div>
+                        break;
+                    case 2:
+                        <div class="bg-warning rounded-4">
+                            &ensp;
+                        </div>
+                        break;
+                    case 3:
+                        <div class="bg-danger rounded-4">
+                            &ensp;
+                        </div>
+                        break;
+                }
 
+                <div class="bd-highlight">
+                    <h4 class="p-1 mx-2" style="text-align: center;">@investimento.nome</h4>
+                </div>
             </div>
-        }
-    </div>
+            <div class="card-body">
+
+                <ul class="list-group" style="list-style-type: none;">
+                    <li class="list-group-item">Investimento Minimo: R$ @investimento.valor_minimo</li>
+                    <li class="list-group-item">Vencimento:
+                        @($"{investimento.vencimento.Day}/{investimento.vencimento.Month}/{investimento.vencimento.Year}")
+                    </li>
+                    <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
+                    <br>
+                    <button class="btn btn-outline-success">Simule</button>
+                    <button class="btn btn-outline-primary mt-2">Contrate</button>
+                </ul>
+            </div>
+        </div>
+    }
 </div>
 
-<Footer></Footer>
+<Footer />
 
 
 @code {
