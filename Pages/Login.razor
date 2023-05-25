@@ -4,7 +4,7 @@
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
-@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <style>
     ::-webkit-scrollbar {
@@ -112,8 +112,8 @@
 
         try
         {
-            await ProtectedLocalStorage.SetAsync(LocalStorageKeys.user_id.ToString(), JWTOBJ["id"]);
-            await ProtectedLocalStorage.SetAsync(LocalStorageKeys.app_token.ToString(), JWTOBJ["jwt_key"]);
+            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.user_id.ToString(), JWTOBJ["id"]);
+            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.app_token.ToString(), JWTOBJ["jwt_key"]);
         }
         catch (KeyNotFoundException)
         {

@@ -1,5 +1,6 @@
-using Blazored.Toast.Services;
+using Blazored.Toast;
 using Blazored.Modal;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazoredModal();
-builder.Services.AddSingleton<Blazored.Toast.BlazoredToast>();
-builder.Services.AddSingleton<Blazored.Toast.Services.IToastService, ToastService>();
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton<HttpClient>();
 
 var app = builder.Build();

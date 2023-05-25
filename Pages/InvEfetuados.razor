@@ -4,7 +4,7 @@
 @using PRIORI_SERVICES_WEB.Data.Types
 @using PRIORI_SERVICES_WEB.Handler
 @using System.Net.Http.Headers
-@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <style>
     html,
@@ -69,8 +69,8 @@
             return;
 
 
-        string? user_id = (await ProtectedLocalStorage.GetAsync<string>(LocalStorageKeys.user_id.ToString())).Value;
-        string? app_token = (await ProtectedLocalStorage.GetAsync<string>(LocalStorageKeys.app_token.ToString())).Value;
+        string user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
+        string app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 

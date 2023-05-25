@@ -24,7 +24,7 @@
 </style>
 
 
-<div class="container-fluid d-flex align-items-center flex-column">
+<div class="container-fluid d-flex align-items-center flex-column my-3">
 
     <div class="container-fluid text-center">
         <h1 class="fs-1 fw-bold" style="font-family: 'Poppins', sans-serif; letter-spacing: 1px;">Cadastro</h1>
@@ -34,13 +34,13 @@
     <div class="tab-pane d-flex flex-column" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
-            <input type="text" @bind="target_cliente.nome" @bind:event="oninput" class="form-control" required /> <br>
+            <input type="text" @bind="target_cliente.nome" @bind:event="oninput" class="form-control" required />
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
             <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required
-                maxlength="11" /> <br>
+                maxlength="11" />
         </div>
 
         <div class="form-outline mb-4">
@@ -52,7 +52,7 @@
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
             <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
-            <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required /> <br>
+            <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required />
         </div>
 
         <div class="form-outline mb-4">
@@ -143,7 +143,7 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 
         try { CadastroUserAsync(target_cliente).RunSynchronously(); }
         catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
-        {}
+        { }
     }
 
     public async Task CadastroUserAsync(ClienteDBO request)
@@ -157,8 +157,8 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
 {"cpf", request.cpf!},
 {"email", request.email!},
 {"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
-{"respostaAssessoria", $"{Convert.ToInt32(registerCheck)}"}}, "/Auth/Cliente/registrar");
-        }
+{"respostaAssessoria", RespostaAssessoria.aceitou}}, "/Auth/Cliente/registrar");
+        } // Podemos implicitamente associar o aceitar do usuário aqui pq pra chegar até aqui tivemos checks disso.
         catch (Exception)
         {
             Toast.ShowError("Houve um erro ao cadastrar, tente novamente");
@@ -171,6 +171,6 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
             return;
         }
 
-        Toast.ShowError("Falha ao cadastrar, tente novamente");
+        Toast.ShowError($"Falha ao cadastrar, tente novamente {await response.Content.ReadAsStringAsync()}");
     }
 }
