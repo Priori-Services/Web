@@ -2,7 +2,6 @@
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
-@using PRIORI_SERVICES_WEB.Data.Types
 
 <style>
     ::-webkit-scrollbar {
@@ -10,7 +9,7 @@
     }
 
     body {
-        background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
+    @BackgroundGradients.BackgroundPrincipal
     }
 </style>
 
@@ -49,7 +48,7 @@
 
         string user_app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
 
-        if ( user_app_token == null || user_app_token == String.Empty || user_app_token == "")
+        if (user_app_token == null || user_app_token == String.Empty || user_app_token == "")
             NavigationManager.NavigateTo("/");
     }
 }

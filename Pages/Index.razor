@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using PRIORI_SERVICES_WEB.Data.Model
 
 @code {
     public FaqItem[] fallback_faqs = new FaqItem[] {
@@ -55,8 +54,8 @@ Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, s�
 
 <a href="#" class="btn d-flex back-to-top"><i class="bi bi-arrow-up-short"></i></a>
 
-<section class="d-flex flex-wrap flex-lg-nowrap align-items-center text-white py-5"
-    style="background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));">
+<section class="d-flex flex-wrap flex-lg-nowrap align-items-center text-white py-5 justify-content-center"
+    style="@BackgroundGradients.BackgroundPrincipal">
     <div class="container-xl d-flex flex-column">
         <div>
             &ensp;
@@ -76,7 +75,7 @@ Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, s�
     </div>
 </section>
 
-<section class="d-flex flex-wrap flex-lg-nowrap align-items-center bg-white text-dark p-3 py-5" id="conhecaPriori">
+<section class="d-flex flex-wrap flex-lg-nowrap align-items-center bg-dark p-3 py-5" id="conhecaPriori">
     <div class="container-xl d-flex flex-column pl-3">
         <div>
             &ensp;
@@ -104,7 +103,7 @@ Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, s�
 
 
 <section class="d-flex flex-wrap flex-lg-nowrap align-items-center text-white text-center p-3 py-5" id="saberMais"
-    style="background-image: linear-gradient(75deg, rgb(224, 139, 213), rgb(167, 143, 255));">
+    style="background-image: linear-gradient(75deg, rgb(155, 139, 224), rgb(45, 1, 204));">
     <div class="d-flex flex-column p-5 align-items-center container-fluid">
         <div>&ensp;</div>
         <div class="container">
