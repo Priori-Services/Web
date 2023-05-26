@@ -1,0 +1,350 @@
+@page "/PosSimulacao"
+
+@using PRIORI_SERVICES_WEB.Data.Model;
+@using PRIORI_SERVICES_WEB.Handler;
+@inject IJSRuntime JSInterop
+
+<NavMenu nav_classes="sticky-top" />
+
+<style>
+    html,
+    body {
+        background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
+    }
+    .margin-simulador{
+        margin-left: 25rem;
+        margin-right: 25rem;
+    }
+</style>
+
+    <div class="rounded-3 mx-5">
+        
+        <p class="fonte-nav-lista text-light fonte-titulo fs-4 p-1 my-5" style="text-align: center;">SIMULADOR</p>
+            
+            <div class="card-body shadow-lg margin-simulador rounded-4 bg-light" style="text-align: center;">
+
+                    <div class="card-header d-flex flex-row bd-highlight text-dark mx-5 pt-3 justify-content-center">
+                     @switch (posSimulacao.id_riscoInvestimento)
+                        {
+                            case 1:
+                                <div class="bg-success risco rounded-4 me-2">
+                                    &ensp;
+                                </div>
+                                break;
+                            case 2:
+                                <div class="bg-warning risco rounded-4 me-2">
+                                    &ensp;
+                                </div>
+                                break;
+                            case 3:
+                                <div class="bg-danger risco rounded-4 me-2">
+                                    &ensp;
+                                </div>
+                                break;
+                        }
+                    
+                    <div class="bd-highlight">
+                        <h4 class="p-1" style="text-align: center;">@posSimulacao.nome</h4>
+                    </div>
+                    </div>
+                        @switch (posSimulacao.id_riscoInvestimento)
+                            {
+                                case 1:
+                                    @switch (posSimulacao.tipo_investimento)
+                                    {
+                                        case "SELIC":
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                            <br>
+                                        </ul>
+                                        break;
+                                        
+                                        case "IPCA":
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                        </ul>
+                                        break;
+
+                                        default:
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                        </ul>
+                                        break;
+                                    }
+                                    break;
+                                case 2:
+                                    @switch (posSimulacao.tipo_investimento)
+                                    {
+                                        case "SELIC":
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                        </ul>
+                                        break;
+                                        
+                                        case "IPCA":
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                        </ul>
+                                        break;
+
+                                        default:
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                            </form>
+                                        </ul>
+                                        break;
+                                    }
+                                    break;
+                                case 3:
+                                    @switch (posSimulacao.tipo_investimento)
+                                    {
+                                        case "SELIC":
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                        </ul>
+                                        break;
+                                        
+                                        case "IPCA":
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                <button type="submit" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                            </form>
+                                        </ul>
+                                        break;
+
+                                        default:
+                                        <ul style="list-style-type: none;">
+                                            <div class="d-flex flex-row container-fluid my-3">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @posSimulacao.valor_minimo</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.vencimento.ToShortDateString()</B></li></div>
+                                            </div>
+                                            <div class="d-flex flex-row container-fluid my-4">
+                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@posSimulacao.rentabilidade_fixa%</B></li></div>
+                                            </div>
+                                            <div id="hideAll" class="">
+                                                <form>
+                                                <div class="mb-4 mx-5">
+                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                    <input type="number" class="form-control" id="valorInv">
+                                                </div>
+                                                <a href="/PosSimulacao">
+                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
+                                                </a>
+                                                </form>
+                                            </div>
+                                        </ul>
+                                        break;
+                                    }
+                                    break;
+                            }
+                        
+                    </div>
+            
+    </div>
+
+<Footer></Footer>
+
+@code {
+    public Investimento posSimulacao = new Investimento {nome = "Falha ao encontrar investimentos."};
+
+    private void Ocultar() {
+        try {
+            ocultarelemento().RunSynchronously();
+        } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
+        { }
+    }
+
+    public async Task ocultarelemento() {
+        await JSInterop.InvokeVoidAsync("ocultarelemento", "hideAll", "d-none");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        posSimulacao = await APIHandler.FetchOrFallbackAsync<Investimento>(
+            $"/investimento/{SimulacaoID.id_selecionado}", 
+            new Investimento {nome = "Falha ao encontrar investimentos."});
+    }
+}

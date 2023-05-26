@@ -57,7 +57,7 @@
                 }
 
                 <div class="bd-highlight">
-                    <h4 class="p-1 mx-2" style="text-align: center;">@investimento.nome</h4>
+                    <h4 class="p-1 mx-2 text-wrap " style="width: 12rem; text-align: right;">@investimento.nome</h4>
                 </div>
             </div>
             <div class="card-body">
@@ -70,7 +70,7 @@
                     <li class="list-group-item">Rentabilidade anual: @investimento.rentabilidade_variavel</li>
                     <br>
                     <button class="btn btn-outline-success"
-                    @onclick="@(() => ModalSimulacao(investimento.id_investimento))">Simule</button>
+                    @onclick="@(() => PosSimulacao(investimento.id_investimento))">Simule</button>
                     <button class="btn btn-outline-primary mt-2">Contrate</button>
                 </ul>
             </div>
@@ -87,20 +87,10 @@
     [CascadingParameter]
     public IModalService Modal_Simulacao { get; set; } = default!;
 
-    public async Task ModalSimulacao(int id_investimento)
+    public void PosSimulacao(int id_investimento)
     {
         SimulacaoID.id_selecionado = id_investimento;
-        var moviesModal = Modal_Simulacao.Show<PosSimulacao>("My Movies");
-        var result = await moviesModal.Result;
-
-        if (result.Cancelled)
-        {
-            Console.WriteLine("Modal was cancelled");
-        }
-        else if (result.Confirmed)
-        {
-            Console.WriteLine("Modal was closed");
-        }
+        NavigationManager.NavigateTo("/PosSimulacao");
     }
 
     protected override async Task OnInitializedAsync()
