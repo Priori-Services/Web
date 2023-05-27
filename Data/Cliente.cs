@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PRIORI_SERVICES_WEB.Data.Model;
 
 public enum Status { ATIVO, INATIVO }
-public enum RespostaAssessoria { aceitou, recusou, cancelou }
+public enum RespostaAssessoria { mogus, aceitou, recusou, cancelou }
 public enum SituacaoAssessoria { ativa, inativa }
 
 [Table("tblClientes")]
