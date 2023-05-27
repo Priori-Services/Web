@@ -1,4 +1,6 @@
 @page "/contato"
+@using PRIORI_SERVICES_WEB.Data.Model
+@using PRIORI_SERVICES_WEB.Data.Types
 
 @code {
     public FaqItem[] fallback_faqs = new FaqItem[] {
@@ -18,14 +20,14 @@ Body = "Todos os nossos investimentos não possuem liquidez diária, ou seja, s�
 }
 <style>
     html, body {
-        @BackgroundGradients.BackgroundPrincipal
+        @(BackgroundGradients.BackgroundPrincipal);;
     }
 </style>
 
 <NavMenu nav_classes="sticky-top"></NavMenu>
 
 <section class="d-flex flex-column align-items-center text-white text-center p-5 py-5"
-    style="background-image: linear-gradient(75deg, rgb(171, 0, 177), rgb(114, 0, 167));">
+    style="@(BackgroundGradients.BackgroundPrincipal);">
     <h1 class="text-center">FAQ</h1>
     <hr>
     <h3>
