@@ -104,6 +104,10 @@
 
         var main_checks = new ErrorEntry[] {
 new ErrorEntry {
+is_error_valid = (registerCheck == false),
+error_description = "É necessário concordar com os termos de uso para prosseguir."
+},
+new ErrorEntry {
 is_error_valid = ((DateTime.Now.Year - dataNascimento.Year) <= 18),
 error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos"
 },
@@ -153,12 +157,12 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
         try
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-{"nome", request.nome!},
-{"senha", request.senha!},
-{"cpf", request.cpf!},
-{"email", request.email!},
-{"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
-{"respostaAssessoria", RespostaAssessoria.aceitou}}, "/Auth/Cliente/registrar");
+            {"nome", request.nome!},
+            {"senha", request.senha!},
+            {"cpf", request.cpf!},
+            {"email", request.email!},
+            {"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
+            {"respostaAssessoria", RespostaAssessoria.aceitou}}, "/Auth/Cliente/registrar");
         } // Podemos implicitamente associar o aceitar do usuário aqui pq pra chegar até aqui tivemos checks disso.
         catch (Exception)
         {
