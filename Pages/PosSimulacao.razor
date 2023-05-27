@@ -192,13 +192,16 @@
                                                 <div class="mb-4 mx-5">
                                                     <label for="exampleInputEmail1" class="form-label text-dark" 
                                                     style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" id="valorInv">
+                                                    <input type="number" class="form-control" @bind="bruto">
                                                 </div>
                                                 <a href="/PosSimulacao">
                                                     <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simule</button>
                                                 </a>
                                                 </form>
                                             </div>
+                                            @if (bruto != 0) {
+                                                    <label class="bg-dark">@calcbruto(bruto)</label>
+                                                }
                                         </ul>
                                         break;
 
@@ -337,6 +340,23 @@
         { }
     }
 
+    private int bruto { get;set;}
+    private int IR { get;set;}
+    private int liquido { get;set;}
+
+    private int calcbruto(int x) {
+        x = bruto;
+        return x;
+    }
+
+    private int calcIR(int x) {
+        x = 122;
+        return x;
+    }
+    private int calcliquido(int x) {
+        x = 122;
+        return x;
+    }
     public async Task ocultarelemento() {
         await JSInterop.InvokeVoidAsync("ocultarelemento", "hideAll", "d-none");
     }
