@@ -1,22 +1,130 @@
 @page "/perfil-usuario"
+@using PRIORI_SERVICES_WEB.Handler
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@using System.Net.Http.Headers
+@inject IToastService Toast
 
-@code {
-    
-}
 
+<style>
+    html, body {
+        @(BackgroundGradients.BackgroundPrincipal);        
+    }
+</style>
 
-<NavMenu nav_class="sticky_top" />
+<NavMenu nav_classes="sticky-top" />
 
 <div class="d-flex flex-row flex-wrap flex-lg-nowrap text-center">
-    <div class="container flex-grow-1">
-        <i class="bi bi-person-circle" style="font-size: 15rem;"></i>
-        <h1>Sussy</h1>
+    @if (clienteuser == null)
+    {
+        <div class="container d-flex flex-row">
+            <div class="container">&ensp;</div>
+            <div class="container-fluid">
+                <h1>Carregando, um momento por favor...</h1>
+                <button class="btn btn-primary" @onclick="@(() => Console.WriteLine(clienteuser!.ToString()))">
+                    Clique aqui se demorar para carregar!
+                </button>
+            </div>
+            <div class="container">&ensp;</div>
+        </div>
+    }
+    else
+    {
+        <div class="container flex-grow-1 my-3">
+            <i class="bi bi-person-circle" style="font-size: 10rem;"></i>
+            <h1>@(clienteuser.nome)</h1>
+            <h1>@(clienteuser.dataNascimento)</h1>
+            <h1>@(clienteuser.email)</h1>
+            <h1>@(clienteuser.endereco)</h1>
+            <h1>Sua pontuação é: @(clienteuser.pontuacao)</h1>
+            <i>Somente os dados modificados serão alterados</i>
+            @if (clienteuser.status != "ATIVO") {
+            <p class="fs-5 text-wrap">
+                Para reativar seu cadastro entre em <a href="contato" class="text-decoration-none">contato</a> com a <i>Priori</i>
+            </p>
+            }
+
+        </div>
+        <div class="container">
+             <div class="container tab-pane d-flex flex-column" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
+            <input type="text" class="form-control" required />
+        </div>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
+            <input type="text" class="form-control" required
+                maxlength="11" />
+        </div>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
+            <input type="date" class="form-control" required />
+        </div>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
+            <input type="email" class="form-control" required />
+        </div>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registerPassword">Senha</label>
+            <input type="password" class="form-control" required />
+        </div>
+
+        <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
+            <input type="password" class="form-control" required />
+        </div>
+
+        <div class="form-check d-flex justify-content-center mb-4">
+            <input class="form-check-input me-2" type="checkbox" value=""
+                aria-describedby="registerCheckHelpText" required />
+            <label class="form-check-label" for="registerCheck">
+                Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
+            </label>
+        </div>
+
+        <button formaction="post" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
+            ALTERAR DADOS
+        </button>
     </div>
-    <div class="container">
-        <h1>hi</h1>
-    </div>
+        </div>
+    }
 </div>
 
 @code {
-    
+    private Cliente? clienteuser {get;set;}
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        Toast.ShowInfo("Carregando...");
+
+        string user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
+        string app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
+
+        clienteuser = await
+        APIHandler.FetchAbstractJsonObjectAsync<Cliente?>($"/Auth/Cliente/Info/{user_id}");
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+
+        Toast.ShowSuccess("Carregamento finalizado!");
+    }
+
+    private void AlterarClienteSync() {
+        try {
+            AlterarCliente().RunSynchronously();
+        } catch (Exception) {
+
+        }
+    }
+
+    private async Task AlterarCliente() {
+
+    }
 }
