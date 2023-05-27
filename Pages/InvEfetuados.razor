@@ -3,6 +3,7 @@
 @using PRIORI_SERVICES_WEB.Handler
 @using System.Net.Http.Headers
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IToastService Toast
 
 <style>
     html,
@@ -66,6 +67,7 @@
         if (!firstRender)
             return;
 
+        Toast.ShowInfo("Carregando...");
 
         string user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
         string app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
@@ -76,5 +78,7 @@
         APIHandler.FetchAbstractJsonObjectAsync<CarteiraInvestimento[]?>($"/CarteiraInvestimento/ByUserID/{user_id}");
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        
+        Toast.ShowSuccess("Carregamento finalizado!");
     }
 }

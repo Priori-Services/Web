@@ -85,9 +85,9 @@
         try
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-{"email", logged_user.email},
-{"senha", logged_user.senha}
-}, "/Auth/Cliente/login");
+            {"email", logged_user.email},
+            {"senha", logged_user.senha}
+            }, "/Auth/Cliente/login");
         }
         catch (Exception)
         {
