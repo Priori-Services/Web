@@ -26,9 +26,14 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script type="text/javascript">
-        function ocultarelemento(elemento, classe) {
-            document.getElementById(elemento).classList += classe
+        function ocultarelemento(elemento) {
+            document.getElementById(elemento).style.display = "none";
         }
+
+        function desocultarelemento(elemento) {
+            document.getElementById(elemento).style.display = "block";
+        }
+
         var prevScrollpos = window.pageYOffset;
 
         window.onscroll = () => {
