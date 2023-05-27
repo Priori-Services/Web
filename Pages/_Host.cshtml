@@ -29,6 +29,19 @@
         function ocultarelemento(elemento, classe) {
             document.getElementById(elemento).classList += classe
         }
+        var prevScrollpos = window.pageYOffset;
+
+        window.onscroll = () => {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos) {
+                document.getElementById("navbarMain").style.top = "0px";
+                document.getElementById("navbarPrioriLogo").style.visibility = "hidden";
+            } else {
+                document.getElementById("navbarMain").style.top = "-70px";
+                document.getElementById("navbarPrioriLogo").style.visibility = "visible";
+            }
+            prevScrollpos = currentScrollPos;
+        }
     </script>
 </body>
 

@@ -45,40 +45,47 @@
         letter-spacing: 2px;
         text-transform: uppercase;
     }
+
+    #navbarMain {
+        transition: top 0.1s;
+    }
+
+    #navbarPrioriLogo {
+        transition: all 0.4s;
+    }
 </style>
 
-<nav class="navbar navbar-expand-lg text-white bg-dark d-flex flex-row @nav_classes"
-    style="@(BackgroundGradients.BackgroundPrincipal); @nav_style">
-    <div class="container-fluid text-nowrap text-decoration-none text-white m-1-15">
-        <NavLink href="/" class="text-white text-wrap-sm fonte-titulo fs-3"
+<nav class="navbar navbar-expand-lg navbar-dark @nav_classes"
+    style="@(BackgroundGradients.BackgroundPrincipal); @nav_style" id="navbarMain">
+    <div class="container-fluid d-flex flex-column">
+        <NavLink href="/" class="navbar-brand text-white text-wrap-sm fonte-titulo fs-3"
             style="font-family: Poppins, sans-serif; text-decoration: none">
             <img src="assets/Logo_Priori_Services.png" alt="Logo Priori Services" class="navbar-brand img-fluid"
-                width="65em" height="60em" />
+                width="50px" height="50px" />
             PRIORI
             SERVICES
         </NavLink>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
-            aria-controls="navbarMain" aria-expanded="true" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
-
-    <div id="navbarMain" class="d-flex flex-column flex-lg-row p-3 collapse navbar-collapse text-nowrap px-3">
-        <ul class="navbar-nav fonte-nav-lista">
-            @foreach (KeyValuePair<string, string> route in paginas_sistema)
-            {
-                <li class="nav-item me-3 hover-underline-animation">
-                    <NavLink href="@route.Key" class="nav-link text-white">
-                        @route.Value
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto fonte-nav-lista mx-2">
+                @foreach (KeyValuePair<string, string> route in paginas_sistema)
+                {
+                    <li class="nav-item me-3 hover-underline-animation">
+                        <NavLink href="@route.Key" class="nav-link text-white">
+                            @route.Value
+                        </NavLink>
+                    </li>
+                }
+                <li @onclick="AreaRedirect" class="text-center nav-item hover-underline-animation">
+                    <NavLink href="#" class="nav-link text-white">
+                        Área do Usuário
                     </NavLink>
                 </li>
-            }
-        </ul>
-        <button @onclick="AreaRedirect" class="text-center btn btn-outline-light px-3 py-2 fs-5">
-            <i class="bi bi-lock"></i>
-            Área do Usuário
-        </button>
+            </ul>
+        </div>
     </div>
 </nav>
 
