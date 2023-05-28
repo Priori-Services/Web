@@ -1,9 +1,11 @@
 @page "/perfil-usuario"
 @using PRIORI_SERVICES_WEB.Handler
-@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @using System.Net.Http.Headers
 @inject IToastService Toast
-
+@inject IJSRuntime JSInterop
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject Blazored.LocalStorage.ISyncLocalStorageService SyncLocalStorage
+@inject NavigationManager NavigationManager
 
 <style>
     html, body {
@@ -19,7 +21,6 @@
         <div class="container d-flex flex-row">
             <div class="container">&ensp;</div>
             <div class="container-fluid">
-                <h1>Carregando, um momento por favor...</h1>
                 <button class="btn btn-primary" @onclick="@(() => Console.WriteLine(clienteuser!.ToString()))">
                     Clique aqui se demorar para carregar!
                 </button>
@@ -30,65 +31,62 @@
     else
     {
         <div class="container flex-grow-1 my-3">
-            <i class="bi bi-person-circle" style="font-size: 10rem;"></i>
-            <h1>@(clienteuser.nome)</h1>
-            <h1>@(clienteuser.dataNascimento)</h1>
-            <h1>@(clienteuser.email)</h1>
-            <h1>@(clienteuser.endereco)</h1>
-            <h1>Sua pontuação é: @(clienteuser.pontuacao)</h1>
-            <i>Somente os dados modificados serão alterados</i>
-            @if (clienteuser.status != "ATIVO") {
-            <p class="fs-5 text-wrap">
-                Para reativar seu cadastro entre em <a href="contato" class="text-decoration-none">contato</a> com a <i>Priori</i>
-            </p>
-            }
+            <div class="d-flex flex-row flex-wrap flex-wrap flex-lg-nowrap ">
+                <div class="container text-right card rounded-5 m-3">
+                    <i class="bi bi-person-circle" style="font-size: 10rem;"></i>
+                    <p class="fs-3">@(clienteuser.nome)</p>
+                    <p class="fs-3">@(clienteuser.cpf)</p>
+                    <p class="fs-3">@(clienteuser.dataNascimento)</p>
+                    <p class="fs-3">@(clienteuser.endereco)</p>
+                    <p class="fs-3">Você tem @(clienteuser.pontuacao) pontos.</p>
+                    @if (clienteuser.status != "ATIVO") {
+                        <p class="fs-5 text-wrap">
+                            Para reativar seu cadastro entre em <a href="contato" class="text-decoration-none">contato</a> com a <i>Priori</i>
+                        </p>
+                    }
+                </div>
+                <div class="container d-flex flex-column align-items-center justify-items-center" id="navbarActions">
+                    <div>&ensp;</div>
+                    <div>
+                        <a href="/investimentos-efetuados" class="btn container-fluid btn-outline-light p-4 fs-4">
+                            INVESTIMENTOS EFETUADOS
+                        </a>
+                        <button class="btn container-fluid btn-outline-light p-4 fs-4">
+                            ALTERAR DADOS
+                        </button>
+                        <button @onclick="UserSairSync" class="btn container-fluid btn-outline-light p-4 fs-4">
+                            SAIR
+                        </button>
+                    </div>
+                    <div>&ensp;</div>
+                </div>
+            </div>
 
+                    
         </div>
-        <div class="container">
-             <div class="container tab-pane d-flex flex-column" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
-            <input type="text" class="form-control" required />
-        </div>
-
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
-            <input type="text" class="form-control" required
-                maxlength="11" />
-        </div>
-
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
-            <input type="date" class="form-control" required />
-        </div>
-
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
-            <input type="email" class="form-control" required />
-        </div>
-
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registerPassword">Senha</label>
-            <input type="password" class="form-control" required />
-        </div>
-
-        <div class="form-outline mb-4">
-            <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
-            <input type="password" class="form-control" required />
-        </div>
-
-        <div class="form-check d-flex justify-content-center mb-4">
-            <input class="form-check-input me-2" type="checkbox" value=""
-                aria-describedby="registerCheckHelpText" required />
-            <label class="form-check-label" for="registerCheck">
-                Li e concordo com os <a class="text-light" href="/termos-de-uso"> termos de uso</a>
-            </label>
-        </div>
-
-        <button formaction="post" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
-            ALTERAR DADOS
-        </button>
-    </div>
+        <div id="areaAlteracao" style="display: none;" class="container tab-pane" role="tabpanel" aria-labelledby="tab-register">
+            <div class="form-outline mb-4">
+                <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
+                <input type="email" class="form-control" required placeholder="@clienteuser.email"/>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label fonteInfo" for="registerPassword">Senha</label>
+                <input type="password" class="form-control" required />
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
+                <input type="password" class="form-control" required />
+            </div>
+            <button formaction="post" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
+                ALTERAR DADOS
+            </button>
+            <i class="mt-3">Deseja alterar outros dados? Entre em <a href="/contato" class="text-primary" style="text-decoration: none;">contato</a> com a Priori</i>
+            @* 
+            SELECT saldo FROM tblCarteiraInvestimentos
+	        WHERE data_efetuacao IN (
+		    SELECT MAX(data_efetuacao) FROM tblCarteiraInvestimentos
+		    GROUP BY id_cliente_carteira)
+            *@
         </div>
     }
 </div>
@@ -101,11 +99,15 @@
         if (!firstRender)
             return;
 
+
+        string? user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
+        string? app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
+
+        if(app_token == String.Empty || app_token == null || app_token == "")
+            NavigationManager.NavigateTo("/");
+        
         Toast.ShowInfo("Carregando...");
-
-        string user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
-        string app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
-
+        
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
         clienteuser = await
@@ -113,8 +115,25 @@
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
 
+        Console.WriteLine(clienteuser!.id_cliente);
+
         Toast.ShowSuccess("Carregamento finalizado!");
     }
+
+    private void UserSairSync() {
+        try {
+            UserSair().RunSynchronously();
+        } catch (Exception) {
+
+        }
+    }
+
+    private async Task UserSair() {
+        await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.app_token.ToString(), "");
+        await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.user_id.ToString(), "");
+        NavigationManager.NavigateTo("/");
+    }
+
 
     private void AlterarClienteSync() {
         try {
