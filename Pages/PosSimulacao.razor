@@ -465,7 +465,7 @@
         double totalBruto = lucro + investido;
         result_bruto = Math.Round(totalBruto);
         IR = Math.Round(lucro * 0.15);
-        liquido = Math.Round(result_bruto - IR);
+        liquido = Math.Round(result_bruto -investido - IR);
     }
 
     public async Task ocultarelemento() {

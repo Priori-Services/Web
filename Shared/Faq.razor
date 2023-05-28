@@ -1,5 +1,12 @@
 @using PRIORI_SERVICES_WEB.Data.Model
 
+<style>
+    html,
+    body {
+        @(BackgroundGradients.BackgroundPrincipal);
+    }
+</style>
+
 <div class="container-fluid p-3">
     <div class="accordion accordion-flush" id="@AccordionRoot">
         @if (Faqs != null)

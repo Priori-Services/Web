@@ -94,7 +94,7 @@
     private Dictionary<string, string> paginas_sistema =
     new Dictionary<string, string> {
 {"/blog","Blog"},
-{"/simulador","Investimentos"},
+{"/investimentos","Investimentos"},
 {"/contato","Contato"}
         };
 
@@ -108,7 +108,7 @@
         NavigationManager.NavigateTo(
         (app_key == String.Empty || app_key == "" || app_key == null)
         ? "/login"
-        : "/areausuario"
+        : "/perfil-usuario"
         );
     }
 
