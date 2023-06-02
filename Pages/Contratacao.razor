@@ -2,6 +2,7 @@
 
 @using PRIORI_SERVICES_WEB.Data.Model;
 @using PRIORI_SERVICES_WEB.Handler;
+@using ChartJs.Blazor.LineChart;
 @inject IJSRuntime JSInterop
 @inject IToastService Toast
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
@@ -420,6 +421,9 @@
                             }
                         
                     </div>
+                    <div>
+                           <Chart Config="_lineConfig"></Chart>
+                    </div>
             
     </div>
 
@@ -479,11 +483,11 @@
         if (@investido < Convert.ToDouble(@contratacao.valor_minimo)) {
             Toast.ShowError("O valor inserido é inferior ao valor mínimo do investimento");
         } else {
-        calcbruto(investido);
-        try {
-            ocultarelemento().RunSynchronously();
-        } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
-        { }
+            calcbruto(investido);
+            try {
+                ocultarelemento().RunSynchronously();
+            } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
+            { }
         }
     }
 
@@ -496,6 +500,41 @@
             desocultarasync().RunSynchronously();
         } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
         { }
+    }
+
+    private LineConfig _lineConfig;
+    protected override void OnInitialized()
+    {
+        ConfigureLine();
+    }
+
+    private void ConfigureLine()
+    {
+        _lineConfig = new LineConfig();
+        _lineConfig.Options = new LineOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Title of my chart"
+                }
+            };
+        foreach(var party in new[] {"party1","party2","party3" })
+        {
+            _lineConfig.Data.Labels.Add(party);
+        }
+        var dataset = new LineDataset<int>(new[] { 35, 50, 15 })
+        {
+             BackgroundColor = string.Join(",",new[]
+             {
+                ColorUtil.ColorHexString(255, 0, 0),
+                ColorUtil.ColorHexString(0, 255, 0),
+                ColorUtil.ColorHexString(0, 0, 255)
+             })
+        };
+
+        _lineConfig.Data.Datasets.Add(dataset); 
     }
 
 
