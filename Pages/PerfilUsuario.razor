@@ -14,7 +14,7 @@
     }
 </style>
 
-<NavMenu nav_classes="sticky-top" />
+<NavMenu />
 
 <div class="d-flex flex-row flex-wrap flex-lg-nowrap text-center">
     @if (clienteuser == null)
@@ -31,108 +31,118 @@
     }
     else
     {
-        <section style="background-color: #eee;" class="container-fluid bg-transparent">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card mb-4">
-                            <div class="card-body text-center">
-                                <i class="bi bi-person-circle text-dark" style="font-size: 7rem;"></i>
-                                <h5 class="my-3">@(clienteuser.nome)</h5>
-                                <div class="d-flex flex-column justify-content-center mb-2">
-                                    <a href="/investimentos-efetuados" class="my-1 btn btn-primary">Meus Investimentos</a>
-                                    <button @onclick="@(() => Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados"))"
-                                        type="button" class="my-1 btn btn-primary">Alteração de Dados</button>
-                                    <button type="button" class="my-1 btn btn-outline-primary">Sair</button>
+        <div class="container-fluid d-flex flex-column">
+            <section style="background-color: #eee;" class="container-fluid bg-transparent d-flex flex-column">
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-person-circle text-dark" style="font-size: 7rem;"></i>
+                                    <h5 class="my-3">@(clienteuser.nome)</h5>
+                                    <div class="d-flex flex-column justify-content-center mb-2">
+                                        <a href="/investimentos-efetuados" class="my-1 btn btn-primary">Meus
+                                            Investimentos</a>
+                                        <button
+                                        @onclick="@(() => Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados"))"
+                                            type="button" class="my-1 btn btn-primary">Alteração de Dados</button>
+                                        <button type="button" @onclick="UserSairSync" class="my-1 btn btn-outline-primary">Sair</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="card mb-4">
-                            <div class="card-body text-dark">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Nome Completo</p>
+                        <div class="col-lg-8">
+                            <div class="card mb-4">
+                                <div class="card-body text-dark">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Nome Completo</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="mb-0">@(clienteuser.nome)</p>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <p class="mb-0">@(clienteuser.nome)</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Email</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="mb-0">@(clienteuser.email)</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Email</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">CPF</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="mb-0">@(clienteuser.cpf)</p>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <p class="mb-0">@(clienteuser.email)</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Endereço</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="mb-0">@(clienteuser.endereco)</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">CPF</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Data de Adesão</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@(clienteuser.data_adesao)</p>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <p class="mb-0">@(clienteuser.cpf)</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Sua Pontuação</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@(clienteuser.pontuacao) pontos</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Endereço</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Data de Nascimento</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@(clienteuser.dataNascimento)</p>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <p class="mb-0">@(clienteuser.endereco)</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Data de Adesão</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@(clienteuser.data_adesao)</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Sua Pontuação</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@(clienteuser.pontuacao) pontos</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Data de Nascimento</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@(clienteuser.dataNascimento)</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Tipo de Investidor</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@(clienteuser.GetTipoInvestidorFromID())</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Tipo de Investidor</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@(clienteuser.GetTipoInvestidorFromID())</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            <section>
+                <div class="d-flex flex-row flex-wrap text-center justify-content-center align-items-center">
+                    <InvEfetuados invEfetuados=@investimentos_cliente />
+                </div>
+            </section>
+        </div>
     }
 </div>
 
 @code {
     private Cliente? clienteuser { get; set; }
+    public CarteiraInvestimento[]? investimentos_cliente { get; set; }
     [CascadingParameter]
     public IModalService Modal_Alteracao { get; set; } = default!;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -153,6 +163,9 @@
 
         clienteuser = await
         APIHandler.FetchAbstractJsonObjectAsync<Cliente?>($"/Auth/Cliente/Info/{user_id}");
+
+        investimentos_cliente = await
+        APIHandler.FetchAbstractJsonObjectAsync<CarteiraInvestimento[]?>($"/CarteiraInvestimento/ByUserID/{user_id}");
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
 

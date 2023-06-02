@@ -1,35 +1,83 @@
+@using PRIORI_SERVICES_WEB.Handler;
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IToastService Toast
+
 <form action="post" class="text-dark d-flex flex-column">
     <div class="form-outline mb-4">
         <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
-        <input type="email" class="form-control" required />
+        <input type="email" @bind="emailUsuario" @bind:event="oninput" class="form-control" required maxlength="40"/>
     </div>
-
+    
+    <div class="form-outline mb-4">
+        <label class="form-label fonteInfo" for="registrarEmail">Endereço</label>
+        <input type="text" @bind="enderecoUsuario" @bind:event="oninput" class="form-control" required maxlength="60" />
+    </div>
+    
     <div class="form-outline mb-4">
         <label class="form-label fonteInfo" for="registerPassword">Senha</label>
-        <input type="password" class="form-control" required />
+        <input type="password" @bind="senhaUsuario" @bind:event="oninput" class="form-control" required />
     </div>
 
     <div class="form-outline mb-4">
         <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
-        <input type="password" class="form-control" required />
+        <input type="password" @bind="senhaConfirm" @bind:event="oninput" class="form-control" required />
     </div>
-
-    <button @onclick="AlterarCliente" class="btn btn-primary">Alterar Dados</button>
+    <button @onclick="AlterarClienteSync" class="btn btn-primary">Alterar Dados</button>
 </form>
 
 <p>Quer alterar outros dados? Entre em contato com a <i>Priori</i></p>
 
 @code {
-    private string emailcliente {get;set;}
-    private void AlterarClienteSync() {
-        try {
+    private string enderecoUsuario {get;set;} = String.Empty;
+    private string emailUsuario { get; set; } = String.Empty;
+    private string senhaUsuario { get; set; } = String.Empty;
+    private string senhaConfirm { get; set; } = String.Empty;
+
+    private void AlterarClienteSync()
+    {
+        if (senhaUsuario != senhaConfirm)
+        {
+            Toast.ShowError("As senhas não são iguais");
+            return;
+        }
+
+
+        try
+        {
             AlterarCliente().RunSynchronously();
-        } catch (Exception) {
+        }
+        catch (Exception)
+        {
 
         }
     }
 
-    private async Task AlterarCliente() {
+    private async Task AlterarCliente()
+    {
+        const string FAILURE_STATE = "Falha ao alterar dados do usuário";
+        HttpResponseMessage response;
+        try
+        {
+            response = await APIHandler.PutRequestAsync(
+            new Dictionary<string, object> {
+{"email", emailUsuario},
+{"senha", senhaUsuario},
+{"endereco", enderecoUsuario}
+                }, $"/Auth/Cliente/{await LocalStorage.GetItemAsStringAsync("app_token")}"
+            );
+        }
+        catch (Exception)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
 
+        if (!response.IsSuccessStatusCode)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        Toast.ShowSuccess("Dados Alterados com Sucesso!");
     }
 }

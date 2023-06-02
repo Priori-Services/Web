@@ -1,0 +1,118 @@
+@using PRIORI_SERVICES_WEB.Handler
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IToastService Toast
+
+<div class="container">
+    @if (invEfetuados == null)
+    {
+        <div class="container d-flex flex-row">
+            <div class="container">&ensp;</div>
+            <div class="container-fluid">
+                <button class="btn btn-outline-white" @onclick="@(() => Console.WriteLine(invEfetuados!.ToString()))">
+                    Clique aqui se demorar para carregar!
+                </button>
+            </div>
+            <div class="container">&ensp;</div>
+        </div>
+    }
+    else
+    {
+        @foreach (var investimento_efetuado in invEfetuados!)
+        {
+            <div class="card p-2 m-5 bg-white text-dark">
+                <div class="card-header bg-white d-flex flex-row">
+                    @switch (GetRiscoInvestimentoFromID(investimento_efetuado.id_investimento))
+                    {
+                        case 1:
+                            <div class="bg-success rounded-4">
+                                &ensp;
+                            </div>
+                            break;
+                        case 2:
+                            <div class="bg-warning rounded-4">
+                                &ensp;
+                            </div>
+                            break;
+                        case 3:
+                            <div class="bg-danger rounded-4">
+                                &ensp;
+                            </div>
+                            break;
+                    }
+                    <div class="bd-highlight">
+                        <h4 class="p-1 mx-2 text-wrap" style="width: 12rem; text-align: right;">
+                            @GetNomeFromInvestimentoID(investimento_efetuado.id_investimento)</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group" style="list-style-type: none;">
+                        <li class="list-group-item">Valor Aplicado: @(investimento_efetuado.valor_aplicado)</li>
+                        <li class="list-group-item">Rentabilidade anual: @(investimento_efetuado.rentabilidade_fixa +
+                    investimento_efetuado.rentabilidade_variavel)</li>
+                        <li class="list-group-item">Data da Aplicão: @(investimento_efetuado.data_efetuacao)</li>
+                        <li class="list-group-item">Vencimento:
+                            @($"{GetVencimentoFromInvestimentoID(investimento_efetuado.id_investimento).Day}/{GetVencimentoFromInvestimentoID(investimento_efetuado.id_investimento).Month}/{GetVencimentoFromInvestimentoID(investimento_efetuado.id_investimento).Year}")
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public CarteiraInvestimento[]? invEfetuados { get; set; }
+    public Investimento[] invDisponiveis = new Investimento[0];
+    private decimal GetRiscoInvestimentoFromID(int? investimento_id)
+    {
+        const decimal FAILED_STATE = 1;
+
+        if (investimento_id == null)
+            return FAILED_STATE;
+
+        foreach (var investimento in invDisponiveis)
+        {
+            if (investimento.id_investimento == investimento_id)
+                return investimento.id_riscoInvestimento;
+        }
+        return FAILED_STATE;
+    }
+    private string GetNomeFromInvestimentoID(int? investimento_id)
+    {
+        const string FAILED_STATE = "Falha ao encontrar nome";
+
+        if (investimento_id == null)
+            return FAILED_STATE;
+
+        foreach (var investimento in invDisponiveis)
+        {
+            if (investimento.id_investimento == investimento_id)
+                return investimento.nome ?? FAILED_STATE;
+        }
+        return FAILED_STATE;
+    }
+    private DateTime GetVencimentoFromInvestimentoID(int? investimento_id)
+    {
+        DateTime FAILED_STATE = DateTime.Now;
+
+        if (investimento_id == null)
+            return FAILED_STATE;
+
+        foreach (var investimento in invDisponiveis)
+        {
+            if (investimento.id_investimento == investimento_id)
+                return investimento.vencimento;
+        }
+        return FAILED_STATE;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        invDisponiveis = await APIHandler.FetchOrFallbackAsync<Investimento[]>("/investimento", new Investimento[] {
+new Investimento {
+nome = "Falha ao encontrar investimento"
+}
+});
+    }
+}
