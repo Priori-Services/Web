@@ -1,0 +1,49 @@
+@inject IToastService Toast
+@using System.Net.Mail
+@using System.Net
+
+<div class="card-body text-dark px-5">
+    @if (!EmailEnviado)
+    {
+        <p class="card-text py-2">
+            Escreva aqui seu email para que nós possamos enviar um email de recuperação
+        </p>
+        <div class="form-outline">
+            <input type="email" @bind="EmailUser" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+        </div>
+        <button @onclick="EnviarEmailSync" class="btn btn-primary w-100">Enviar Email</button>
+    }
+    else
+    {
+
+    }
+
+</div>
+
+@code {
+    private bool EmailEnviado { get; set; } = false;
+    private string EmailUser { get; set; } = String.Empty;
+
+    private void EnviarEmailSync()
+    {
+var smtpClient = new SmtpClient("smtp.mail.com")
+{
+    Port = 587,
+    Credentials = new NetworkCredential("username", "password"),
+    EnableSsl = true,
+};
+    
+smtpClient.Send("email", "recipient", "subject", "body");
+
+        var mailMessage = new MailMessage
+{
+    From = new MailAddress("email"),
+    Subject = "subject",
+    Body = "<h1>Hello</h1>",
+    IsBodyHtml = true,
+};
+mailMessage.To.Add("recipient");
+
+smtpClient.Send(mailMessage); 
+    }
+}

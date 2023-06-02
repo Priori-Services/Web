@@ -6,6 +6,7 @@
 @inject IToastService Toast
 @inject ModalService Modal
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IModalService Modal
 
 <style>
     ::-webkit-scrollbar {
@@ -18,7 +19,7 @@
 </style>
 
 
-<NavMenu nav_classes="sticky-top" nav_style="" />
+<NavMenu />
 
 <section class="bg-transparent py-5 container-fluid row d-flex flex-row justify-content-center align-items-center">
     <div class="col-md-9 col-lg-6 col-xl-5">
@@ -45,14 +46,8 @@
                 @bind="logged_user.senha" />
             </div>
             <div class="d-flex justify-content-between align-items-center">
-                <!-- Checkbox -->
-                <div class="form-check mb-0">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="permanecerConectado" />
-                    <label class="form-check-label" for="form2Example3">
-                        Permanecer conectado
-                    </label>
-                </div>
-                <a href="#!" class="text-light">Esqueceu sua senha?</a>
+                <button @onclick="@(() => Modal_Alteracao.Show<EsqueceuASenha>("Esqueceu a senha"))" type="button"
+                    class="btn btn-primary">Esqueceu a senha?</button>
             </div>
             <div class="text-center text-lg-start mt-4 pt-2">
                 <button type="button" class="btn btn-outline-light text-white px-5 py-3 my-3"
@@ -66,6 +61,8 @@
 </section>
 
 @code {
+    [CascadingParameter]
+    public IModalService Modal_Alteracao { get; set; } = default!;
     protected class UserLogin
     {
         public string senha { get; set; } = String.Empty;
