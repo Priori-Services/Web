@@ -81,9 +81,6 @@
 @code {
     public Investimento[] invDisponiveis = new Investimento[0];
 
-    [CascadingParameter]
-    public IModalService Modal_Simulacao { get; set; } = default!;
-
     public void PosSimulacao(int id_investimento)
     {
         SimulacaoID.id_selecionado = id_investimento;

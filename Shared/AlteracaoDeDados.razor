@@ -1,0 +1,35 @@
+<form action="post" class="text-dark d-flex flex-column">
+    <div class="form-outline mb-4">
+        <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
+        <input type="email" class="form-control" required />
+    </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label fonteInfo" for="registerPassword">Senha</label>
+        <input type="password" class="form-control" required />
+    </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
+        <input type="password" class="form-control" required />
+    </div>
+
+    <button @onclick="AlterarCliente" class="btn btn-primary">Alterar Dados</button>
+</form>
+
+<p>Quer alterar outros dados? Entre em contato com a <i>Priori</i></p>
+
+@code {
+    private string emailcliente {get;set;}
+    private void AlterarClienteSync() {
+        try {
+            AlterarCliente().RunSynchronously();
+        } catch (Exception) {
+
+        }
+    }
+
+    private async Task AlterarCliente() {
+
+    }
+}

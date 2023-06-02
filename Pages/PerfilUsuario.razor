@@ -8,8 +8,9 @@
 @inject NavigationManager NavigationManager
 
 <style>
-    html, body {
-        @(BackgroundGradients.BackgroundPrincipal);        
+    html,
+    body {
+    @(BackgroundGradients.BackgroundPrincipal);
     }
 </style>
 
@@ -30,70 +31,110 @@
     }
     else
     {
-        <div class="container flex-grow-1 my-3">
-            <div class="d-flex flex-row flex-wrap flex-wrap flex-lg-nowrap ">
-                <div class="container text-right card rounded-5 m-3">
-                    <i class="bi bi-person-circle" style="font-size: 10rem;"></i>
-                    <p class="fs-3">@(clienteuser.nome)</p>
-                    <p class="fs-3">@(clienteuser.cpf)</p>
-                    <p class="fs-3">@(clienteuser.dataNascimento)</p>
-                    <p class="fs-3">@(clienteuser.endereco)</p>
-                    <p class="fs-3">Você tem @(clienteuser.pontuacao) pontos.</p>
-                    @if (clienteuser.status != "ATIVO") {
-                        <p class="fs-5 text-wrap">
-                            Para reativar seu cadastro entre em <a href="contato" class="text-decoration-none">contato</a> com a <i>Priori</i>
-                        </p>
-                    }
-                </div>
-                <div class="container d-flex flex-column align-items-center justify-items-center" id="navbarActions">
-                    <div>&ensp;</div>
-                    <div>
-                        <a href="/investimentos-efetuados" class="btn container-fluid btn-outline-light p-4 fs-4">
-                            INVESTIMENTOS EFETUADOS
-                        </a>
-                        <button class="btn container-fluid btn-outline-light p-4 fs-4">
-                            ALTERAR DADOS
-                        </button>
-                        <button @onclick="UserSairSync" class="btn container-fluid btn-outline-light p-4 fs-4">
-                            SAIR
-                        </button>
+        <section style="background-color: #eee;" class="container-fluid bg-transparent">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <i class="bi bi-person-circle text-dark" style="font-size: 7rem;"></i>
+                                <h5 class="my-3">@(clienteuser.nome)</h5>
+                                <div class="d-flex flex-column justify-content-center mb-2">
+                                    <a href="/investimentos-efetuados" class="my-1 btn btn-primary">Meus Investimentos</a>
+                                    <button @onclick="@(() => Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados"))"
+                                        type="button" class="my-1 btn btn-primary">Alteração de Dados</button>
+                                    <button type="button" class="my-1 btn btn-outline-primary">Sair</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>&ensp;</div>
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-body text-dark">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Nome Completo</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="mb-0">@(clienteuser.nome)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Email</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="mb-0">@(clienteuser.email)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">CPF</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="mb-0">@(clienteuser.cpf)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Endereço</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="mb-0">@(clienteuser.endereco)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Data de Adesão</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">@(clienteuser.data_adesao)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Sua Pontuação</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">@(clienteuser.pontuacao) pontos</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Data de Nascimento</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">@(clienteuser.dataNascimento)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Tipo de Investidor</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">@(clienteuser.GetTipoInvestidorFromID())</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-                    
-        </div>
-        <div id="areaAlteracao" style="display: none;" class="container tab-pane" role="tabpanel" aria-labelledby="tab-register">
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
-                <input type="email" class="form-control" required placeholder="@clienteuser.email"/>
-            </div>
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registerPassword">Senha</label>
-                <input type="password" class="form-control" required />
-            </div>
-            <div class="form-outline mb-4">
-                <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
-                <input type="password" class="form-control" required />
-            </div>
-            <button formaction="post" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
-                ALTERAR DADOS
-            </button>
-            <i class="mt-3">Deseja alterar outros dados? Entre em <a href="/contato" class="text-primary" style="text-decoration: none;">contato</a> com a Priori</i>
-            @* 
-            SELECT saldo FROM tblCarteiraInvestimentos
-	        WHERE data_efetuacao IN (
-		    SELECT MAX(data_efetuacao) FROM tblCarteiraInvestimentos
-		    GROUP BY id_cliente_carteira)
-            *@
-        </div>
+        </section>
     }
 </div>
 
 @code {
-    private Cliente? clienteuser {get;set;}
-
+    private Cliente? clienteuser { get; set; }
+    [CascadingParameter]
+    public IModalService Modal_Alteracao { get; set; } = default!;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -103,11 +144,11 @@
         string? user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
         string? app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
 
-        if(app_token == String.Empty || app_token == null || app_token == "")
+        if (app_token == String.Empty || app_token == null || app_token == "")
             NavigationManager.NavigateTo("/");
-        
+
         Toast.ShowInfo("Carregando...");
-        
+
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
         clienteuser = await
@@ -120,30 +161,22 @@
         Toast.ShowSuccess("Carregamento finalizado!");
     }
 
-    private void UserSairSync() {
-        try {
+    private void UserSairSync()
+    {
+        try
+        {
             UserSair().RunSynchronously();
-        } catch (Exception) {
+        }
+        catch (Exception)
+        {
 
         }
     }
 
-    private async Task UserSair() {
+    private async Task UserSair()
+    {
         await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.app_token.ToString(), "");
         await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.user_id.ToString(), "");
         NavigationManager.NavigateTo("/");
-    }
-
-
-    private void AlterarClienteSync() {
-        try {
-            AlterarCliente().RunSynchronously();
-        } catch (Exception) {
-
-        }
-    }
-
-    private async Task AlterarCliente() {
-
     }
 }

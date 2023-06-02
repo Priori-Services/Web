@@ -45,6 +45,12 @@
         </div>
 
         <div class="form-outline mb-4">
+            <label class="form-label fonteInfo" for="registrarEndereco">Endereço</label>
+            <input type="text" @bind="target_cliente.endereco" @bind:event="oninput" class="form-control" required
+                maxlength="50" />
+        </div>
+
+        <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarDataNASCIMENTO">Data de Nascimento</label>
             <span class="detalhes">necessária pra identificar a maioridade</span>
             <input type="date" @bind="dataNascimento" @bind:event="oninput" class="form-control" required />
@@ -161,6 +167,7 @@ error_description = "CPF do usuário deve ter menos de 11 caractéres"
             {"senha", request.senha!},
             {"cpf", request.cpf!},
             {"email", request.email!},
+            {"endereco", request.endereco!},
             {"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
             {"respostaAssessoria", RespostaAssessoria.aceitou}}, "/Auth/Cliente/registrar");
         } // Podemos implicitamente associar o aceitar do usuário aqui pq pra chegar até aqui tivemos checks disso.

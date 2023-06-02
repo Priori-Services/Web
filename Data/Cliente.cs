@@ -3,12 +3,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PRIORI_SERVICES_WEB.Data.Model;
 
 public enum Status { ATIVO, INATIVO }
+public enum TipoInvestidor { mogus, }
 public enum RespostaAssessoria { mogus, aceitou, recusou, cancelou }
-public enum SituacaoAssessoria { ativa, inativa }
+public enum SituacaoAssessoria { mogus, ativa, inativa }
 
 [Table("tblClientes")]
 public class Cliente
 {
+    public string GetTipoInvestidorFromID() {
+        switch (this.id_tipoinvestidor)
+        {
+            case 1:
+                return "TODO";
+            case 2:
+                return "TODO";
+            case 3:
+                return "TODO";
+            default:
+                return "Não encontrado";
+        }
+    }
+
     [Column(TypeName = "int")]
     public int id_cliente { get; set; }
 

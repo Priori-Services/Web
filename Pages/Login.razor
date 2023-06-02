@@ -4,6 +4,7 @@
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
+@inject ModalService Modal
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <style>
@@ -12,7 +13,7 @@
     }
 
     body {
-        @(BackgroundGradients.BackgroundPrincipal);
+    @(BackgroundGradients.BackgroundPrincipal);
     }
 </style>
 
@@ -65,6 +66,8 @@
 </section>
 
 @code {
+    [CascadingParameter]
+    public IModalService Modal_Recuperacao { get; set; } = default!;
     protected class UserLogin
     {
         public string senha { get; set; } = String.Empty;
@@ -85,9 +88,9 @@
         try
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-            {"email", logged_user.email},
-            {"senha", logged_user.senha}
-            }, "/Auth/Cliente/login");
+{"email", logged_user.email},
+{"senha", logged_user.senha}
+}, "/Auth/Cliente/login");
         }
         catch (Exception)
         {
