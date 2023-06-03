@@ -1,0 +1,49 @@
+@inject IToastService Toast
+@using PRIORI_SERVICES_WEB.Handler
+@inject IAsyncService AsyncService
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+<form action="post" class="text-dark d-flex flex-column">
+    <h4>Digite o saldo aqui que deve ser inserido </h4>
+    <i>Por enquanto isso só será uma simulação, nada implementado corretamente ainda</i>
+
+    <div class="form-outline mb-4">
+        <input type="text" @bind="saldoUser" @bind:event="oninput" class="form-control" required maxlength="60" />
+    </div>
+
+    <button @onclick="() => AsyncService.RunTaskAsSync(InserirSaldo)" class="btn btn-primary">INSERIR SALDO</button>
+</form>
+
+@code {
+    private string saldoUser { get; set; } = String.Empty;
+    private async Task InserirSaldo()
+    {
+        const string FAILURE_STATE = "Falha ao inserir saldo";
+        string user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+
+        HttpResponseMessage response;
+
+        try
+        {
+            response = await APIHandler.PutRequestAsync(
+            new Dictionary<string, object> {
+{"saldo", Convert.ToDecimal(saldoUser)}
+                }, "/CarteiraInvestimento/saldo/{user_id}"
+            );
+        }
+        catch (Exception)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        Toast.ShowSuccess("Saldo inserido com sucesso!");
+    }
+
+}
