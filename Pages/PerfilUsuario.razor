@@ -14,7 +14,7 @@
     }
 </style>
 
-<NavMenu />
+<NavMenu nav_classes="sticky-top" />
 
 <div class="d-flex flex-row flex-wrap flex-lg-nowrap text-center">
     @if (clienteuser == null)
@@ -22,8 +22,8 @@
         <div class="container d-flex flex-row">
             <div class="container">&ensp;</div>
             <div class="container-fluid">
-                <button class="btn btn-primary" @onclick="@(() => Console.WriteLine(clienteuser!.ToString()))">
-                    Clique aqui se demorar para carregar!
+                <button class="btn btn-light m-5" @onclick="@(() => Console.WriteLine(clienteuser!.ToString()))">
+                    clique aqui para prosseguir
                 </button>
             </div>
             <div class="container">&ensp;</div>
@@ -38,15 +38,16 @@
                         <div class="col-lg-4">
                             <div class="card mb-4">
                                 <div class="card-body text-center">
-                                    <i class="bi bi-person-circle text-dark" style="font-size: 7rem;"></i>
-                                    <h5 class="my-3">@(clienteuser.nome)</h5>
-                                    <div class="d-flex flex-column justify-content-center mb-2">
-                                        <a href="/investimentos-efetuados" class="my-1 btn btn-primary">Meus
+                                    <i class="bi bi-person-circle text-dark" style="font-size: 6rem;"></i>
+                                    <h5 class="mb-2">@(clienteuser.nome)</h5>
+                                    <h5 class="mb-4">Cliente desde @($"{clienteuser.data_adesao.Day}/{clienteuser.data_adesao.Month}/{clienteuser.data_adesao.Year}")</h5>
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <a href="/investimentos-efetuados" class="my-1 mx-2 btn btn-outline-primary">Meus
                                             Investimentos</a>
                                         <button
                                         @onclick="@(() => Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados"))"
-                                            type="button" class="my-1 btn btn-primary">Alteração de Dados</button>
-                                        <button type="button" @onclick="UserSairSync" class="my-1 btn btn-outline-primary">Sair</button>
+                                            type="button" class="my-1 mx-4 btn btn-outline-primary">Alteração de Dados</button>
+                                        <button type="button" @onclick="UserSairSync" class="my-1 mx-5 btn btn-outline-danger">Sair</button>
                                     </div>
                                 </div>
                             </div>
@@ -65,6 +66,15 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-3">
+                                            <p class="mb-0">CPF</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="mb-0">@(clienteuser.cpf)</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
                                             <p class="mb-0">Email</p>
                                         </div>
                                         <div class="col-sm-9">
@@ -74,10 +84,10 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <p class="mb-0">CPF</p>
+                                            <p class="mb-0">Data de Nascimento</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <p class="mb-0">@(clienteuser.cpf)</p>
+                                            <p class="text-muted mb-0">@(clienteuser.dataNascimento)</p>
                                         </div>
                                     </div>
                                     <hr>
@@ -95,7 +105,7 @@
                                             <p class="mb-0">Data de Adesão</p>
                                         </div>
                                         <div class="col-sm-9">
-                                            <p class="text-muted mb-0">@(clienteuser.data_adesao)</p>
+                                            <p class="text-muted mb-0">@($"{clienteuser.data_adesao.Day}/{clienteuser.data_adesao.Month}/{clienteuser.data_adesao.Year}")</p>
                                         </div>
                                     </div>
                                     <hr>
@@ -107,38 +117,16 @@
                                             <p class="text-muted mb-0">@(clienteuser.pontuacao) pontos</p>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Data de Nascimento</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p class="text-muted mb-0">@(clienteuser.dataNascimento)</p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <p class="mb-0">Tipo de Investidor</p>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p class="text-muted mb-0">@(clienteuser.GetTipoInvestidorFromID())</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <section>
-                <div class="d-flex flex-row flex-wrap text-center justify-content-center align-items-center">
-                    <InvEfetuados invEfetuados=@investimentos_cliente />
-                </div>
-            </section>
         </div>
     }
 </div>
+<Footer></Footer>
 
 @code {
     private Cliente? clienteuser { get; set; }
