@@ -1,6 +1,7 @@
 using Blazored.Toast;
 using Blazored.Modal;
 using Blazored.LocalStorage;
+using PRIORI_SERVICES_WEB.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton<HttpClient>();
-
+builder.Services.AddScoped<IAsyncService, AsyncService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
