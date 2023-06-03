@@ -92,6 +92,11 @@
                                                 </div>
                                                 <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
                                                 <button @onclick="ContratarActionSync" type="submit" class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
+                                                @if (saldo > investido) {
+                                                    <p>haha</p>
+                                                } else {
+                                                    <button class="bg-danger text-decoration-none text-light"><a href="/">SALDO</a></button>
+                                                }
                                             </div> 
                                         </ul>
                                         break;
@@ -421,9 +426,11 @@
                             }
                         
                     </div>
+                    @*
                     <div>
                            <Chart Config="_lineConfig"></Chart>
                     </div>
+                    *@
             
     </div>
 
@@ -431,7 +438,8 @@
 
 @code {
     public Investimento contratacao = new Investimento {nome = "Falha ao encontrar investimentos."};
-
+    public double saldo {get;set;} = 0;
+    private string user_id {get;set;} = String.Empty;
     private double investido {get; set;}
     private double result_bruto {get;set;}
     private double IR { get;set;}
@@ -440,7 +448,7 @@
 
     private void ContratarActionSync() {
         try {
-            ContratarAction().RunSynchronously();
+            ContratarAction().RunSynchronously();           
         } catch (Exception) {
 
         }
@@ -448,11 +456,49 @@
 
     private async Task ContratarAction() {
         var app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
-
+        
         if(app_token == String.Empty || app_token == "" || app_token == null) {
             NavigationManager.NavigateTo("/login");
             return;
         }
+
+        user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+
+        saldo = await APIHandler.FetchAbstractJsonObjectAsync<double>($"/Auth/Cliente/saldo/{user_id}");
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+
+        if (saldo <= investido) {    
+            Toast.ShowError("Seu saldo é insuficiente para contratação.");
+            return;
+        }
+        const string FAILURE_STATE = "Falha ao contratar investimento";
+        HttpResponseMessage response;
+        try {
+            response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
+            {"id_cliente_carteira",user_id},
+            {"id_investimento",SimulacaoID.id_selecionado},
+            {"rentabilidade_fixa",contratacao.rentabilidade_fixa},
+            {"rentabilidade_variavel",contratacao.rentabilidade_variavel},
+            {"data_efetuacao", DateTime.Now},
+            {"valor_aplicado", investido},
+            {"status", "ATIVO"},
+            {"saldo", saldo - investido}
+        },"/CarteiraInvestimento"); 
+        } catch (Exception) {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+        
+        if (!response.IsSuccessStatusCode) {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        Toast.ShowSuccess("Investimento contratado com sucesso!");
+
         await JSInterop.InvokeVoidAsync("ocultarelemento","btnCONTRATAR");
     }
 

@@ -115,31 +115,31 @@ error_description = "É necessário concordar com os termos de uso para prossegu
 },
 new ErrorEntry {
 is_error_valid = ((DateTime.Now.Year - dataNascimento.Year) <= 18),
-error_description = "Você deve ser maior de 18 anos de idade para acessar este site de investimentos"
+error_description = "Você deve possuir mais de 18 anos para utilizar nossos serviços"
 },
 new ErrorEntry {
 is_error_valid = (target_cliente.senha != confirmacaoSenhaLogin),
-error_description = "A senha e sua confirmação não são iguais"
+error_description = "As duas senhas não conferem"
 },
 new ErrorEntry {
 is_error_valid = (!target_cliente.senha!.Any(char.IsSymbol)),
-error_description = "Senha deve conter símbolos"
+error_description = "´necessário que a senha contenha símbolos"
 },
 new ErrorEntry {
 is_error_valid = (target_cliente.senha!.Length <= 8),
-error_description = "Senha deve ter mais de 8 caractéres"
+error_description = "A senha deve conter mais de 8 caractéres"
 },
 new ErrorEntry {
 is_error_valid = (!target_cliente.senha.Any(char.IsNumber)),
-error_description = "Senha deve ter pelo menos um número"
+error_description = "A senha deve conter pelo menos um número"
 },
 new ErrorEntry {
 is_error_valid = (!target_cliente.senha.Any(char.IsUpper)),
-error_description = "Senha deve ter pelo menos um caractére maiúsculo"
+error_description = "A senha deve conter pelo menos um caractére maiúsculo"
 },
 new ErrorEntry {
 is_error_valid = (target_cliente.cpf!.Length > 11),
-error_description = "CPF do usuário deve ter menos de 11 caractéres"
+error_description = "O CPF digitado é inválido"
 }
 };
 
