@@ -7,6 +7,7 @@
 @inject ModalService Modal
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject IModalService Modal
+@inject IAsyncService AsyncService
 
 <style>
     ::-webkit-scrollbar {
@@ -33,27 +34,27 @@
                     Login
                 </p>
             </div>
-            <!-- Email input -->
+            
             <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example3">E-mail</label>
                 <input type="email" id="emailLogin" class="form-control form-control-lg text-white bg-transparent"
-                @bind="logged_user.email" />
+                @bind="user.email" />
             </div>
-            <!-- Password input -->
+            
             <div class="form-outline mb-3">
                 <label class="form-label" for="form3Example4">Senha</label>
                 <input type="password" id="senhaLogin" class="form-control form-control-lg bg-transparent text-white"
-                @bind="logged_user.senha" />
+                @bind="user.senha" />
             </div>
             <div class="d-flex justify-content-between align-items-center">
-                <button @onclick="@(() => Modal_Alteracao.Show<EsqueceuASenha>("Esqueceu a senha"))" type="button"
-                    class="btn btn-primary">Esqueceu a senha?</button>
+                <a href="#" @onclick="@(() => Modal_Alteracao.Show<EsqueceuASenha>("Esqueceu a senha"))"
+                    class="link-danger text-decoration-none">Esqueceu a senha?</a>
             </div>
             <div class="text-center text-lg-start mt-4 pt-2">
                 <button type="button" class="btn btn-outline-light text-white px-5 py-3 my-3"
-                @onclick="login_user_wrapper">Acessar</button>
+                @onclick="@(() => AsyncService.RunTaskAsSync(LoginUser))">Acessar</button>
                 <p class="small fw-bold mt-2 pt-1 mb-0">Não possui cadastro?
-                    <a href="/cadastro" class="link-danger">Registre-se</a>
+                    <a href="/cadastro" class="link-danger text-decoration-none">Registre-se</a>
                 </p>
             </div>
         </form>
@@ -63,59 +64,55 @@
 @code {
     [CascadingParameter]
     public IModalService Modal_Alteracao { get; set; } = default!;
-    protected class UserLogin
+    protected class UserCredentials
     {
         public string senha { get; set; } = String.Empty;
         public string email { get; set; } = String.Empty;
     }
-    protected UserLogin logged_user { get; set; } = new UserLogin();
-    private const string TOAST_ERROR_MSG = "Falha ao fazer login";
+    private UserCredentials user { get; set; } = new UserCredentials();
 
-    public void login_user_wrapper()
-    {
-        try { LoginUserAsync().RunSynchronously(); }
-        catch (Exception) { }
-    }
 
-    public async Task LoginUserAsync()
+    public async Task LoginUser()
     {
+        const string FAILURE_STATE = "Falha ao fazer login";
+
         HttpResponseMessage? response;
         try
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-{"email", logged_user.email},
-{"senha", logged_user.senha}
+{"email", user.email},
+{"senha", user.senha}
 }, "/Auth/Cliente/login");
         }
         catch (Exception)
         {
-            Toast.ShowError(TOAST_ERROR_MSG);
+            Toast.ShowError(FAILURE_STATE);
             return;
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            Toast.ShowError(TOAST_ERROR_MSG);
+            Toast.ShowError(FAILURE_STATE);
             return;
         }
 
-        var JWTOBJ = await System.Text.Json.JsonSerializer.DeserializeAsync<Dictionary<string, string>?>(
+        var ID_JWT = await System.Text.Json.JsonSerializer.DeserializeAsync<Dictionary<string, string>?>(
         await response.Content.ReadAsStreamAsync()
         );
-        if (JWTOBJ == null)
+        if (ID_JWT == null)
         {
-            Toast.ShowError(TOAST_ERROR_MSG);
+            Toast.ShowError(FAILURE_STATE);
             return;
         }
 
         try
         {
-            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.user_id.ToString(), JWTOBJ["id"]);
-            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.app_token.ToString(), JWTOBJ["jwt_key"]);
+            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.user_id.ToString(), ID_JWT["id"]);
+            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.app_token.ToString(), ID_JWT["jwt_key"]);
         }
         catch (KeyNotFoundException)
         {
-            Toast.ShowError(TOAST_ERROR_MSG);
+            Toast.ShowError(FAILURE_STATE);
             return;
         }
         NavigationManager.NavigateTo("/");
