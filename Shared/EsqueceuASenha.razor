@@ -1,49 +1,128 @@
 @inject IToastService Toast
 @using System.Net.Mail
 @using System.Net
+@using PRIORI_SERVICES_WEB.Handler
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <div class="card-body text-dark px-5">
     @if (!EmailEnviado)
     {
-        <p class="card-text py-2">
+        <p class="card-text fs-3 py-2">
             Escreva aqui seu email para que nós possamos enviar um email de recuperação
         </p>
         <div class="form-outline">
             <input type="email" @bind="EmailUser" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
         </div>
-        <button @onclick="EnviarEmailSync" class="btn btn-primary w-100">Enviar Email</button>
+        <button @onclick="EnviarEmail" class="btn btn-primary w-100">Enviar Email</button>
     }
     else
     {
+        @if (!CodigoCorreto)
+        {
+            <p class="card-text fs-2 py-2">
+                Agora escreva o código recebido
+            </p>
+            <div class="form-outline">
+                <input type="text" @bind="CodigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+            </div>
+            <button @onclick="() => CodigoCorreto = (CodigoInput == CodigoGen)" class="btn btn-primary w-100">Verificar
+                Código</button>
+        }
+        else
+        {
+            <p class="fs-3">Insira sua nova senha</p>
+            <div class="form-outline">
+                <input type="text" @bind="SenhaNovaInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+            </div>
 
+            <p class="">Confirmação de senha</p>
+            <div class="form-outline">
+                <input type="text" @bind="SenhaNovaConfirm" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+            </div>
+
+            <button @onclick="AlterarSenhaSync" class="btn btn-primary w-100">Alterar Senha</button>
+        }
     }
-
 </div>
 
 @code {
     private bool EmailEnviado { get; set; } = false;
+    private bool CodigoCorreto { get; set; } = false;
     private string EmailUser { get; set; } = String.Empty;
+    private string CodigoInput { get; set; } = String.Empty;
+    private string SenhaNovaInput { get; set; } = String.Empty;
+    private string SenhaNovaConfirm { get; set; } = String.Empty;
+    private const int MINIMUM_SIX_DIGIT = 0;
+    private const int MAXIMUM_SIX_DIGIT = 1000000;
+    @*Código aleatório de 6 dígitos entre 100000 e 1000000*@
+    private string CodigoGen { get; set; } = new Random().Next(MINIMUM_SIX_DIGIT, MAXIMUM_SIX_DIGIT).ToString("D6");
 
-    private void EnviarEmailSync()
+    private void EnviarEmail()
     {
-var smtpClient = new SmtpClient("smtp.mail.com")
-{
-    Port = 587,
-    Credentials = new NetworkCredential("username", "password"),
-    EnableSsl = true,
-};
-    
-smtpClient.Send("email", "recipient", "subject", "body");
+        var smtpClient = new SmtpClient("smtp.mail.com")
+            {
+                Port = 587,
+                EnableSsl = true,
+            };
+
+        smtpClient.UseDefaultCredentials = false;
+        smtpClient.Credentials = new NetworkCredential(ConfigHandler.PRIORI_EMAIL_ADDRESS, ConfigHandler.PRIORI_EMAIL_PASSWORD);
 
         var mailMessage = new MailMessage
-{
-    From = new MailAddress("email"),
-    Subject = "subject",
-    Body = "<h1>Hello</h1>",
-    IsBodyHtml = true,
-};
-mailMessage.To.Add("recipient");
+            {
+                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
+                Subject = "Redefinição de senha Priori",
+                Body = $"<h1>Teste de Redefinição de senha</h1><h2>Seu código de recuperação de senha é: {CodigoGen}</h2>",
+                IsBodyHtml = true,
+            };
+        mailMessage.To.Add(EmailUser);
 
-smtpClient.Send(mailMessage); 
+        smtpClient.Send(mailMessage);
+
+        EmailEnviado = true;
+        Toast.ShowSuccess("Email enviado com sucesso!");
+    }
+
+    private void AlterarSenhaSync()
+    {
+        try
+        {
+            AlterarSenha().RunSynchronously();
+        }
+        catch (Exception)
+        {
+
+        }
+    }
+
+    private async Task AlterarSenha()
+    {
+        if (SenhaNovaInput != SenhaNovaConfirm) {
+            Toast.ShowError("As senhas digitadas não são iguais");
+            return;
+        }
+        const string FAILURE_STATE = "Falha ao mudar a senha";
+
+        string user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+
+        HttpResponseMessage response;
+        try
+        {
+            response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
+{"senha", SenhaNovaInput}}, $"/Auth/Cliente/senha/{user_id}");
+        }
+        catch (Exception)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        if(!response.IsSuccessStatusCode) {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        Toast.ShowSuccess("Senha alterada com sucesso!");
+        @*Fechar modal aqui*@
     }
 }

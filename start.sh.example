@@ -1,4 +1,4 @@
-PRIORI_API_ENDPOINT=localhost:5135
-PRIORI_EMAIL_ADDRESS=priori@cyberservices.com
+PRIORI_API_ENDPOINT='localhost:5135'
+PRIORI_EMAIL_ADDRESS='priori@cyberservices.com'
 PRIORI_EMAIL_PASSWORD=
 dotnet watch
