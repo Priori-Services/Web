@@ -40,7 +40,8 @@
                                 <div class="card-body text-center">
                                     <i class="bi bi-person-circle text-dark" style="font-size: 6rem;"></i>
                                     <h5 class="mb-2">@(clienteuser.nome)</h5>
-                                    <h5 class="mb-4">Cliente desde @($"{clienteuser.data_adesao.Day}/{clienteuser.data_adesao.Month}/{clienteuser.data_adesao.Year}")</h5>
+                                    <h5 class="mb-2">Cliente desde @($"{clienteuser.data_adesao.Day}/{clienteuser.data_adesao.Month}/{clienteuser.data_adesao.Year}")</h5>
+                                    <h5 class="mb-4">Seu saldo é de @saldouser</h5>
                                     <div class="d-flex flex-column justify-content-center">
                                         <a href="/investimentos-efetuados" class="my-1 mx-2 btn btn-outline-primary">Meus
                                             Investimentos</a>
@@ -130,7 +131,8 @@
 
 @code {
     private Cliente? clienteuser { get; set; }
-    public CarteiraInvestimento[]? investimentos_cliente { get; set; }
+    private string saldouser { get; set; } = String.Empty;
+
     [CascadingParameter]
     public IModalService Modal_Alteracao { get; set; } = default!;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -152,8 +154,7 @@
         clienteuser = await
         APIHandler.FetchAbstractJsonObjectAsync<Cliente?>($"/Auth/Cliente/Info/{user_id}");
 
-        investimentos_cliente = await
-        APIHandler.FetchAbstractJsonObjectAsync<CarteiraInvestimento[]?>($"/CarteiraInvestimento/ByUserID/{user_id}");
+        saldouser = (await APIHandler.FetchOrFallbackAsync<decimal>($"/CarteiraInvestimento/saldo/{user_id}", 0)).ToString();
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
 
