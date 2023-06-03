@@ -69,6 +69,8 @@
                     <li class="list-group-item">Rentabilidade anual: @(investimento.rentabilidade_variavel + investimento.rentabilidade_fixa)%</li>
                     <button class="btn btn-outline-primary mt-2" 
                     @onclick="@(() => Contratacao(investimento.id_investimento))">Simular</button>
+                    <button class="btn btn-outline-secondary mt-2" 
+                    @onclick="@(() => Historico(investimento.id_investimento))">Histórico</button>
                 </ul>
             </div>
         </div>
@@ -85,6 +87,12 @@
     {
         SimulacaoID.id_selecionado = id_investimento;
         NavigationManager.NavigateTo("/Contratacao");
+    }
+
+    public void Historico(int id_investimento)
+    {
+        SimulacaoID.id_selecionado = id_investimento;
+        NavigationManager.NavigateTo("/grafico");
     }
 
     protected override async Task OnInitializedAsync()
