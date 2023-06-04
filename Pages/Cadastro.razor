@@ -5,6 +5,7 @@
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
+@inject IAsyncService AsyncService
 
 <NavMenu nav_classes="sticky-top" />
 
@@ -35,18 +36,17 @@
     <div class="tab-pane d-flex flex-column" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarNome">Nome Completo</label>
-            <input type="text" @bind="target_cliente.nome" @bind:event="oninput" class="form-control" required />
+            <input type="text" @bind="usuario.nome" @bind:event="oninput" class="form-control" required />
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarCPF">CPF</label>
-            <input type="text" @bind="target_cliente.cpf" @bind:event="oninput" class="form-control" required
-                maxlength="11" />
+            <input type="text" @bind="usuario.cpf" @bind:event="oninput" class="form-control" required maxlength="11" />
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarEndereco">Endereço</label>
-            <input type="text" @bind="target_cliente.endereco" @bind:event="oninput" class="form-control" required
+            <input type="text" @bind="usuario.endereco" @bind:event="oninput" class="form-control" required
                 maxlength="50" />
         </div>
 
@@ -59,12 +59,12 @@
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registrarEmail">E-mail</label>
             <span class="detalhes">você vai precisar ativar sua conta depois de criar seu cadastro</span>
-            <input type="email" @bind="target_cliente.email" @bind:event="oninput" class="form-control" required />
+            <input type="email" @bind="usuario.email" @bind:event="oninput" class="form-control" required />
         </div>
 
         <div class="form-outline mb-4">
             <label class="form-label fonteInfo" for="registerPassword">Senha</label>
-            <input type="password" @bind="target_cliente.senha" @bind:event="oninput" class="form-control" required />
+            <input type="password" @bind="usuario.senha" @bind:event="oninput" class="form-control" required />
         </div>
 
         <div class="form-outline mb-4">
@@ -80,96 +80,105 @@
             </label>
         </div>
 
-        <button formaction="post" @onclick="CadastroUser" class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
+        <button formaction="post" @onclick="@(() => AsyncService.RunTaskAsSync(CadastroUser))"
+            class="text-center btn btn-outline-light px-4 py-2 fs-5 ">
             CADASTRAR
         </button>
     </div>
 </div>
 
 @code {
-    public struct ErrorEntry
+    public struct EntradaDeErro
     {
-        public bool is_error_valid;
-        public string error_description;
+        public bool condicao_e_valida;
+        public string descricao;
     }
-    public ClienteDBO target_cliente = new ClienteDBO();
+    public ClienteDBO usuario = new ClienteDBO();
     public DateTime dataNascimento { get; set; } = DateTime.Now;
     public string confirmacaoSenhaLogin { get; set; } = String.Empty;
     public bool registerCheck { get; set; } = false;
+    [CascadingParameter]
+    public IModalService Modal_Email { get; set; } = default!;
 
-    public void CadastroUser()
+    public async Task CadastroUser()
     {
-        foreach (var prop in target_cliente.GetType().GetProperties())
+        foreach (var prop in usuario.GetType().GetProperties())
         {
-            if (prop.GetValue(target_cliente, null) == null)
+            if (prop.GetValue(usuario, null) == null)
             {
                 Toast.ShowError("É necessário preencher todos os campos para proceder!");
                 return;
             }
         }
 
-        var main_checks = new ErrorEntry[] {
-new ErrorEntry {
-is_error_valid = (registerCheck == false),
-error_description = "É necessário concordar com os termos de uso para prosseguir."
+        var main_checks = new EntradaDeErro[] {
+new EntradaDeErro {
+condicao_e_valida = (registerCheck == false),
+descricao = "É necessário concordar com os termos de uso para prosseguir."
 },
-new ErrorEntry {
-is_error_valid = ((DateTime.Now.Year - dataNascimento.Year) <= 18),
-error_description = "Você deve possuir mais de 18 anos para utilizar nossos serviços"
+new EntradaDeErro {
+condicao_e_valida = ((DateTime.Now.Year - dataNascimento.Year) <= 18),
+descricao = "Você deve possuir mais de 18 anos para utilizar nossos serviços"
 },
-new ErrorEntry {
-is_error_valid = (target_cliente.senha != confirmacaoSenhaLogin),
-error_description = "As duas senhas não conferem"
+new EntradaDeErro {
+condicao_e_valida = (usuario.senha != confirmacaoSenhaLogin),
+descricao = "As duas senhas não conferem"
 },
-new ErrorEntry {
-is_error_valid = (!target_cliente.senha!.Any(char.IsSymbol)),
-error_description = "´necessário que a senha contenha símbolos"
+new EntradaDeErro {
+condicao_e_valida = (!usuario.senha!.Any(char.IsSymbol)),
+descricao = "´necessário que a senha contenha símbolos"
 },
-new ErrorEntry {
-is_error_valid = (target_cliente.senha!.Length <= 8),
-error_description = "A senha deve conter mais de 8 caractéres"
+new EntradaDeErro {
+condicao_e_valida = (usuario.senha!.Length <= 8),
+descricao = "A senha deve conter mais de 8 caractéres"
 },
-new ErrorEntry {
-is_error_valid = (!target_cliente.senha.Any(char.IsNumber)),
-error_description = "A senha deve conter pelo menos um número"
+new EntradaDeErro {
+condicao_e_valida = (!usuario.senha.Any(char.IsNumber)),
+descricao = "A senha deve conter pelo menos um número"
 },
-new ErrorEntry {
-is_error_valid = (!target_cliente.senha.Any(char.IsUpper)),
-error_description = "A senha deve conter pelo menos um caractére maiúsculo"
+new EntradaDeErro {
+condicao_e_valida = (!usuario.senha.Any(char.IsUpper)),
+descricao = "A senha deve conter pelo menos um caractére maiúsculo"
 },
-new ErrorEntry {
-is_error_valid = (target_cliente.cpf!.Length > 11),
-error_description = "O CPF digitado é inválido"
+new EntradaDeErro {
+condicao_e_valida = (usuario.cpf!.Length > 11),
+descricao = "O CPF digitado é inválido"
 }
 };
 
         foreach (var check in main_checks)
         {
-            if (check.is_error_valid)
+            if (check.condicao_e_valida)
             {
-                Toast.ShowError(check.error_description);
+                Toast.ShowError(check.descricao);
                 return;
             }
         }
 
-        try { CadastroUserAsync(target_cliente).RunSynchronously(); }
-        catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
-        { }
-    }
+        var confirmEmailModal = Modal_Email.Show<TFACadastro>("Confirmação de Email");
+        var result = await confirmEmailModal.Result;
 
-    public async Task CadastroUserAsync(ClienteDBO request)
-    {
+        if (result.Cancelled)
+        {
+            Toast.ShowError("Para prosseguir, é necessária a confirmação do email.");
+            return;
+        }
+        else if (result.Confirmed)
+        {
+            Toast.ShowSuccess("Email confirmado com sucesso!");
+        } 
+
         HttpResponseMessage response = null!;
         try
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-            {"nome", request.nome!},
-            {"senha", request.senha!},
-            {"cpf", request.cpf!},
-            {"email", request.email!},
-            {"endereco", request.endereco!},
-            {"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
-            {"respostaAssessoria", RespostaAssessoria.aceitou}}, "/Auth/Cliente/registrar");
+{"nome", usuario.nome!},
+{"senha", usuario.senha!},
+{"cpf", usuario.cpf!},
+{"email", usuario.email!},
+{"endereco", usuario.endereco!},
+{"dataNascimento", $"{dataNascimento.Day}/{dataNascimento.Month}/{dataNascimento.Year}"},
+{"respostaAssessoria", RespostaAssessoria.aceitou}}, "/Auth/Cliente/registrar");
         } // Podemos implicitamente associar o aceitar do usuário aqui pq pra chegar até aqui tivemos checks disso.
         catch (Exception)
         {
