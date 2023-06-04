@@ -2,7 +2,6 @@
 
 @using PRIORI_SERVICES_WEB.Data.Model;
 @using PRIORI_SERVICES_WEB.Handler;
-@using ChartJs.Blazor.LineChart;
 @inject IJSRuntime JSInterop
 @inject IToastService Toast
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
@@ -13,7 +12,7 @@
 <style>
     html,
     body {
-        background-image: linear-gradient(75deg, rgb(211, 35, 218), rgb(114, 0, 167));
+        @(BackgroundGradients.BackgroundPrincipal);
     }
     .margin-simulador{
         margin-left: 25rem;
@@ -57,50 +56,49 @@
                                     @switch (contratacao.tipo_investimento)
                                     {
                                         case "SELIC":
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
+                                            <ul style="list-style-type: none;">
+                                                <div class="d-flex flex-row container-fluid my-3">
+                                                    <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                                                    <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
                                                 </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simular</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
+                                                <div class="d-flex flex-row container-fluid my-4">
+                                                    <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                    <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
                                                 </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                                <button @onclick="ContratarActionSync" type="submit" class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
-                                                @if (saldo > investido) {
-                                                    <p>haha</p>
-                                                } else {
-                                                    <button class="bg-danger text-decoration-none text-light"><a href="/">SALDO</a></button>
-                                                }
-                                            </div> 
-                                        </ul>
-                                        break;
-                                        
+                                                <div class="d-flex flex-row container-fluid my-4">
+                                                    <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                                                    <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @contratacao.rentabilidade_fixa%</B></li></div>
+                                                </div>
+                                                <div id="hideAll">
+                                                    <form>
+                                                    <div class="mb-4 mx-5">
+                                                        <label for="exampleInputEmail1" class="form-label text-dark" 
+                                                        style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                                                        <input type="number" class="form-control" @bind="investido">
+                                                    </div>
+                                                    <a href="/contratacao">
+                                                        <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simular</button>
+                                                    </a>
+                                                    </form>
+                                                </div>
+                                                <div id="desocultarAll" style="display: none;">
+                                                    <hr class="mx-5 text-dark">
+                                                    <div class="d-flex flex-column">
+                                                        <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
+                                                        <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
+                                                        <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
+                                                        <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
+                                                    </div>
+                                                    <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
+                                                    <button @onclick="ContratarActionSync" type="submit" class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
+                                                    @if (saldo > investido) {
+                                                        <p>haha</p>
+                                                    } else {
+                                                        <button class="bg-danger text-decoration-none text-light"><a href="/">SALDO</a></button>
+                                                    }
+                                                </div> 
+                                            </ul>
+                                            break;
                                         case "IPCA":
                                         <ul style="list-style-type: none;">
                                             <div class="d-flex flex-row container-fluid my-3">
@@ -526,7 +524,7 @@
     }
 
     private void Ocultar() {
-        if (@investido < Convert.ToDouble(@contratacao.valor_minimo)) {
+        if (investido < Convert.ToDouble(contratacao.valor_minimo)) {
             Toast.ShowError("O valor inserido é inferior ao valor mínimo do investimento");
         } else {
             calcbruto(investido);
@@ -548,7 +546,7 @@
         { }
     }
 
-    private LineConfig _lineConfig;
+    @*private LineConfig _lineConfig;
     protected override void OnInitialized()
     {
         ConfigureLine();
@@ -581,7 +579,7 @@
         };
 
         _lineConfig.Data.Datasets.Add(dataset); 
-    }
+    }*@
 
 
 }
