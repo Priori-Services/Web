@@ -1,7 +1,7 @@
 using Blazored.Toast;
 using Blazored.Modal;
 using Blazored.LocalStorage;
-using PRIORI_SERVICES_WEB.Handler;
+using PRIORI_SERVICES_WEB.Handler.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,8 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddScoped<IAsyncService, AsyncService>();
+builder.Services.AddScoped<ISMTPService, SMTPService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
