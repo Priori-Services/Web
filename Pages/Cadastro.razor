@@ -155,6 +155,7 @@ descricao = "O CPF digitado é inválido"
             }
         }
 
+        Toast.ShowInfo("Enviando email de confirmação");
         var param = new ModalParameters().Add(nameof(TFACadastro.emailUser), usuario.email!);
         var confirmEmailModal = Modal_Email.Show<TFACadastro>("Confirmação de Email", param);
         var result = await confirmEmailModal.Result;
