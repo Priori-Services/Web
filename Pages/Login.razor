@@ -4,7 +4,6 @@
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
-@inject ModalService Modal
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject IModalService Modal
 @inject IAsyncService AsyncService
@@ -34,21 +33,20 @@
                     Login
                 </p>
             </div>
-            
+
             <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example3">E-mail</label>
                 <input type="email" id="emailLogin" class="form-control form-control-lg text-white bg-transparent"
                 @bind="user.email" />
             </div>
-            
+
             <div class="form-outline mb-3">
                 <label class="form-label" for="form3Example4">Senha</label>
                 <input type="password" id="senhaLogin" class="form-control form-control-lg bg-transparent text-white"
                 @bind="user.senha" />
             </div>
             <div class="d-flex justify-content-between align-items-center">
-                <p @onclick="@(() => Modal_Alteracao.Show<EsqueceuASenha>("Esqueceu a senha"))"
-                    class="link-danger text-decoration-none">Esqueceu a senha?</p>
+                <p @onclick="EsqueceuASenhaModal" class="link-danger text-decoration-none">Esqueceu a senha?</p>
             </div>
             <div class="text-center text-lg-start mt-4 pt-2">
                 <button type="button" class="btn btn-outline-light text-white px-5 py-3 my-3"
@@ -60,21 +58,19 @@
         </form>
     </div>
 </section>
-
 @code {
-    [CascadingParameter]
-    public IModalService Modal_Alteracao { get; set; } = default!;
-    protected class UserCredentials
-    {
-        public string senha { get; set; } = String.Empty;
-        public string email { get; set; } = String.Empty;
-    }
+    [CascadingParameter] public IModalService Modal_Alteracao { get; set; } = default!;
     private UserCredentials user { get; set; } = new UserCredentials();
-
 
     public async Task LoginUser()
     {
         const string FAILURE_STATE = "Falha ao fazer login";
+
+        if (user.email == String.Empty || user.email == "" || user.email == null ||
+            user.senha == String.Empty || user.senha == "" || user.senha == null) {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
 
         HttpResponseMessage? response;
         try
@@ -116,6 +112,18 @@
             return;
         }
         NavigationManager.NavigateTo("/");
+    }
+
+    public void EsqueceuASenhaModal()
+    {
+        if (user.email == String.Empty || user.email == "" || user.email == null) {
+            Toast.ShowError("Digite um email antes de reiniciar sua senha");
+            return;
+        }
+
+        Toast.ShowInfo("Enviando email...");
+        var param = new ModalParameters().Add(nameof(EsqueceuASenha.UsuarioFull), user);
+        Modal_Alteracao.Show<EsqueceuASenha>("Esqueci a senha", param);
     }
 }
 

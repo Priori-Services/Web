@@ -3,24 +3,19 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject ISMTPService SMTP
 @inject IAsyncService AsyncService
+@using System.Net.Mail
 
 <div class="card-body text-dark px-5">
     @if (!EmailEnviado)
     {
-        <p class="card-text fs-3 py-2">
-            Escreva aqui seu email para que nós possamos enviar um email de recuperação
-        </p>
-        <div class="form-outline">
-            <input type="email" @bind="EmailUser" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
-        </div>
-        <button @onclick="EnviarEmail" class="btn btn-primary w-100">Enviar Email</button>
+        <h1>Espere enquanto estamos enviando um email para confirmação...</h1>
     }
     else
     {
         @if (!CodigoCorreto)
         {
             <p class="card-text fs-2 py-2">
-                Agora escreva o código recebido
+                Digite aqui o código de confirmação enviado ao email @UsuarioFull!.email
             </p>
             <div class="form-outline">
                 <input type="text" @bind="CodigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
@@ -32,12 +27,12 @@
         {
             <p class="fs-3">Insira sua nova senha</p>
             <div class="form-outline">
-                <input type="text" @bind="SenhaNovaInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+                <input type="password" @bind="SenhaNovaInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
             </div>
 
             <p class="">Confirmação de senha</p>
             <div class="form-outline">
-                <input type="text" @bind="SenhaNovaConfirm" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+                <input type="password" @bind="SenhaNovaConfirm" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
             </div>
 
             <button @onclick="@(() => AsyncService.RunTaskAsSync(AlterarSenha))" class="btn btn-primary w-100">Alterar
@@ -49,29 +44,30 @@
 @code {
     private bool EmailEnviado { get; set; } = false;
     private bool CodigoCorreto { get; set; } = false;
-    private string EmailUser { get; set; } = String.Empty;
+    private string CodigoGen { get; set; } = String.Empty;
+    [Parameter] public UserCredentials? UsuarioFull {get;set;}
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private string CodigoInput { get; set; } = String.Empty;
     private string SenhaNovaInput { get; set; } = String.Empty;
     private string SenhaNovaConfirm { get; set; } = String.Empty;
-    private string CodigoGen { get; set; } = String.Empty;
-    private void EnviarEmail()
+    protected override void OnInitialized()
     {
-        Toast.ShowInfo("Enviando email...");
         CodigoGen = SMTP.GenerateAuthenticationID(6);
 
-        var mailMessage = new System.Net.Mail.MailMessage
+        var mailMessage = new MailMessage
             {
-                From = new System.Net.Mail.MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
+                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
                 Subject = "Redefinição de senha Priori",
-                Body = $"<h1>Teste de Redefinição de senha</h1><h2>Seu código de recuperação de senha é: {CodigoGen}</h2>",
+                Body = $"<h1>Redefinição de senha Priori</h1><h2>Seu código de recuperação de senha é: {CodigoGen}</h2>",
                 IsBodyHtml = true
             };
 
         try
         {
-            SMTP.SendMailTo(mailMessage, EmailUser);
+            SMTP.SendMailTo(mailMessage, UsuarioFull!.email);
         }
-        catch (System.Net.Mail.SmtpException)
+        catch (SmtpException)
         {
             Toast.ShowError("Falha ao enviar email");
             return;
@@ -88,15 +84,16 @@
             Toast.ShowError("As senhas digitadas não são iguais");
             return;
         }
+        @*TODO: Verificações válidas de senha daqui!*@
         const string FAILURE_STATE = "Falha ao mudar a senha";
 
-        string user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
 
         HttpResponseMessage response;
         try
         {
-            response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-{"senha", SenhaNovaInput}}, $"/Auth/Cliente/senha/{user_id}");
+            response = await APIHandler.PutRequestAsync(new Dictionary<string, object> {
+{"email", UsuarioFull!.email},
+{"senha", SenhaNovaInput}}, $"/Auth/Cliente/senha/reset");
         }
         catch (Exception)
         {
@@ -112,6 +109,6 @@
         }
 
         Toast.ShowSuccess("Senha alterada com sucesso!");
-        @*Fechar modal aqui*@
+        await BlazoredModal.CloseAsync();
     }
 }
