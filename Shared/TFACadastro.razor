@@ -39,8 +39,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Toast.ShowInfo("Enviando email de confirmação");
-        const string FAILURE_STATE ="Falha ao enviar email de confirmação.";
+        const string FAILURE_STATE = "Falha ao enviar email de confirmação.";
         codigoGen = SMTP.GenerateAuthenticationID(6);
         
         if(emailUser == null) {

@@ -24,18 +24,19 @@
         <input type="password" @bind="senhaConfirm" @bind:event="oninput" class="form-control" required />
     </div>
     <p class="text-dark">Quer alterar outros dados? Entre em contato com a <i>Priori</i></p>
+    <p>* Somente os dados alterados irão ser modificados, mas confirmar ou alterar a senha é necessário</p>
     <button @onclick="@(() => AsyncService.RunTaskAsSync(AlterarCliente))" class="btn btn-primary">Alterar
         Dados</button>
 </div>
 
 
 @code {
-    @*TODO: Placeholders p todos os valores aqui*@
+    [Parameter] public Cliente? usuarioFull { get; set; }
     private string enderecoUsuario { get; set; } = String.Empty;
     private string emailUsuario { get; set; } = String.Empty;
     private string senhaUsuario { get; set; } = String.Empty;
     private string senhaConfirm { get; set; } = String.Empty;
-
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task AlterarCliente()
     {
         if (senhaUsuario != senhaConfirm)
@@ -79,5 +80,17 @@
         }
 
         Toast.ShowSuccess("Dados Alterados com Sucesso!");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (usuarioFull == null || usuarioFull.endereco == null || usuarioFull.email == null)
+        {
+            Toast.ShowError("Falha ao ler as informações do usuário");
+            await BlazoredModal.CancelAsync();
+            return;
+        }
+        this.enderecoUsuario = usuarioFull.endereco;
+        this.emailUsuario = usuarioFull.email;
     }
 }

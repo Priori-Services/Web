@@ -52,7 +52,7 @@
                                         @onclick="@(() => Modal_Saldo.Show<InsercaoDeSaldo>("Inserção de saldo"))"
                                             type="button" class="my-1 mx-4 btn btn-outline-primary">Inserir saldo</button>
                                         <button
-                                        @onclick="@(() => Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados"))"
+                                        @onclick="InitModalAlteracao"
                                             type="button" class="my-1 mx-4 btn btn-outline-primary">Alterar dados</button>
                                         <button type="button" @onclick="@(() => AsyncService.RunTaskAsSync(UserSair))"
                                             class="my-1 mx-5 btn btn-outline-danger">Sair</button>
@@ -178,5 +178,10 @@
         await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.app_token.ToString(), "");
         await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.user_id.ToString(), "");
         NavigationManager.NavigateTo("/");
+    }
+
+    private void InitModalAlteracao() {
+        var param = new ModalParameters().Add(nameof(AlteracaoDeDados.usuarioFull),clienteuser!);
+        Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados",param);
     }
 }
