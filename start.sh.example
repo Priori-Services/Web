@@ -1,4 +1,7 @@
-PRIORI_API_ENDPOINT='localhost:5135'
-PRIORI_EMAIL_ADDRESS='priori@cyberservices.com'
-PRIORI_EMAIL_PASSWORD=
+export PRIORI_API_ENDPOINT=localhost:5000
+export PRIORI_EMAIL_ADDRESS=priori@cyberservices.com
+export PRIORI_EMAIL_PASSWORD=
+export SMTP_SERVICE_URL=smtp.gmail.com
+export SMTP_SERVICE_PORT=587
+
 dotnet watch
