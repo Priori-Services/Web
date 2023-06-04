@@ -1,5 +1,66 @@
 # Changelog
 
+## [2.1.0](https://github.com/Priori-Services/Web/compare/v2.0.0...v2.1.0) (2023-06-04)
+
+
+### Features
+
+* adicionar devbox p/ desenvolvimento com nix ([f80216e](https://github.com/Priori-Services/Web/commit/f80216e6662cc5225bc799de1b5b8677d96491d5))
+* aparecer saldo na área do usuário ([60cfaab](https://github.com/Priori-Services/Web/commit/60cfaab1413be1e77764b1d89984e4a2ec396bb8))
+* AsyncService p/ execução de código assíncrono sincronamente ([1cb1a3a](https://github.com/Priori-Services/Web/commit/1cb1a3a7c0164c4497d5f181e9f1fd55bcc0648d))
+* blazored toasts e WIP cadastro e login ([bd1935a](https://github.com/Priori-Services/Web/commit/bd1935a27d656a1f8ac3d48cb046d2a7c2287750))
+* código de cálculo da simulação ([f99a392](https://github.com/Priori-Services/Web/commit/f99a3920fade4e36e69cfe4668570a7001d61c5d))
+* cores mais escuras do background para visibilidade ([dd559c1](https://github.com/Priori-Services/Web/commit/dd559c152256c6c3a1a3fe5d48ef859ee7d93697))
+* dependencias e teste chart ([9beb267](https://github.com/Priori-Services/Web/commit/9beb2674218c68fdf1b5f144267d4e818896b318))
+* design e código da inserção de saldo ([88814d8](https://github.com/Priori-Services/Web/commit/88814d8a8343f61ce863d32abb077be1fc3069d8))
+* FAQ no Index! ([bc64a05](https://github.com/Priori-Services/Web/commit/bc64a059fa05c45b505c28ef34762380af9b4560))
+* finalização do código não-testado do Esqueceu a Senha ([565ff85](https://github.com/Priori-Services/Web/commit/565ff853a05a57d45b30294b92f997d6414db519))
+* gravar a decisão de aceitar ou não os termos no banco de dados durante cadastro ([aa6bea7](https://github.com/Priori-Services/Web/commit/aa6bea70cbb306aef555b2f302a8ea89dba71493))
+* implementação de design do perfil ([b07089d](https://github.com/Priori-Services/Web/commit/b07089d82acbb07157f875deaab947763c15b5b6))
+* implementação de put request ([908a512](https://github.com/Priori-Services/Web/commit/908a512a79152f98d28690002bf228a5d5639eec))
+* implementação dos inv's e design ([8dcb041](https://github.com/Priori-Services/Web/commit/8dcb04106080f15218c0bdc2829d19b39c674931))
+* implementação inicial das features do perfil de usuário ([5caa6a5](https://github.com/Priori-Services/Web/commit/5caa6a57248c096aefa90d3a5e0d642b42391180))
+* implementação primária básica de Blazored Modal no Simulador ([878d410](https://github.com/Priori-Services/Web/commit/878d41066088f6a653c6710e6ae890287746b217))
+* implementar data de nascimento no cadastro (FUNCIONAL LES GO) ([45c4e02](https://github.com/Priori-Services/Web/commit/45c4e0221586f5f703b8e55a77e3bc30dff0c0b4))
+* inicio da pág c/ dados do user e insert sald ([1e10a15](https://github.com/Priori-Services/Web/commit/1e10a158b6017ded9f8154fda5bee3710efa3873))
+* inicio do código de cálculo líquido ([59da2f4](https://github.com/Priori-Services/Web/commit/59da2f4a4a47d22e48fd37e0772b112a9ff445c4))
+* investimentos - atualização da carteira investidor e inv. efetuados ([8d867e1](https://github.com/Priori-Services/Web/commit/8d867e1ed84d625fa5dd6cd15ffcd7309d71c5bd))
+* login totalmente funcional ([7d8dc4d](https://github.com/Priori-Services/Web/commit/7d8dc4ddd7c1fddf5618b1fb50607363456e1cca))
+* modal de alteração de dados do usuário e investimentos na area do usuário ([5308946](https://github.com/Priori-Services/Web/commit/530894628e6d5131016bf8c9bc56ca5aa1a8f5b2))
+* página pós simulação ([c230309](https://github.com/Priori-Services/Web/commit/c230309bff4c6cf3af9c80ee1adf5ba9149f7952))
+* re-design simulador ([09f2fd6](https://github.com/Priori-Services/Web/commit/09f2fd621d277ce481a89471bbe99aee9cb7400b))
+* redesign navbar ([9dcd0d9](https://github.com/Priori-Services/Web/commit/9dcd0d945e4f3985cbd60d85cabcf3af554abe5d))
+* refatoração do cadastro + modal de 2FA ([40e596d](https://github.com/Priori-Services/Web/commit/40e596dc8554a26bc85f2d490b9dca072b04c234))
+* script para chart.js ([ea30ef2](https://github.com/Priori-Services/Web/commit/ea30ef25b37b5e0a3ad2159bbb9d1fc9fc662a91))
+* SMTPService para handling de emails da priori ([285288f](https://github.com/Priori-Services/Web/commit/285288fa3b5bfd2490b7db3ece6e4f91caf803e1))
+* substituir simu por contratação e implementação btn contratar ([f89075c](https://github.com/Priori-Services/Web/commit/f89075cb3e58da23f1ea7bc2ae635862303dc1fa))
+* utilização de protected local storage p/ manuseio do localstorage ([10cebea](https://github.com/Priori-Services/Web/commit/10cebea26a6d7e2016c4f140a31e27a26c6483fb))
+* variáveis de ambiente para controle de email de recuperação e cadastro de senha ([b5ebddf](https://github.com/Priori-Services/Web/commit/b5ebddf1b1255c6bd3783e07f38ca4cd50ee89eb))
+* WIP - navbar reativa ([92c677f](https://github.com/Priori-Services/Web/commit/92c677fe0404fbbc160f4dd75f62b4b6aed97a3c))
+
+
+### Bug Fixes
+
+* alteração de background ([ffac426](https://github.com/Priori-Services/Web/commit/ffac4267f7b9fdb94c6a329d3ef2979f9bf55e11))
+* alteracao de dados com authenticação ([c86e353](https://github.com/Priori-Services/Web/commit/c86e353ea66e30f2ccd379ac5eaa85c49f27ae3d))
+* cadastro completamente funcional ([592dc0c](https://github.com/Priori-Services/Web/commit/592dc0ceaa0965ecb3e50ade82eed6f7933d69b5))
+* check de termos de uso no cadastro ([9d8fb24](https://github.com/Priori-Services/Web/commit/9d8fb248b0a4a61cef9b7db1c5dba3ef5edef051))
+* colocar referencia do chartjs no csproj ([b51bfbb](https://github.com/Priori-Services/Web/commit/b51bfbb4ee792e1093ac927abdfb38863afc794f))
+* correção de detalhes cadastro, login e inv.ef ([a098309](https://github.com/Priori-Services/Web/commit/a098309eed48b5afa56590428cd117fa54862c69))
+* handlerservices namespace e alteracaodedados com asyncservice ([0c3ee53](https://github.com/Priori-Services/Web/commit/0c3ee534f5919fb6c7fe21311d79d4daae1a6664))
+* implementação da resposta "0" em res. asses. ([504b410](https://github.com/Priori-Services/Web/commit/504b410442c8ac2c37790c1ea03205333bbd7499))
+* inicialização do modal de esqueci a senha ([46f5afa](https://github.com/Priori-Services/Web/commit/46f5afa3f28a6378daffac2cca3182e68703a72d))
+* login redirecionando p/ index quando clica o esqueci a senha ([4c7301b](https://github.com/Priori-Services/Web/commit/4c7301b1978dddc89258457cbd658a799c7668ec))
+* namespace handler no PosSimulacao ([c467ed1](https://github.com/Priori-Services/Web/commit/c467ed162970eaae428652f440d6e6f8524bb0b3))
+* priori_api_endpoint p/ apihandler ([3fff9d8](https://github.com/Priori-Services/Web/commit/3fff9d8dc5f10421b7ab31abe584b3ba4044a0fd))
+* remover chart e background gradients no contratacao ([d2181d3](https://github.com/Priori-Services/Web/commit/d2181d3233b1a27285dbfb4ffa5ae1e97cc6b328))
+* remover dupla navbar no index ([9ec0502](https://github.com/Priori-Services/Web/commit/9ec0502e8b3707fe270d3d574e81f5c0188dba7b))
+* renomear do 2FACadastro ([2b3a4f2](https://github.com/Priori-Services/Web/commit/2b3a4f28d8549dda7923559c04e874006b0e0de1))
+* reutilizar conexão da api no handler ([af84f46](https://github.com/Priori-Services/Web/commit/af84f46810620611751003552a89525c5c4732a4))
+* saldo contratação e textos cadastro ([5d45a23](https://github.com/Priori-Services/Web/commit/5d45a23c9d06a44d3ef1709b3753a840fd12f1a8))
+* start.cmd com o endpoint correto agor ([d90621e](https://github.com/Priori-Services/Web/commit/d90621e12cec9376cd33d50eba54fff5ad2bfcd2))
+* utilizar Blazored LocalStorage ao invés de protected pq é muito lagado odeio ([7f3d846](https://github.com/Priori-Services/Web/commit/7f3d8461bd8e6693398f4567fc0c0b2401dfcf84))
+
 ## [2.0.0](https://github.com/Priori-Services/Web/compare/v1.0.0...v2.0.0) (2023-05-13)
 
 
