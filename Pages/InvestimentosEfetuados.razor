@@ -30,6 +30,18 @@
     else
     {
         <div class="my-3 d-flex flex-row flex-wrap text-center justify-content-center align-items-center">
+            @if(invEfetuados.Length == 0) {
+                <div class="card p-2 m-5 bg-white text-dark">
+                    <div class="card-header bg-white">
+                        <h4>Nenhum investimento cadastrado nessa conta!</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Se quiser contratar um investimento, entre na página de investimentos disponíveis, e contate um!</h5>
+                        <a class="btn btn-outline-primary w-100" href="/investimentos">Contratar</a>
+                    </div>
+                </div>
+                
+            }
             @foreach (var investimento_efetuado in invEfetuados!)
             {
                 <div class="card p-2 m-5 bg-white text-dark">
