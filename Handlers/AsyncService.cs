@@ -1,4 +1,4 @@
-namespace PRIORI_SERVICES_WEB.Handler;
+namespace PRIORI_SERVICES_WEB.Handler.Services;
 
 public interface IAsyncService
 {
