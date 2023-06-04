@@ -5,13 +5,22 @@ namespace PRIORI_SERVICES_WEB.Handler.Services;
 
 public interface ISMTPService
 {
+    public string GenerateAuthenticationID(int digits);
     public void SendMailTo(MailMessage message, string target);
 }
 
-
-
 public class SMTPService : ISMTPService
 {
+    /// Exceptions:
+    ///     ArgumentOutOfRangeException
+    ///     FormatException
+    public string GenerateAuthenticationID(int digits = 6)
+    {
+        const int MINIMUM_CONST = 0;
+        int MAXIMUM = (int)(Math.Pow(10, digits));
+
+        return new Random().Next(MINIMUM_CONST, MAXIMUM).ToString($"D{digits}");
+    }
 
     /// Summary:
     ///     Envia um email utilizando o email da Priori para X target

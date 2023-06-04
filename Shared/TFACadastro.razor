@@ -1,0 +1,72 @@
+@inject ISMTPService SMTP
+@inject IToastService Toast
+@inject IAsyncService AsyncService
+@using System.Net.Mail
+
+<div class="card-body text-dark px-5">
+    @if (!emailEnviado) {
+        <h1>Espere enquanto estamos enviando um email para confirmação...</h1>
+    } else {
+        <p class="card-text fs-2 py-2">
+            Digite aqui o código de confirmação enviado ao email @emailUser
+        </p>
+        <div class="form-outline">
+            <input type="text" @bind="codigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+        </div>
+        <button @onclick="() => AsyncService.RunTaskAsSync(CodigoVerification)" class="btn btn-primary w-100">Verificar
+                Código</button>
+    }
+</div>
+
+@code {
+    private bool emailEnviado {get;set;} = false;
+    private bool codigoCorreto {get;set;} = false;
+    private string codigoInput {get;set;} = String.Empty;
+    private string codigoGen {get;set;} = String.Empty;
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    [Parameter] public string? emailUser {get;set;}
+
+    private async Task CodigoVerification() {
+        if (codigoGen != codigoInput) {
+            Toast.ShowError("O código digitado não é válido");
+            return;
+        }
+
+        await BlazoredModal.CloseAsync();
+        Toast.ShowError("Email confirmado com sucesso");
+        return;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Toast.ShowInfo("Enviando email de confirmação");
+        const string FAILURE_STATE ="Falha ao enviar email de confirmação.";
+        codigoGen = SMTP.GenerateAuthenticationID(6);
+        
+        if(emailUser == null) {
+            Toast.ShowError(FAILURE_STATE);
+            await BlazoredModal.CancelAsync();
+            return;
+        }
+
+        var mailMessage = new MailMessage
+            {
+                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
+                Subject = "Confirmação de email Priori",
+                Body = $"<h1>Você deve confirmar seu email para prosseguir cadastro</h1><h2>Seu código de confirmação é: {codigoGen}</h2>",
+                IsBodyHtml = true
+            };
+
+        try {
+            SMTP.SendMailTo(mailMessage,emailUser);
+        } catch (SmtpException e) {
+            Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(e.ToString());
+            await BlazoredModal.CancelAsync();
+            return;
+        }
+
+        emailEnviado = true;
+        Toast.ShowSuccess("Email enviado com sucesso");
+    }
+}

@@ -155,17 +155,14 @@ descricao = "O CPF digitado é inválido"
             }
         }
 
-        var confirmEmailModal = Modal_Email.Show<TFACadastro>("Confirmação de Email");
+        var param = new ModalParameters().Add(nameof(TFACadastro.emailUser), usuario.email!);
+        var confirmEmailModal = Modal_Email.Show<TFACadastro>("Confirmação de Email", param);
         var result = await confirmEmailModal.Result;
 
-        if (result.Cancelled)
+        if (!result.Confirmed)
         {
-            Toast.ShowError("Para prosseguir, é necessária a confirmação do email.");
+            Toast.ShowError("É necessária a confirmação do e-mail para prosseguir");
             return;
-        }
-        else if (result.Confirmed)
-        {
-            Toast.ShowSuccess("Email confirmado com sucesso!");
         } 
 
         HttpResponseMessage response = null!;

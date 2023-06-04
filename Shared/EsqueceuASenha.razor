@@ -53,14 +53,11 @@
     private string CodigoInput { get; set; } = String.Empty;
     private string SenhaNovaInput { get; set; } = String.Empty;
     private string SenhaNovaConfirm { get; set; } = String.Empty;
-    private const int MINIMUM_SIX_DIGIT = 0;
-    private const int MAXIMUM_SIX_DIGIT = 1000000;
-    @*Código aleatório de 6 dígitos entre 100000 e 1000000*@
-    private string CodigoGen { get; set; } = new Random().Next(MINIMUM_SIX_DIGIT, MAXIMUM_SIX_DIGIT).ToString("D6");
-
+    private string CodigoGen { get; set; } = String.Empty;
     private void EnviarEmail()
     {
         Toast.ShowInfo("Enviando email...");
+        CodigoGen = SMTP.GenerateAuthenticationID(6);
 
         var mailMessage = new System.Net.Mail.MailMessage
             {
