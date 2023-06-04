@@ -5,7 +5,7 @@ namespace PRIORI_SERVICES_WEB.Handler;
 
 public static class APIHandler
 {
-    private static string api_endpoint { get; set; } = ConfigHandler.API_ENDPOINT;
+    private static string api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
     public static HttpClient static_client = new HttpClient();
 
     public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
@@ -53,7 +53,8 @@ public static class APIHandler
 
         return response;
     }
-    public static async Task<HttpResponseMessage> PutRequestAsync (Dictionary<string, object> json_object, string target_url){
+    public static async Task<HttpResponseMessage> PutRequestAsync(Dictionary<string, object> json_object, string target_url)
+    {
         string json_string = Encoding.UTF8.GetString(
             JsonSerializer.SerializeToUtf8Bytes(json_object)
         );
