@@ -3,47 +3,65 @@
 @inject IAsyncService AsyncService
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
-<form action="post" class="text-dark d-flex flex-column">
+<div class="text-dark d-flex flex-column">
     <h4>Digite o saldo aqui que deve ser inserido </h4>
     <i>Por enquanto isso só será uma simulação, nada implementado corretamente ainda</i>
 
     <div class="form-outline mb-4">
-        <input type="text" @bind="saldoUser" @bind:event="oninput" class="form-control" required maxlength="60" />
+        <input type="text" @bind="saldoInput" @bind:event="oninput" class="form-control" required maxlength="60" />
     </div>
 
-    <button @onclick="() => AsyncService.RunTaskAsSync(InserirSaldo)" class="btn btn-primary">INSERIR SALDO</button>
-</form>
+    <button @onclick="() => AsyncService.RunTaskAsSync(InserirSaldo)" class="btn btn-primary w-100">INSERIR
+        SALDO</button>
+</div>
 
 @code {
-    private string saldoUser { get; set; } = String.Empty;
+    private string? saldoInput { get; set; }
+    [Parameter] public string? saldoUser { get; set; }
+    [Parameter] public string? userid { get; set; }
+
+    [Parameter] public string? app_token { get; set; }
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task InserirSaldo()
     {
+        if (userid == null || saldoInput == null)
+        {
+            Toast.ShowError("Falha ao carregar dados do modal");
+            await BlazoredModal.CloseAsync();
+            return;
+        }
+
         const string FAILURE_STATE = "Falha ao inserir saldo";
-        string user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
 
         HttpResponseMessage response;
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
 
         try
         {
             response = await APIHandler.PutRequestAsync(
             new Dictionary<string, object> {
-{"saldo", Convert.ToDecimal(saldoUser)}
-                }, "/CarteiraInvestimento/saldo/{user_id}"
+{"saldo_aplicado", Convert.ToDecimal(saldoInput) + Convert.ToDecimal(saldoUser)}
+                }, $"/CarteiraInvestimento/saldo/{userid}"
             );
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(e.ToString());
             return;
         }
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
 
         if (!response.IsSuccessStatusCode)
         {
             Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine("{0},{1}",response.StatusCode, await response.Content.ReadAsStringAsync());
             return;
         }
 
         Toast.ShowSuccess("Saldo inserido com sucesso!");
+        await BlazoredModal.CloseAsync();
     }
-
 }
