@@ -24,7 +24,7 @@
             <div class="container">&ensp;</div>
             <div class="container-fluid">
                 <button class="btn btn-light m-5" @onclick="@(() => Console.WriteLine(clienteuser!.ToString()))">
-                    clique aqui para prosseguir
+                    Clique aqui para prosseguir
                 </button>
             </div>
             <div class="container">&ensp;</div>
@@ -48,12 +48,10 @@
                                     <div class="d-flex flex-column justify-content-center">
                                         <a href="/investimentos-efetuados" class="my-1 mx-2 btn btn-outline-primary">Meus
                                             Investimentos</a>
-                                        <button
-                                        @onclick="@(() => Modal_Saldo.Show<InsercaoDeSaldo>("Inserção de saldo"))"
+                                        <button @onclick="InitModalInsercao"
                                             type="button" class="my-1 mx-4 btn btn-outline-primary">Inserir saldo</button>
-                                        <button
-                                        @onclick="InitModalAlteracao"
-                                            type="button" class="my-1 mx-4 btn btn-outline-primary">Alterar dados</button>
+                                        <button @onclick="InitModalAlteracao" type="button"
+                                            class="my-1 mx-4 btn btn-outline-primary">Alterar dados</button>
                                         <button type="button" @onclick="@(() => AsyncService.RunTaskAsSync(UserSair))"
                                             class="my-1 mx-5 btn btn-outline-danger">Sair</button>
                                     </div>
@@ -141,6 +139,7 @@
 @code {
     private Cliente? clienteuser { get; set; }
     private string saldouser { get; set; } = String.Empty;
+    private string? app_token {get;set;}
     [CascadingParameter]
     public IModalService Modal_Saldo { get; set; } = default!;
     [CascadingParameter]
@@ -152,7 +151,7 @@
 
 
         string? user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
-        string? app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
+        app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
 
         if (app_token == String.Empty || app_token == null || app_token == "")
             NavigationManager.NavigateTo("/");
@@ -180,8 +179,18 @@
         NavigationManager.NavigateTo("/");
     }
 
-    private void InitModalAlteracao() {
-        var param = new ModalParameters().Add(nameof(AlteracaoDeDados.usuarioFull),clienteuser!);
-        Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados",param);
+    private void InitModalAlteracao()
+    {
+        var param = new ModalParameters().Add(nameof(AlteracaoDeDados.usuarioFull), clienteuser!);
+        Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados", param);
+    }
+
+    private void InitModalInsercao()
+    {
+        var param = new ModalParameters();
+        param.Add(nameof(InsercaoDeSaldo.userid), clienteuser!.id_cliente.ToString());
+        param.Add(nameof(InsercaoDeSaldo.saldoUser), saldouser);
+        param.Add(nameof(InsercaoDeSaldo.app_token), app_token!);
+        Modal_Saldo.Show<InsercaoDeSaldo>("Inserção de Saldo", param);
     }
 }
