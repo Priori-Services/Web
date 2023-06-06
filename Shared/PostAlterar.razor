@@ -1,0 +1,154 @@
+@using PRIORI_SERVICES_WEB.Data.Model
+@using Blazored.TextEditor
+@using System.Linq
+@inject IAsyncService AsyncService
+@inject IToastService Toast
+
+
+<style>
+    .list-group-item:hover {
+        background-color: blue;
+        color: white;
+    }
+</style>
+
+<div class="card-body text-dark px-5">
+    @if (selected_post == null)
+    {
+        <h3>Selecione o post a ser alterado</h3>
+        <hr>
+
+        <ul class="list-group">
+        @if (posts != null)
+            {
+                @foreach (var post in posts!)
+                {
+                    <li class="list-group-item" @onclick="@(() => { selected_post = GetPostFromID(posts, post.id_post); })">
+                        @(post.titulo!.ToLower()) | @(post.data_criacao)
+                    </li>
+                }
+            }
+        </ul>
+    }
+    else
+    {
+        <h2 class="text-center">Digite aqui suas alterações</h2>
+        <hr>
+
+        <input type="text" @bind="selected_post!.titulo" @bind:event="oninput" class="form-control my-3"
+            placeholder="Titulo" />
+        <select @bind="selected_categoria_id" name="Categoria" class="form-control my-3">
+        <option value="">Selectione uma categoria</option>
+        @if (categorias != null)
+            {
+                @foreach (var categoria in categorias)
+                {
+                    <option class="text-dark" value="@categoria.id_categoria">@categoria.nome_categoria</option>
+                }
+            }
+        </select>
+
+        <input type="text" @bind="selected_post.descricao" @bind:event="oninput" class="form-control my-3"
+            placeholder="Descrição" />
+
+        <BlazoredTextEditor @ref="@QuillHtml">
+            <ToolbarContent>
+                <select class="ql-header">
+                    <option selected=""></option>
+                    <option value="1"></option>
+                    <option value="2"></option>
+                    <option value="3"></option>
+                    <option value="4"></option>
+                    <option value="5"></option>
+                </select>
+                <span class="ql-formats">
+                    <button class="ql-bold"></button>
+                    <button class="ql-italic"></button>
+                    <button class="ql-underline"></button>
+                    <button class="ql-strike"></button>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-color"></select>
+                    <select class="ql-background"></select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-list" value="ordered"></button>
+                    <button class="ql-list" value="bullet"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-link"></button>
+                </span>
+            </ToolbarContent>
+            <EditorContent>
+                @(selected_post.conteudo)
+            </EditorContent>
+        </BlazoredTextEditor>
+        <br />
+        <button class="btn btn-primary w-100"
+        @onclick="@(() => AsyncService.RunTaskAsSync(AlterarPostAsync))">Postar</button>
+        <br />
+    }
+</div>
+
+@code {
+    BlazoredTextEditor QuillHtml = default!;
+    [Parameter] public PostBlog[]? posts { get; set; }
+    [Parameter] public CategoriaBlog[]? categorias { get; set; }
+    private PostBlog? selected_post { get; set; }
+    [Parameter] public string? app_token { get; set; }
+    [Parameter] public string? autor_post { get; set; }
+    private int? selected_categoria_id { get; set; } = null;
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private PostBlog? GetPostFromID(PostBlog[] posts, int id)
+    {
+        foreach (var item in posts)
+        {
+            if (item.id_post == id)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private async Task AlterarPostAsync()
+    {
+        const string FAILURE_STATE = "Falha ao alterar post";
+
+        HttpResponseMessage response;
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new
+        System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+        try
+        {
+            response = await APIHandler.PutRequestAsync(new Dictionary<string, object> {
+{"titulo", selected_post!.titulo!},
+{"descricao", selected_post!.descricao!},
+{"id_categoria", selected_categoria_id!},
+{"conteudo",await this.QuillHtml.GetHTML()},
+{"id_autor",autor_post!},
+}, $"/Blog/Posts/{selected_post!.id_post}");
+        }
+        catch (Exception e)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(e.ToString());
+            return;
+        }
+        finally
+        {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(response.StatusCode);
+            return;
+        }
+
+        Toast.ShowSuccess("Postado com sucesso");
+        await BlazoredModal.CloseAsync();
+    }
+}
