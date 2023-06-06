@@ -1,0 +1,111 @@
+@inject IToastService Toast
+@inject IAsyncService AsyncService
+@using Blazored.TextEditor
+
+<div class="card-body text-dark px-5">
+    <h2 class="text-center">Digite aqui o que você pretende postar</h2>
+    <hr>
+
+    <input type="text" @bind="post_to_be_posted.titulo" @bind:event="oninput" class="form-control my-3"
+        placeholder="Titulo" />
+
+    <select @bind="selected_categoria_id" name="Categoria" class="form-control my-3">
+        <option value="">Selectione uma categoria</option>
+        @if (AllCategorias != null)
+        {
+            @foreach (var categoria in AllCategorias)
+            {
+                <option class="text-dark" value="@categoria.id_categoria">@categoria.nome_categoria</option>
+            }
+        }
+    </select>
+
+    <input type="text" @bind="post_to_be_posted.descricao" @bind:event="oninput" class="form-control my-3"
+        placeholder="Descrição" />
+
+    <BlazoredTextEditor @ref="@QuillHtml">
+        <ToolbarContent>
+            <select class="ql-header">
+                <option selected=""></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+            </select>
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+            </span>
+        </ToolbarContent>
+        <EditorContent>
+            Digite aqui o conteudo do seu post em HTML
+        </EditorContent>
+    </BlazoredTextEditor>
+    <br />
+    <button class="btn btn-primary w-100" @onclick="@(() => AsyncService.RunTaskAsSync(Post))">Postar</button>
+    <br />
+</div>
+
+@code {
+    BlazoredTextEditor QuillHtml = default!;
+    [Parameter] public int? autor_post { get; set; }
+    [Parameter] public string? app_token { get; set; }
+    [Parameter] public CategoriaBlog[]? AllCategorias { get; set; }
+    private int? selected_categoria_id { get; set; } = null;
+    private PostBlogDBO post_to_be_posted { get; set; } = new PostBlogDBO();
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private async Task Post()
+    {
+        const string FAILURE_STATE = "Falha ao postar";
+
+        HttpResponseMessage response;
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new
+        System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+        try
+        {
+            response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
+{"titulo",post_to_be_posted.titulo!},
+{"descricao", post_to_be_posted.descricao!},
+{"id_categoria", selected_categoria_id!},
+{"conteudo",await this.QuillHtml.GetHTML()},
+{"id_autor",autor_post!.ToString()!},
+}, "/Blog/Posts");
+        }
+        catch (Exception e)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(e.ToString());
+            return;
+        }
+        finally
+        {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(response.StatusCode);
+            return;
+        }
+
+        Toast.ShowSuccess("Postado com sucesso");
+        await BlazoredModal.CloseAsync();
+    }
+}

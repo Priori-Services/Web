@@ -1,38 +1,62 @@
 @page "/blog"
 @using PRIORI_SERVICES_WEB.Handler
+@using System.Net.Http.Headers
+@inject IAsyncService AsyncService
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IToastService Toast
+@inject NavigationManager NavigationManager
 
-<NavMenu nav_classes="sticky-top" />
+<NavMenu />
 
 <style>
     body {
-        @BackgroundGradients.BackgroundPrincipal
+    @BackgroundGradients.BackgroundPrincipal
     }
 </style>
 
-<nav class="container-fluid">
-    <ul class="pagination">
-        <button class="btn btn-primary mr-3" on:click={reset_categorias}> Limpar </button>
-        @foreach (CategoriaBlog item in PageBlogCategoria)
-        {
+<div class="d-flex flex-column">
+    <nav class="container">
+        <ul class="pagination">
+            <button class="btn btn-primary mr-3" on:click={reset_categorias}> Limpar </button>
+            @foreach (CategoriaBlog item in PageBlogCategoria)
+            {
+                <li class="page-item">
+                    <button class="page-link" aria-label="">@item.nome_categoria</button>
+                </li>
+            }
+        </ul>
+    </nav>
+    <nav class="container">
+        <ul class="pagination">
             <li class="page-item">
-                <button class="page-link" aria-label="">@item.nome_categoria</button>
+                <button class="page-link bg-warning text-white"
+                @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar Posts</button>
             </li>
-        }
-    </ul>
-</nav>
+            <li class="page-item">
+
+                <button class="page-link bg-danger text-white">Remover Posts</button>
+            </li>
+            <li class="page-item">
+
+                <button class="page-link bg-primary text-white">Alterar Posts</button>
+            </li>
+        </ul>
+    </nav>
+</div>
 
 <div class="my-5 container-sm text-center">
     <div class="d-flex flex-row flex-wrap">
         @foreach (var item in PageBlogPosts)
         {
             <div class="card px-3 py-4 m-1 bg-light border rounded-4">
-                <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))" class="text-dark text-decoration-none">
-                    <h3 class="fs-4">@item.titulo</h3>
-                    <p class="fw-italic">@item.descricao</p>
-                    <span class="badge bg-primary rounded-pill">@item.data_criacao</span>
+                <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))"
+                    class="text-dark text-decoration-none">
+                <h3 class="fs-4">@item.titulo</h3>
+                <p class="fw-italic">@item.descricao</p>
+                <span class="badge bg-primary rounded-pill">@item.data_criacao</span>
 
-                    <span
-                        class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
+                <span
+                    class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
                 </p>
             </div>
         }
@@ -46,7 +70,49 @@
 
     [CascadingParameter] public IModalService Modal_Viewer { get; set; } = default!;
 
-    public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj) {
+    [CascadingParameter] public IModalService Modal_Adicionar { get; set; } = default!;
+
+    public async Task InitAdicionarAsync()
+    {
+        const string FAILURE_STATE = "Você não tem permissão para adicionar posts";
+        string? user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+        string? app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
+
+        if (user_id == "" || user_id == String.Empty || user_id == null ||
+        app_token == "" || app_token == String.Empty || app_token == null)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        int id_consultor;
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
+        try
+        {
+            id_consultor = await APIHandler.FetchAbstractJsonObjectAsync<int>($"/Auth/Cliente/idconsultor/{user_id}");
+        }
+        catch (Exception)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        } finally {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        var param = new ModalParameters();
+        param.Add(nameof(PostAdd.autor_post), id_consultor);
+        param.Add(nameof(PostAdd.app_token), app_token);
+        param.Add(nameof(PostAdd.AllCategorias), PageBlogCategoria);
+        var modal_adicionar_post = Modal_Adicionar.Show<PostAdd>("Adicionar Post", param);
+        var result = await modal_adicionar_post.Result;
+        
+        if (result.Confirmed)
+            NavigationManager.NavigateTo("/blog");
+    }
+
+    public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj)
+    {
         var param = new ModalParameters();
         param.Add(nameof(PostViewer.PostMain), post_obj);
         param.Add(nameof(PostViewer.CategoriaMain), categoria_obj);

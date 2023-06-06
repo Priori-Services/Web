@@ -1,16 +1,10 @@
 @using PRIORI_SERVICES_WEB.Data.Model
 @using Markdig
 
-<style>
-    html,
-    body {
-    @(BackgroundGradients.BackgroundPrincipal)
-    }
-</style>
-
-
 <div class="card-body text-dark px-5">
-    <h2>@(PostMain!.titulo)</h2>
+    <h3>@(PostMain!.titulo)</h3>
+    <h5>@(PostMain!.descricao)</h5>
+    <hr>
     
     @((MarkupString)(Markdown.ToHtml(PostMain.conteudo!)))
 

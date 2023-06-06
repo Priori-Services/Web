@@ -8,6 +8,8 @@ public static class APIHandler
     private static string api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
     public static HttpClient static_client = new HttpClient();
 
+    public static async Task<HttpResponseMessage> GetRequest(string target_url) => await static_client.GetAsync($"http://{api_endpoint}/api{target_url}");
+
     public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
     {
         string? response = await static_client.GetStringAsync($"http://{api_endpoint}/api{target_url}");
