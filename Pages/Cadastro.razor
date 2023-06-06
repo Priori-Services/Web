@@ -101,7 +101,8 @@
     [CascadingParameter] public IModalService Modal_Email { get; set; } = default!;
     [CascadingParameter] public IModalService Modal_Saldo { get; set; } = default!;
 
-    public void CheckFieldsCadastro() {
+    public async Task CadastroUser() {
+
         foreach (var prop in usuario.GetType().GetProperties())
         {
             if (prop.GetValue(usuario, null) == null)
@@ -154,11 +155,7 @@ descricao = "O CPF digitado é inválido"
                 return;
             }
         }
-    }
 
-    public async Task CadastroUser()
-    {
-        CheckFieldsCadastro();
 
         Toast.ShowInfo("Enviando email de confirmação");
         var param = new ModalParameters().Add(nameof(TFACadastro.emailUser), usuario.email!);
