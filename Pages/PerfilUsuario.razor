@@ -170,6 +170,8 @@
         Console.WriteLine(clienteuser!.id_cliente);
 
         Toast.ShowSuccess("Carregamento finalizado!");
+
+        StateHasChanged();
     }
 
     private async Task UserSair()
@@ -181,6 +183,7 @@
 
     private void InitModalAlteracao()
     {
+        @*TODO: 2FA DO EMAIL AQUI*@
         var param = new ModalParameters().Add(nameof(AlteracaoDeDados.usuarioFull), clienteuser!);
         Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados", param);
     }

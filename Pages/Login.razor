@@ -140,7 +140,8 @@
 
         Toast.ShowInfo("Enviando email...");
         var param = new ModalParameters().Add(nameof(EsqueceuASenha.UsuarioFull), user);
-        Modal_Alteracao.Show<EsqueceuASenha>("Esqueci a senha", param);
+        var result = Modal_Alteracao.Show<EsqueceuASenha>("Esqueci a senha", param);
+        @*TODO: se o modal ser cancelado, navegar o usuário p/ o index, caso contrário, p/ contratação*@
     }
 }
 
