@@ -1,0 +1,69 @@
+@using PRIORI_SERVICES_WEB.Data.Model
+@inject IAsyncService AsyncService
+@inject IToastService Toast
+
+<style>
+    .list-group-item:hover {
+        background-color: blue;
+        color: white;
+    }
+</style>
+
+
+<div class="card-body text-dark px-5">
+    <h3>Selecione o post a ser removido</h3>
+    <hr>
+
+    <ul class="list-group">
+        @if(posts != null) {
+            @foreach (var post in posts!)
+            {
+                <li class="list-group-item" @onclick="@(() => {
+                        selected_post_id = post.id_post;
+                        AsyncService.RunTaskAsSync(RemoverPostAsync);
+                    })">
+                    @(post.titulo!.ToLower()) | @(post.data_criacao)
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+@code {
+
+    [Parameter] public PostBlog[]? posts { get; set; }
+    [Parameter] public string? app_token { get; set; }
+
+    private int selected_post_id { get; set; }
+
+    private async Task RemoverPostAsync()
+    {
+        const string FAILURE_STATE = "Falha ao remover post";
+
+
+        HttpResponseMessage response;
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+        try
+        {
+            response = await APIHandler.DeleteRequest($"/Blog/Posts/{selected_post_id}");
+        }
+        catch (Exception)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            Console.WriteLine(response.StatusCode);
+            return;
+        }
+
+        Toast.ShowSuccess("Post removido com sucesso");
+        StateHasChanged();
+    }
+}

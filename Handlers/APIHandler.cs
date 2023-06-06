@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Net.Http.Headers;
 
 namespace PRIORI_SERVICES_WEB.Handler;
 
@@ -8,7 +9,23 @@ public static class APIHandler
     private static string api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
     public static HttpClient static_client = new HttpClient();
 
+    public static async Task<T> RunTaskWithAuthentication<T>(Task<T> task, string JWT_token) {
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWT_token);
+
+        T? result;
+
+        try {
+            result = await task;
+        } finally {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        return result;
+    }
+
     public static async Task<HttpResponseMessage> GetRequest(string target_url) => await static_client.GetAsync($"http://{api_endpoint}/api{target_url}");
+
+    public static async Task<HttpResponseMessage> DeleteRequest(string target_url) => await static_client.DeleteAsync($"http://{api_endpoint}/api{target_url}");
 
     public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
     {

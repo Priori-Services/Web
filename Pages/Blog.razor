@@ -34,7 +34,8 @@
             </li>
             <li class="page-item">
 
-                <button class="page-link bg-danger text-white">Remover Posts</button>
+                <button 
+                @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))" class="page-link bg-danger text-white">Remover Posts</button>
             </li>
             <li class="page-item">
 
@@ -72,6 +73,57 @@
 
     [CascadingParameter] public IModalService Modal_Adicionar { get; set; } = default!;
 
+    public async Task<int?> CheckUserIsConsultor(string user_id, string app_token)
+    {
+        int id_consultor;
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
+        try
+        {
+            id_consultor = await APIHandler.FetchAbstractJsonObjectAsync<int>($"/Auth/Cliente/idconsultor/{user_id}");
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+        finally
+        {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        return id_consultor;
+    }
+
+    public async Task InitRemoverAsync()
+    {
+        const string FAILURE_STATE = "Você não tem permissão para adicionar posts";
+        string? user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+        string? app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
+
+        if (user_id == "" || user_id == String.Empty || user_id == null ||
+        app_token == "" || app_token == String.Empty || app_token == null)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        int? id_consultor = await CheckUserIsConsultor(user_id, app_token);
+
+        if (id_consultor == null)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+
+        var param = new ModalParameters();
+        param.Add(nameof(PostDelete.posts), PageBlogPosts);
+        param.Add(nameof(PostDelete.app_token), app_token);
+        var modal_remover_post = Modal_Adicionar.Show<PostDelete>("Remover Post", param);
+        var result = await modal_remover_post.Result;
+        
+        NavigationManager.NavigateTo("/blog");
+    }
+
     public async Task InitAdicionarAsync()
     {
         const string FAILURE_STATE = "Você não tem permissão para adicionar posts";
@@ -85,19 +137,12 @@
             return;
         }
 
-        int id_consultor;
+        int? id_consultor = await CheckUserIsConsultor(user_id, app_token);
 
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
-        try
-        {
-            id_consultor = await APIHandler.FetchAbstractJsonObjectAsync<int>($"/Auth/Cliente/idconsultor/{user_id}");
-        }
-        catch (Exception)
+        if (id_consultor == null)
         {
             Toast.ShowError(FAILURE_STATE);
             return;
-        } finally {
-            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
         }
 
         var param = new ModalParameters();
@@ -106,9 +151,8 @@
         param.Add(nameof(PostAdd.AllCategorias), PageBlogCategoria);
         var modal_adicionar_post = Modal_Adicionar.Show<PostAdd>("Adicionar Post", param);
         var result = await modal_adicionar_post.Result;
-        
-        if (result.Confirmed)
-            NavigationManager.NavigateTo("/blog");
+
+        NavigationManager.NavigateTo("/blog");
     }
 
     public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj)
