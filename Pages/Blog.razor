@@ -26,14 +26,14 @@
         @foreach (var item in PageBlogPosts)
         {
             <div class="card px-3 py-4 m-1 bg-light border rounded-4">
-                <a href="/blog/post/@item.id_post" style="text-decoration: none;" class="text-dark">
+                <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))" class="text-dark text-decoration-none">
                     <h3 class="fs-4">@item.titulo</h3>
                     <p class="fw-italic">@item.descricao</p>
                     <span class="badge bg-primary rounded-pill">@item.data_criacao</span>
 
                     <span
                         class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
-                </a>
+                </p>
             </div>
         }
     </div>
@@ -43,6 +43,15 @@
     public PostBlog[] PageBlogPosts = new PostBlog[0];
 
     public CategoriaBlog[] PageBlogCategoria = new CategoriaBlog[0];
+
+    [CascadingParameter] public IModalService Modal_Viewer { get; set; } = default!;
+
+    public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj) {
+        var param = new ModalParameters();
+        param.Add(nameof(PostViewer.PostMain), post_obj);
+        param.Add(nameof(PostViewer.CategoriaMain), categoria_obj);
+        Modal_Viewer.Show<PostViewer>(post_obj.titulo!, param);
+    }
 
     public CategoriaBlog GetCategoriaBlogFromID(int id)
     {
