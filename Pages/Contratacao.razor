@@ -4,7 +4,7 @@
 @using PRIORI_SERVICES_WEB.Handler;
 @inject IJSRuntime JSInterop
 @inject IToastService Toast
-@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 
 <NavMenu nav_classes="sticky-top" />
@@ -473,6 +473,7 @@
             return;
         }
         const string FAILURE_STATE = "Falha ao contratar investimento";
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
         HttpResponseMessage response;
         try {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
@@ -488,6 +489,8 @@
         } catch (Exception) {
             Toast.ShowError(FAILURE_STATE);
             return;
+        } finally {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
         }
         
         if (!response.IsSuccessStatusCode) {
@@ -545,41 +548,4 @@
         } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
         { }
     }
-
-    @*private LineConfig _lineConfig;
-    protected override void OnInitialized()
-    {
-        ConfigureLine();
-    }
-
-    private void ConfigureLine()
-    {
-        _lineConfig = new LineConfig();
-        _lineConfig.Options = new LineOptions
-            {
-                Responsive = true,
-                Title = new OptionsTitle
-                {
-                    Display = true,
-                    Text = "Title of my chart"
-                }
-            };
-        foreach(var party in new[] {"party1","party2","party3" })
-        {
-            _lineConfig.Data.Labels.Add(party);
-        }
-        var dataset = new LineDataset<int>(new[] { 35, 50, 15 })
-        {
-             BackgroundColor = string.Join(",",new[]
-             {
-                ColorUtil.ColorHexString(255, 0, 0),
-                ColorUtil.ColorHexString(0, 255, 0),
-                ColorUtil.ColorHexString(0, 0, 255)
-             })
-        };
-
-        _lineConfig.Data.Datasets.Add(dataset); 
-    }*@
-
-
 }
