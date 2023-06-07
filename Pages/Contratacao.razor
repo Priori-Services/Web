@@ -10,8 +10,7 @@
 <NavMenu nav_classes="sticky-top" />
 
 <style>
-    html,
-    body {
+    html, body {
         @(BackgroundGradients.BackgroundPrincipal);
     }
     .margin-simulador{
@@ -20,417 +19,60 @@
     }
 </style>
 
-    <div class="rounded-3 mx-5">
-        
-        <p class="fonte-nav-lista text-light fonte-titulo fs-4 p-1 my-5" style="text-align: center;">SIMULAÇÃO</p>
-            
-            <div class="card-body shadow-lg margin-simulador rounded-4 bg-light" style="text-align: center;">
-
-                    <div class="card-header d-flex flex-row bd-highlight text-dark mx-5 pt-3 justify-content-center">
-                     @switch (contratacao.id_riscoInvestimento)
-                        {
-                            case 1:
-                                <div class="bg-success risco rounded-4 me-2">
-                                    &ensp;
-                                </div>
-                                break;
-                            case 2:
-                                <div class="bg-warning risco rounded-4 me-2">
-                                    &ensp;
-                                </div>
-                                break;
-                            case 3:
-                                <div class="bg-danger risco rounded-4 me-2">
-                                    &ensp;
-                                </div>
-                                break;
-                        }
-                    
-                    <div class="bd-highlight">
-                        <h4 class="p-1" style="text-align: center;">@contratacao.nome</h4>
+<div class="rounded-3 mx-5 ">
+    <p class="fonte-nav-lista text-light fonte-titulo fs-4 p-1 my-5 text-center">SIMULAÇÃO</p>
+    <div class="card-body shadow-lg p-5 margin-simulador rounded-4 bg-light text-center">
+        <div class="card-header d-flex flex-row bd-highlight text-dark mx-5 pt-3 justify-content-center">
+            <div class="bg-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) risco rounded-4 me-2">
+                &ensp;
+            </div>
+            <div class="bd-highlight">
+                <h4 class="p-1 text-center">@contratacao.nome</h4>
+            </div>
+        </div>
+        <ul style="list-style-type: none;">
+            <div class="d-flex flex-row container-fluid my-3">
+                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
+                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @(contratacao.valor_minimo)</b></li></div>
+            </div>
+            <div class="d-flex flex-row container-fluid my-4">
+                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
+            </div>
+            <div class="d-flex flex-row container-fluid my-4">
+                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
+                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@(contratacao.tipo_investimento) + @(contratacao.rentabilidade_fixa)%</b></li></div>
+            </div>
+            <div id="hideAll">
+                <form>
+                    <div class="mb-4 mx-5">
+                        <label for="exampleInputEmail1" class="form-label text-dark" style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                        <input type="number" class="form-control" @bind="investido">
                     </div>
-                    </div>
-                        @switch (contratacao.id_riscoInvestimento)
-                            {
-                                case 1:
-                                    @switch (contratacao.tipo_investimento)
-                                    {
-                                        case "SELIC":
-                                            <ul style="list-style-type: none;">
-                                                <div class="d-flex flex-row container-fluid my-3">
-                                                    <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                    <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                                </div>
-                                                <div class="d-flex flex-row container-fluid my-4">
-                                                    <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                    <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                                </div>
-                                                <div class="d-flex flex-row container-fluid my-4">
-                                                    <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                    <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @contratacao.rentabilidade_fixa%</B></li></div>
-                                                </div>
-                                                <div id="hideAll">
-                                                    <form>
-                                                    <div class="mb-4 mx-5">
-                                                        <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                        style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                        <input type="number" class="form-control" @bind="investido">
-                                                    </div>
-                                                    <a href="/contratacao">
-                                                        <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simular</button>
-                                                    </a>
-                                                    </form>
-                                                </div>
-                                                <div id="desocultarAll" style="display: none;">
-                                                    <hr class="mx-5 text-dark">
-                                                    <div class="d-flex flex-column">
-                                                        <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                        <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                        <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                        <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                    </div>
-                                                    <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                                    <button @onclick="ContratarActionSync" type="submit" class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
-                                                    @if (saldo > investido) {
-                                                        <p>haha</p>
-                                                    } else {
-                                                        <button class="bg-danger text-decoration-none text-light"><a href="/">SALDO</a></button>
-                                                    }
-                                                </div> 
-                                            </ul>
-                                            break;
-                                        case "IPCA":
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-
-                                        default:
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-success rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-                                    }
-                                    break;
-                                case 2:
-                                    @switch (contratacao.tipo_investimento)
-                                    {
-                                        case "SELIC":
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll" class="">
-                                                <form>
-                                                <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                                </div>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-                                        
-                                        case "IPCA":
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Its Was Working R$ @investido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-
-                                        default:
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-warning rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-                                    }
-                                    break;
-                                case 3:
-                                    @switch (contratacao.tipo_investimento)
-                                    {
-                                        case "SELIC":
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>SELIC + @contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-                                        
-                                        case "IPCA":
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>IPCA + @contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-
-                                        default:
-                                        <ul style="list-style-type: none;">
-                                            <div class="d-flex flex-row container-fluid my-3">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @contratacao.valor_minimo</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
-                                            </div>
-                                            <div class="d-flex flex-row container-fluid my-4">
-                                                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                                                <div class="text-danger rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.rentabilidade_fixa%</B></li></div>
-                                            </div>
-                                            <div id="hideAll">
-                                                <form>
-                                                <div class="mb-4 mx-5">
-                                                    <label for="exampleInputEmail1" class="form-label text-dark" 
-                                                    style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                                                    <input type="number" class="form-control" @bind="investido">
-                                                </div>
-                                                <a href="/contratacao">
-                                                    <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Contratar</button>
-                                                </a>
-                                                </form>
-                                            </div>
-                                            <div id="desocultarAll" style="display: none;">
-                                                <hr class="mx-5 text-dark">
-                                                <div class="d-flex flex-column">
-                                                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @investido</label> 
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @result_bruto</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @IR</label>
-                                                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @liquido</label>
-                                                </div>
-                                                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                                            </div>  
-                                        </ul>
-                                        break;
-                                    }
-                                    break;
-                            }
-                        
-                    </div>
-                    @*
-                    <div>
-                           <Chart Config="_lineConfig"></Chart>
-                    </div>
-                    *@
-            
+                    <a href="/contratacao">
+                        <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simular</button>
+                    </a>
+                </form>
+            </div>
+            <div id="desocultarAll" style="display: none;">
+                <hr class="mx-5 text-dark">
+                <div class="d-flex flex-column">
+                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @(investido)</label> 
+                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @(result_bruto)</label>
+                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @(IR)</label>
+                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @(liquido)</label>
+                </div>
+                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
+                <button @onclick="ContratarActionSync" type="submit" class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
+                @if (saldo > investido) {
+                    <p>haha</p>
+                } else {
+                    <button class="bg-danger text-decoration-none text-light"><a href="/">SALDO</a></button>
+                }
+            </div>
+        </ul>
     </div>
+</div>
 
 <Footer></Footer>
 
@@ -449,6 +91,19 @@
             ContratarAction().RunSynchronously();           
         } catch (Exception) {
 
+        }
+    }
+
+    private string IdInvestimentoToColor(decimal id) {
+        switch (id) {
+            case 1:
+                return "success";
+            case 2:
+                return "warning";
+            case 3:
+                return "danger";
+            default:
+                return "danger";
         }
     }
 
