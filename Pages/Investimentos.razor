@@ -4,11 +4,13 @@
 @using PRIORI_SERVICES_WEB.Data.Types
 @using PRIORI_SERVICES_WEB.Handler
 @inject NavigationManager NavigationManager
+@inject IAsyncService AsyncService
+@inject ILocalStorageService LocalStorage
 
 <style>
     html,
     body {
-        @(BackgroundGradients.BackgroundPrincipal);
+    @(BackgroundGradients.BackgroundPrincipal);
     }
 </style>
 
@@ -66,11 +68,12 @@
                     <li class="list-group-item">Vencimento:
                         @($"{investimento.vencimento.Day}/{investimento.vencimento.Month}/{investimento.vencimento.Year}")
                     </li>
-                    <li class="list-group-item">Rentabilidade anual: @(investimento.rentabilidade_variavel + investimento.rentabilidade_fixa)%</li>
-                    <button class="btn btn-outline-primary mt-2" 
+                    <li class="list-group-item">Rentabilidade anual: @(investimento.rentabilidade_variavel +
+                    investimento.rentabilidade_fixa)%</li>
+                    <button class="btn btn-outline-primary mt-2"
                     @onclick="@(() => Contratacao(investimento.id_investimento))">Simular</button>
-                    <button class="btn btn-outline-secondary mt-2" 
-                    @onclick="@(() => Historico(investimento.id_investimento))">Histórico</button>
+                    <button class="btn btn-outline-secondary mt-2"
+                    @onclick="@(() => InitModalHistorico(investimento.id_investimento))">Histórico</button>
                 </ul>
             </div>
         </div>
@@ -82,6 +85,7 @@
 
 @code {
     public Investimento[] invDisponiveis = new Investimento[0];
+    [CascadingParameter] public IModalService ModalMain { get; set; } = default!;
 
     public void Contratacao(int id_investimento)
     {
@@ -89,10 +93,11 @@
         NavigationManager.NavigateTo("/Contratacao");
     }
 
-    public void Historico(int id_investimento)
+    private void InitModalHistorico(int investimento_id)
     {
-        SimulacaoID.id_selecionado = id_investimento;
-        NavigationManager.NavigateTo("/grafico");
+        var param = new ModalParameters();
+        param.Add(nameof(AtualizacoesModal.id_investimento_selectionado), investimento_id);
+        ModalMain.Show<AtualizacoesModal>("Histórico do Investimento", param);
     }
 
     protected override async Task OnInitializedAsync()

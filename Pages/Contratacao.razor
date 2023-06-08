@@ -2,18 +2,22 @@
 
 @using PRIORI_SERVICES_WEB.Data.Model;
 @using PRIORI_SERVICES_WEB.Handler;
+@using System.Net.Http.Headers
 @inject IJSRuntime JSInterop
 @inject IToastService Toast
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
+@inject IAsyncService AsyncService
 
 <NavMenu nav_classes="sticky-top" />
 
 <style>
-    html, body {
-        @(BackgroundGradients.BackgroundPrincipal);
+    html,
+    body {
+    @(BackgroundGradients.BackgroundPrincipal);
     }
-    .margin-simulador{
+
+    .margin-simulador {
         margin-left: 25rem;
         margin-right: 25rem;
     }
@@ -27,46 +31,71 @@
                 &ensp;
             </div>
             <div class="bd-highlight">
-                <h4 class="p-1 text-center">@contratacao.nome</h4>
+                <h4 class="p-1 text-center">@(contratacao.nome)</h4>
             </div>
         </div>
         <ul style="list-style-type: none;">
             <div class="d-flex flex-row container-fluid my-3">
-                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li></div>
-                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>R$ @(contratacao.valor_minimo)</b></li></div>
+                <div>
+                    <li class="list-group-item mt-2 ms-5 text-dark text-left"
+                        style="font-size: Large; letter-spacing: 0.1rem;"><b>Investimento Minimo:⠀⠀⠀⠀</b></li>
+                </div>
+                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2 text-right"
+                    style="background-color: #f4f5f5;">
+                    <li><b>R$ @(contratacao.valor_minimo)</b></li>
+                </div>
             </div>
             <div class="d-flex flex-row container-fluid my-4">
-                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@contratacao.vencimento.ToShortDateString()</B></li></div>
+                <div>
+                    <li class="list-group-item mt-2 ms-5 text-dark text-left"
+                        style="font-size: Large; letter-spacing: 0.1rem;"><b>Vencimento:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li>
+                </div>
+                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2 text-right"
+                    style="background-color: #f4f5f5;">
+                    <li><b>@(contratacao.vencimento.ToShortDateString())</b></li>
+                </div>
             </div>
             <div class="d-flex flex-row container-fluid my-4">
-                <div><li class="list-group-item mt-2 ms-5 text-dark" style="font-size: Large; text-align: left; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li></div>
-                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2" style="background-color: #f4f5f5; text-align: right;"><li><b>@(contratacao.tipo_investimento) + @(contratacao.rentabilidade_fixa)%</b></li></div>
+                <div>
+                    <li class="list-group-item mt-2 ms-5 text-dark text-left"
+                        style="font-size: Large; letter-spacing: 0.1rem;"><b>Rentabilidade:⠀⠀⠀⠀⠀⠀⠀⠀⠀</b></li>
+                </div>
+                <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2 text-right"
+                    style="background-color: #f4f5f5;">
+                    <li><b>@(contratacao.tipo_investimento) + @(contratacao.rentabilidade_fixa)%</b></li>
+                </div>
             </div>
             <div id="hideAll">
                 <form>
                     <div class="mb-4 mx-5">
-                        <label for="exampleInputEmail1" class="form-label text-dark" style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
-                        <input type="number" class="form-control" @bind="investido">
+                        <label for="exampleInputEmail1" class="form-label text-dark"
+                            style="letter-spacing: 0.05rem;"><b>Valor (R$)</b></label>
+                        <input type="number" class="form-control" @bind="InvestidoPeloUsuario">
                     </div>
                     <a href="/contratacao">
-                        <button type="submit" @onclick="Ocultar" class="btn btn-outline-secondary mb-3">Simular</button>
+                        <button type="submit" @onclick="@(() => AsyncService.RunTaskAsSync(OcultarActionAsync))"
+                            class="btn btn-outline-secondary mb-3">SIMULAR</button>
                     </a>
                 </form>
             </div>
             <div id="desocultarAll" style="display: none;">
                 <hr class="mx-5 text-dark">
                 <div class="d-flex flex-column">
-                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @(investido)</label> 
-                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @(result_bruto)</label>
-                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @(IR)</label>
-                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @(liquido)</label>
+                    <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @(InvestidoPeloUsuario)</label>
+                    <label class="text-dark fw-bold p-1 my-3">Retorno Bruto: ⠀⠀R$ @(RetornoBruto)</label>
+                    <label class="text-dark fw-bold p-1 my-3">Imposto de Renda (IR): ⠀⠀R$ @(ImpostoDeRenda)</label>
+                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀R$ @(RetornoLiquido)</label>
                 </div>
-                <button type="submit" @onclick="Desocultar" class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
-                <button @onclick="ContratarActionSync" type="submit" class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
-                @if (saldo > investido) {
+                <button type="submit" @onclick="@(() => AsyncService.RunTaskAsSync(desocultarasync))"
+                    class="btn btn-outline-secondary mb-4 mt-2">RE-SIMULAR</button>
+                <button @onclick="@(() => AsyncService.RunTaskAsSync(ContratarActionAsync))" type="submit"
+                    class="btn btn-outline-primary mb-4 mt-2 ms-4">CONTRATAR</button>
+                @if (SaldoUsuario > InvestidoPeloUsuario)
+                {
                     <p>haha</p>
-                } else {
+                }
+                else
+                {
                     <button class="bg-danger text-decoration-none text-light"><a href="/">SALDO</a></button>
                 }
             </div>
@@ -77,25 +106,17 @@
 <Footer></Footer>
 
 @code {
-    public Investimento contratacao = new Investimento {nome = "Falha ao encontrar investimentos."};
-    public double saldo {get;set;} = 0;
-    private string user_id {get;set;} = String.Empty;
-    private double investido {get; set;}
-    private double result_bruto {get;set;}
-    private double IR { get;set;}
-    private double liquido { get;set;}
-    private bool userlogado {get;set;} = false;
+    public Investimento contratacao = new Investimento { nome = "Falha ao encontrar investimentos." };
+    public double SaldoUsuario { get; set; } = 0;
+    private double InvestidoPeloUsuario { get; set; }
+    private double RetornoBruto { get; set; }
+    private double ImpostoDeRenda { get; set; }
+    private double RetornoLiquido { get; set; }
 
-    private void ContratarActionSync() {
-        try {
-            ContratarAction().RunSynchronously();           
-        } catch (Exception) {
-
-        }
-    }
-
-    private string IdInvestimentoToColor(decimal id) {
-        switch (id) {
+    private string IdInvestimentoToColor(decimal id)
+    {
+        switch (id)
+        {
             case 1:
                 return "success";
             case 2:
@@ -107,100 +128,112 @@
         }
     }
 
-    private async Task ContratarAction() {
-        var app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
-        
-        if(app_token == String.Empty || app_token == "" || app_token == null) {
+    private async Task ContratarActionAsync()
+    {
+        const string FAILURE_STATE = "Falha ao contratar investimento";
+        string? app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
+        string? user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+
+        if (app_token == String.Empty || app_token == "" || app_token == null ||
+        user_id == String.Empty || user_id == "" || user_id == null)
+        {
             NavigationManager.NavigateTo("/login");
             return;
         }
 
-        user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+        try
+        {
+            SaldoUsuario = await APIHandler.FetchAbstractJsonObjectAsync<double>($"/CarteiraInvestimento/saldo/{user_id}");
+        }
+        catch (Exception)
+        {
+            Toast.ShowError(FAILURE_STATE);
+            return;
+        }
+        finally
+        {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+        }
 
-        saldo = await APIHandler.FetchAbstractJsonObjectAsync<double>($"/Auth/Cliente/saldo/{user_id}");
-
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
-
-        if (saldo <= investido) {    
+        if (SaldoUsuario <= InvestidoPeloUsuario)
+        {
             Toast.ShowError("Seu saldo é insuficiente para contratação.");
             return;
         }
-        const string FAILURE_STATE = "Falha ao contratar investimento";
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
         HttpResponseMessage response;
-        try {
+        try
+        {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-            {"id_cliente_carteira",user_id},
-            {"id_investimento",SimulacaoID.id_selecionado},
-            {"rentabilidade_fixa",contratacao.rentabilidade_fixa},
-            {"rentabilidade_variavel",contratacao.rentabilidade_variavel},
-            {"data_efetuacao", DateTime.Now},
-            {"valor_aplicado", investido},
-            {"status", "ATIVO"},
-            {"saldo", saldo - investido}
-        },"/CarteiraInvestimento"); 
-        } catch (Exception) {
+{"id_cliente_carteira",user_id},
+{"id_investimento",SimulacaoID.id_selecionado},
+{"rentabilidade_fixa",contratacao.rentabilidade_fixa},
+{"rentabilidade_variavel",contratacao.rentabilidade_variavel},
+{"valor_aplicado", InvestidoPeloUsuario},
+{"saldo", SaldoUsuario - InvestidoPeloUsuario}
+}, "/CarteiraInvestimento");
+        }
+        catch (Exception)
+        {
             Toast.ShowError(FAILURE_STATE);
             return;
-        } finally {
+        }
+        finally
+        {
             APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
         }
-        
-        if (!response.IsSuccessStatusCode) {
+
+        if (!response.IsSuccessStatusCode)
+        {
             Toast.ShowError(FAILURE_STATE);
             return;
         }
 
         Toast.ShowSuccess("Investimento contratado com sucesso!");
 
-        await JSInterop.InvokeVoidAsync("ocultarelemento","btnCONTRATAR");
+        await JSInterop.InvokeVoidAsync("ocultarelemento", "btnCONTRATAR");
     }
 
-    public void calcbruto(double investido) {
-        double rentabilidadeTotal = (Convert.ToDouble(contratacao.rentabilidade_fixa) + Convert.ToDouble(contratacao.rentabilidade_variavel)) / 360;
+    public void calcbruto(double investido)
+    {
+        double rentabilidadeTotal = (Convert.ToDouble(contratacao.rentabilidade_fixa) +
+        Convert.ToDouble(contratacao.rentabilidade_variavel)) / 360;
         TimeSpan calcdiasDoInv = contratacao.vencimento - DateTime.Today;
-        var totalDias = calcdiasDoInv.Days;
-        double lucro =((investido * Convert.ToDouble(rentabilidadeTotal) * totalDias) / 100);
-        double totalBruto = lucro + investido;
-        result_bruto = Math.Round(totalBruto);
-        IR = Math.Round(lucro * 0.15);
-        liquido = Math.Round(result_bruto -investido - IR);
-    }
-
-    public async Task ocultarelemento() {
-        await JSInterop.InvokeVoidAsync("ocultarelemento", "hideAll");
-        await JSInterop.InvokeVoidAsync("desocultarelemento", "desocultarAll");
+        double lucro = ((investido * Convert.ToDouble(rentabilidadeTotal) * calcdiasDoInv.Days) / 100);
+        RetornoBruto = Math.Round(lucro + investido);
+        ImpostoDeRenda = Math.Round(lucro * 0.15);
+        RetornoLiquido = Math.Round(RetornoBruto - investido - ImpostoDeRenda);
     }
 
     protected override async Task OnInitializedAsync()
     {
         contratacao = await APIHandler.FetchOrFallbackAsync<Investimento>(
-            $"/investimento/{SimulacaoID.id_selecionado}", 
-            new Investimento {nome = "Falha ao encontrar investimentos."});
+        $"/investimento/{SimulacaoID.id_selecionado}",
+        new Investimento { nome = "Falha ao encontrar investimentos." });
     }
 
-    private void Ocultar() {
-        if (investido < Convert.ToDouble(contratacao.valor_minimo)) {
+    private async Task OcultarActionAsync()
+    {
+        if (InvestidoPeloUsuario < Convert.ToDouble(contratacao.valor_minimo))
+        {
             Toast.ShowError("O valor inserido é inferior ao valor mínimo do investimento");
-        } else {
-            calcbruto(investido);
-            try {
-                ocultarelemento().RunSynchronously();
-            } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
-            { }
+            return;
         }
+        calcbruto(InvestidoPeloUsuario);
+        await ocultarasync();
     }
 
-    private async Task desocultarasync () {
-        await JSInterop.InvokeVoidAsync("desocultarelemento","hideAll");
-        await JSInterop.InvokeVoidAsync("ocultarelemento","desocultarAll");
+    private async Task desocultarasync()
+    {
+        await JSInterop.InvokeVoidAsync("desocultarelemento", "hideAll");
+        await JSInterop.InvokeVoidAsync("ocultarelemento", "desocultarAll");
     }
-    private void Desocultar() {
-        try {
-            desocultarasync().RunSynchronously();
-        } catch (Exception e) when (e is ObjectDisposedException || e is InvalidOperationException)
-        { }
+    public async Task ocultarasync()
+    {
+        await JSInterop.InvokeVoidAsync("ocultarelemento", "hideAll");
+        await JSInterop.InvokeVoidAsync("desocultarelemento", "desocultarAll");
     }
 }

@@ -1,0 +1,126 @@
+@using ChartJs.Blazor;
+@using ChartJs.Blazor.LineChart
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Common.Axes.Ticks
+@using ChartJs.Blazor.Common.Enums
+@using ChartJs.Blazor.Common.Handlers
+@using ChartJs.Blazor.Common.Time
+@using ChartJs.Blazor.Util
+@using ChartJs.Blazor.Interop
+@using PRIORI_SERVICES_WEB.Data.Model
+@inject IToastService Toast
+@using System.Net.Http.Headers
+
+<style>
+    html,
+    body {
+        background-color: whitesmoke;
+        color: black;
+    }
+</style>
+
+
+<div class="container-fluid bg-white">
+    @if (!graph_valido)
+    {
+        <h1 class="text-dark">Não foi possível carregar os dados do investimento</h1>
+    }
+    else
+    {
+        <h1 class="text-dark text-center">Histórico de Atualizações</h1>
+        <Chart Config="_lineConfig"></Chart>
+    }
+</div>
+
+
+@code {
+    [Parameter] public int id_investimento_selectionado { get; set; }
+    private bool graph_valido { get; set; } = false;
+    private Atualizacao[]? atualizacoes_investimento { get; set; }
+    private LineConfig _lineConfig = new LineConfig();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        try
+        {
+            atualizacoes_investimento = await
+            APIHandler.FetchAbstractJsonObjectAsync<Atualizacao[]?>($"/Atualizacao/investimento/{id_investimento_selectionado}");
+        }
+        catch (HttpRequestException)
+        {
+            graph_valido = false;
+            StateHasChanged();
+            return;
+        }
+
+        ConfigureLine();
+
+        StateHasChanged();
+    }
+
+    private void ConfigureLine()
+    {
+        // Lista de todas as atualizacoes + última atualização com as rentabilidades atuais
+        List<decimal> rentabilidades_das_atualizacoes;
+
+        try
+        {
+            rentabilidades_das_atualizacoes = (
+            from atualizacao
+            in atualizacoes_investimento
+            select (atualizacao.rentFixaAntiga + atualizacao.rentVarAntiga)).ToList();
+
+
+            rentabilidades_das_atualizacoes.Add(
+            (
+            from latest_atualizacao
+            in atualizacoes_investimento
+            where (latest_atualizacao.data_atualizacao == (
+            from latest_date
+            in atualizacoes_investimento
+            select latest_date.data_atualizacao).Max())
+            select (latest_atualizacao.rentVarAtual + latest_atualizacao.rentFixaAtual)
+            ).Single()
+            );
+        }
+        catch (Exception)
+        {
+            graph_valido = false;
+            return;
+        }
+
+
+        // Setup necessário p/ cores e labels e tudo dos gráficos
+        _lineConfig.Options = new LineOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Histórico do investimento"
+                }
+            };
+        foreach (var party in atualizacoes_investimento!)
+        {
+            _lineConfig.Data.Labels.Add(party.data_atualizacao.ToString());
+        }
+
+        var dataset = new LineDataset<Decimal>(rentabilidades_das_atualizacoes)
+            {
+                Label = "Rentabilidade",
+                BackgroundColor = string.Join(",", new[]
+            {
+ColorUtil.ColorHexString(255, 100, 0),
+ColorUtil.ColorHexString(0, 255, 0),
+ColorUtil.ColorHexString(0, 0, 255)
+})
+            };
+
+        _lineConfig.Data.Datasets.Add(dataset);
+        graph_valido = true;
+    }
+}
