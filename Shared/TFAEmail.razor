@@ -7,9 +7,12 @@
     @if (!emailEnviado) {
         <h1>Espere enquanto estamos enviando um email para confirmação...</h1>
     } else {
-        <p class="card-text fs-2 py-2">
-            Digite aqui o código de confirmação enviado ao email @emailUser
-        </p>
+        <p class="card-text fs-4 py-2">
+                Digite aqui o código de confirmação do email
+            </p>
+            <p class="card-text">
+                Email utilizado: @(emailUser)
+            </p>
         <div class="form-outline">
             <input type="text" @bind="codigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
         </div>
@@ -25,6 +28,7 @@
     private string codigoGen {get;set;} = String.Empty;
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     [Parameter] public string? emailUser {get;set;}
+    [Parameter] public MailMessage? MensagemTFA {get;set;}
 
     private async Task CodigoVerification() {
         if (codigoGen != codigoInput) {
@@ -48,16 +52,8 @@
             return;
         }
 
-        var mailMessage = new MailMessage
-            {
-                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
-                Subject = "Confirmação de email Priori",
-                Body = $"<h1>Você deve confirmar seu email para prosseguir cadastro</h1><h2>Seu código de confirmação é: {codigoGen}</h2>",
-                IsBodyHtml = true
-            };
-
         try {
-            SMTP.SendMailTo(mailMessage,emailUser);
+            SMTP.SendMailTo(MensagemTFA!,emailUser);
         } catch (SmtpException e) {
             Toast.ShowError(FAILURE_STATE);
             Console.WriteLine(e.ToString());

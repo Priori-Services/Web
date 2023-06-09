@@ -1,12 +1,15 @@
 @page "/cadastro"
+
 @using PRIORI_SERVICES_WEB.Handler
 @using PRIORI_SERVICES_WEB.Data.Types
 @using PRIORI_SERVICES_WEB.Data.Model
+@using System.Net.Mail
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
 @inject IAsyncService AsyncService
 @inject ILocalStorageService LocalStorage
+@inject ISMTPService SMTP
 
 <NavMenu nav_classes="sticky-top" />
 
@@ -101,7 +104,8 @@
     [CascadingParameter] public IModalService Modal_Email { get; set; } = default!;
     [CascadingParameter] public IModalService Modal_Saldo { get; set; } = default!;
 
-    public async Task CadastroUser() {
+    public async Task CadastroUser()
+    {
 
         foreach (var prop in usuario.GetType().GetProperties())
         {
@@ -156,17 +160,31 @@ descricao = "O CPF digitado é inválido"
             }
         }
 
-
+        var mensagemCadastro = new MailMessage
+            {
+                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
+                Subject = "Confirmação de email Priori",
+                Body = SMTP.GeneratePrioriEmail(
+                    "Email de cadastro Priori",
+                    "Para prosseguir com o cadastro, deve-se confirmar seu email",
+                    SMTP.GenerateAuthenticationID(6)
+                ),
+                IsBodyHtml = true
+            };
+        
         Toast.ShowInfo("Enviando email de confirmação");
-        var param = new ModalParameters().Add(nameof(TFACadastro.emailUser), usuario.email!);
-        var confirmEmailModal = Modal_Email.Show<TFACadastro>("Confirmação de Email", param);
+        var param = new ModalParameters();
+        param.Add(nameof(TFAEmail.emailUser), usuario.email!);
+        param.Add(nameof(TFAEmail.MensagemTFA), mensagemCadastro);
+
+        var confirmEmailModal = Modal_Email.Show<TFAEmail>("Confirmação de Email", param);
         var result = await confirmEmailModal.Result;
 
         if (!result.Confirmed)
         {
             Toast.ShowError("É necessária a confirmação do e-mail para prosseguir");
             return;
-        } 
+        }
 
         HttpResponseMessage response = null!;
         try
