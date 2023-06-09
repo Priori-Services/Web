@@ -152,23 +152,21 @@
         string? user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
         app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
 
-        if (app_token == String.Empty || app_token == null || app_token == "")
-            NavigationManager.NavigateTo("/");
+        if (app_token == String.Empty || app_token == null || app_token == "" ||
+            user_id == String.Empty || user_id == null || user_id == "")
+            NavigationManager.NavigateTo("/login");
 
-        Toast.ShowInfo("Carregando...");
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
-        clienteuser = await
-        APIHandler.FetchAbstractJsonObjectAsync<Cliente?>($"/Auth/Cliente/Info/{user_id}");
-
-        saldouser = (await APIHandler.FetchOrFallbackAsync<decimal>($"/CarteiraInvestimento/saldo/{user_id}", 0)).ToString();
-
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
-
-        Console.WriteLine(clienteuser!.id_cliente);
-
-        Toast.ShowSuccess("Carregamento finalizado!");
+        try {
+            clienteuser = await APIHandler.FetchAbstractJsonObjectAsync<Cliente?>($"/Auth/Cliente/Info/{user_id}");
+            saldouser = (await APIHandler.FetchOrFallbackAsync<decimal>($"/CarteiraInvestimento/saldo/{user_id}", 0)).ToString();
+        } catch (HttpRequestException) {
+            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
 
         StateHasChanged();
     }
