@@ -6,7 +6,7 @@ namespace PRIORI_SERVICES_WEB.Handler;
 
 public static class APIHandler
 {
-    private static string Api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
+    public static string Api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
     public static HttpClient static_client = new();
 
     public static async Task<T> RunTaskWithAuthentication<T>(Task<T> task, string JWT_token) {
