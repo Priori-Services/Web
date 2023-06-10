@@ -191,6 +191,7 @@
         param.Add(nameof(InsercaoDeSaldo.userid), clienteuser!.id_cliente.ToString());
         param.Add(nameof(InsercaoDeSaldo.saldoUser), saldouser);
         param.Add(nameof(InsercaoDeSaldo.app_token), app_token!);
+        param.Add(nameof(InsercaoDeSaldo.mensagem_modal), "Digite aqui o valor a ser inserido");
         Modal_Saldo.Show<InsercaoDeSaldo>("Inserção de Saldo", param);
     }
 }
