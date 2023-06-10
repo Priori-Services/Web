@@ -2,7 +2,10 @@ namespace PRIORI_SERVICES_WEB.Data.Model;
 
 public record PrioriVerificationEmail(string Titulo, string Motivo, int DigitosCodigo)
 {
-    protected static string GenerateAuthenticationID(int digits = 6) => new Random().Next(0, (int)Math.Pow(10, digits)).ToString($"D{digits}");
+    private const int DEFAULT_DIGITOS = 6;
+    public string CodigoGen {get;set;} = GenerateAuthenticationID(DEFAULT_DIGITOS);
+
+    public static string GenerateAuthenticationID(int digits = 6) => new Random().Next(0, (int)Math.Pow(10, digits)).ToString($"D{digits}");
 
     public string Generate() => $@"
 <body style=""background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;"">
@@ -46,7 +49,7 @@ public record PrioriVerificationEmail(string Titulo, string Motivo, int DigitosC
                             <table width=""100%"" border=""0"" cellspacing=""0"" cellpadding=""0"">
                                 <tr>
                                     <td bgcolor=""#ffffff"" align=""center"" style=""padding: 0px 30px 60px 30px;"">
-                                        <table border=""0"" cellspacing=""0"" cellpadding=""0""><tr><td align=""center"" style=""border-radius: 3px;"" bgcolor=""#5846f9"">{GenerateAuthenticationID(DigitosCodigo)}
+                                        <table border=""0"" cellspacing=""0"" cellpadding=""0""><tr><td align=""center"" style=""border-radius: 3px;"" bgcolor=""#5846f9"">{CodigoGen}
                                     </td>
                                 </tr>
                             </table>

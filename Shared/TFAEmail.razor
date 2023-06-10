@@ -44,14 +44,14 @@
     protected override async Task OnInitializedAsync()
     {
         const string FAILURE_STATE = "Falha ao enviar email de confirmação.";
-       
-        
+
         if(emailUser == null) {
             Toast.ShowError(FAILURE_STATE);
             await BlazoredModal.CancelAsync();
             return;
         }
 
+        codigoGen = MensagemTFA!.CodigoGen;
         try {
             SMTP.SendVerificationMailTo(MensagemTFA!,emailUser);
         } catch (SmtpException e) {
