@@ -67,23 +67,15 @@
 
     protected override void OnInitialized()
     {
-        CodigoGen = SMTP.GenerateAuthenticationID(6);
-
-        var mailMessage = new MailMessage
-            {
-                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
-                Subject = "Redefinição de senha Priori",
-                Body = SMTP.GeneratePrioriEmail(
-                    "Redefinição de senha Priori",
-                    "Estamos lhe enviando um email de confirmação pois foi requisitado uma reinicialização de sua senha. Caso isso não seja uma requisição sua, ignore este email.",
-                    SMTP.GenerateAuthenticationID(6)
-                ),
-                IsBodyHtml = true
-            };
+        PrioriVerificationEmail mail = new(
+            Titulo: "Redefinição de senha Priori",
+            Motivo: "Estamos lhe enviando um email de confirmação pois foi requisitado uma reinicialização de sua senha. Caso isso não seja uma requisição sua, ignore este email.",
+            DigitosCodigo: 6
+        );
 
         try
         {
-            SMTP.SendMailTo(mailMessage, UsuarioFull!.email);
+            SMTP.SendVerificationMailTo(mail, UsuarioFull!.email);
         }
         catch (SmtpException)
         {
@@ -130,7 +122,13 @@ descricao = "A senha deve conter pelo menos um caractére maiúsculo"
         }
 
         Toast.ShowInfo("Enviando email de confirmação");
-        var param = new ModalParameters().Add(nameof(TFAEmail.emailUser), UsuarioFull!.email);
+        var param = new ModalParameters();
+        param.Add(nameof(TFAEmail.emailUser), UsuarioFull!.email);
+        param.Add(nameof(TFAEmail.MensagemTFA), new PrioriVerificationEmail(
+            Titulo: "Código de verificação de email para confirmação de reinicialização de senha",
+            Motivo: "Este email foi enviado para confirmar a alteração de sua senha por meio da ferramenta de reinicialização da senha de nosso sistema WEB, se não foi requirido por você, favor ignorar este email.",
+            DigitosCodigo: 6
+        ));
         var confirmEmailModal = Modal_Email.Show<TFAEmail>("Confirmação de Email", param);
         var result = await confirmEmailModal.Result;
 

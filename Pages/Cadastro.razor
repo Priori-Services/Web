@@ -3,7 +3,6 @@
 @using PRIORI_SERVICES_WEB.Handler
 @using PRIORI_SERVICES_WEB.Data.Types
 @using PRIORI_SERVICES_WEB.Data.Model
-@using System.Net.Mail
 @inject IJSRuntime JSInterop
 @inject NavigationManager NavigationManager
 @inject IToastService Toast
@@ -131,7 +130,7 @@ descricao = "As duas senhas não conferem"
 },
 new EntradaDeErro {
 condicao_e_valida = (!usuario.senha!.Any(char.IsSymbol)),
-descricao = "´necessário que a senha contenha símbolos"
+descricao = "É necessário que a senha contenha símbolos"
 },
 new EntradaDeErro {
 condicao_e_valida = (usuario.senha!.Length <= 8),
@@ -160,22 +159,16 @@ descricao = "O CPF digitado é inválido"
             }
         }
 
-        var mensagemCadastro = new MailMessage
-            {
-                From = new MailAddress(ConfigHandler.PRIORI_EMAIL_ADDRESS),
-                Subject = "Confirmação de email Priori",
-                Body = SMTP.GeneratePrioriEmail(
-                    "Email de cadastro Priori",
-                    "Para prosseguir com o cadastro, deve-se confirmar seu email",
-                    SMTP.GenerateAuthenticationID(6)
-                ),
-                IsBodyHtml = true
-            };
+        PrioriVerificationEmail mail = new(
+            Titulo: "Confirmação de email Priori",
+            Motivo: "Para prosseguir com o cadastro, deve-se confirmar seu email",
+            DigitosCodigo: 6
+        );
         
         Toast.ShowInfo("Enviando email de confirmação");
         var param = new ModalParameters();
         param.Add(nameof(TFAEmail.emailUser), usuario.email!);
-        param.Add(nameof(TFAEmail.MensagemTFA), mensagemCadastro);
+        param.Add(nameof(TFAEmail.MensagemTFA), mail);
 
         var confirmEmailModal = Modal_Email.Show<TFAEmail>("Confirmação de Email", param);
         var result = await confirmEmailModal.Result;

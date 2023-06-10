@@ -28,7 +28,7 @@
     private string codigoGen {get;set;} = String.Empty;
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     [Parameter] public string? emailUser {get;set;}
-    [Parameter] public MailMessage? MensagemTFA {get;set;}
+    [Parameter] public PrioriVerificationEmail? MensagemTFA {get;set;}
 
     private async Task CodigoVerification() {
         if (codigoGen != codigoInput) {
@@ -44,7 +44,7 @@
     protected override async Task OnInitializedAsync()
     {
         const string FAILURE_STATE = "Falha ao enviar email de confirmação.";
-        codigoGen = SMTP.GenerateAuthenticationID(6);
+       
         
         if(emailUser == null) {
             Toast.ShowError(FAILURE_STATE);
@@ -53,7 +53,7 @@
         }
 
         try {
-            SMTP.SendMailTo(MensagemTFA!,emailUser);
+            SMTP.SendVerificationMailTo(MensagemTFA!,emailUser);
         } catch (SmtpException e) {
             Toast.ShowError(FAILURE_STATE);
             Console.WriteLine(e.ToString());

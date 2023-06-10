@@ -6,8 +6,8 @@ namespace PRIORI_SERVICES_WEB.Handler;
 
 public static class APIHandler
 {
-    private static string api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
-    public static HttpClient static_client = new HttpClient();
+    private static string Api_endpoint { get; set; } = ConfigHandler.PRIORI_API_ENDPOINT;
+    public static HttpClient static_client = new();
 
     public static async Task<T> RunTaskWithAuthentication<T>(Task<T> task, string JWT_token) {
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWT_token);
@@ -23,15 +23,15 @@ public static class APIHandler
         return result;
     }
 
-    public static async Task<HttpResponseMessage> GetRequest(string target_url) => await static_client.GetAsync($"http://{api_endpoint}/api{target_url}");
+    public static async Task<HttpResponseMessage> GetRequest(string target_url) => await static_client.GetAsync($"http://{Api_endpoint}/api{target_url}");
 
-    public static async Task<HttpResponseMessage> DeleteRequest(string target_url) => await static_client.DeleteAsync($"http://{api_endpoint}/api{target_url}");
+    public static async Task<HttpResponseMessage> DeleteRequest(string target_url) => await static_client.DeleteAsync($"http://{Api_endpoint}/api{target_url}");
 
     public static async Task<T?> FetchAbstractJsonObjectAsync<T>(string target_url)
     {
-        string? response = await static_client.GetStringAsync($"http://{api_endpoint}/api{target_url}");
+        string? response = await static_client.GetStringAsync($"http://{Api_endpoint}/api{target_url}");
 
-        MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(response));
+        MemoryStream stream = new(Encoding.UTF8.GetBytes(response));
 
         return await JsonSerializer.DeserializeAsync<T>(stream);
     }
@@ -66,7 +66,7 @@ public static class APIHandler
 
 
         var response = await static_client.PostAsync(
-            $"http://{api_endpoint}/api{target_url}",
+            $"http://{Api_endpoint}/api{target_url}",
             content
         );
 
@@ -87,7 +87,7 @@ public static class APIHandler
         );
 
         var response = await static_client.PutAsync(
-            $"http://{api_endpoint}/api{target_url}",
+            $"http://{Api_endpoint}/api{target_url}",
             content
         );
 
