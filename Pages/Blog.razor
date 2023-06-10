@@ -175,10 +175,9 @@
 
     public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj)
     {
-        var param = new ModalParameters();
-        param.Add(nameof(PostViewer.PostMain), post_obj);
-        param.Add(nameof(PostViewer.CategoriaMain), categoria_obj);
-        Modal_Viewer.Show<PostViewer>(post_obj.titulo!, param);
+        SimulacaoID.PostMain = post_obj;
+        SimulacaoID.CategoriaMain = categoria_obj;
+        NavigationManager.NavigateTo("/blog-viewer");
     }
 
     public CategoriaBlog GetCategoriaBlogFromID(int id)
