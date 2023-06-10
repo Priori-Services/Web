@@ -20,15 +20,14 @@
     }
 </style>
 
-
 <div class="container-fluid bg-white">
     @if (!graph_valido)
     {
-        <h1 class="text-dark">Não foi possível carregar os dados do investimento</h1>
+        <h1 class="text-dark my-3">Não foi possível carregar os dados do investimento</h1>
     }
     else
     {
-        <h1 class="text-dark text-center">Histórico de Atualizações</h1>
+        <h1 class="text-dark text-center mt-4 mb-4"><u>Histórico de Taxas</u></h1>
         <Chart Config="_lineConfig"></Chart>
     }
 </div>
@@ -114,10 +113,10 @@
                 Label = "Rentabilidade",
                 BackgroundColor = string.Join(",", new[]
             {
-ColorUtil.ColorHexString(255, 100, 0),
-ColorUtil.ColorHexString(0, 255, 0),
-ColorUtil.ColorHexString(0, 0, 255)
-})
+                ColorUtil.ColorHexString(255, 100, 0),
+                ColorUtil.ColorHexString(0, 255, 0),
+                ColorUtil.ColorHexString(0, 0, 255)
+            })
             };
 
         _lineConfig.Data.Datasets.Add(dataset);
