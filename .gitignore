@@ -1,3 +1,4 @@
+*.sln
 .devbox
 start.*
 !start.*.example
