@@ -21,23 +21,25 @@
     <div class="container">
         &ensp;
     </div>
-    <nav class="container">
-        <ul class="pagination">
-            <li class="page-item">
-                <button class="page-link bg-warning text-white"
-                @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar Posts</button>
-            </li>
-            <li class="page-item">
-
-                <button @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))"
-                    class="page-link bg-danger text-white">Remover Posts</button>
-            </li>
-            <li class="page-item">
-                <button @onclick="@(() => AsyncService.RunTaskAsSync(InitAlterarAsync))"
-                    class="page-link bg-primary text-white">Alterar Posts</button>
-            </li>
-        </ul>
-    </nav>
+    @if (isUserConsultor)
+    {
+        <nav class="container">
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="page-link bg-warning text-white"
+                    @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar Posts</button>
+                </li>
+                <li class="page-item">
+                    <button @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))"
+                        class="page-link bg-danger text-white">Remover Posts</button>
+                </li>
+                <li class="page-item">
+                    <button @onclick="@(() => AsyncService.RunTaskAsSync(InitAlterarAsync))"
+                        class="page-link bg-primary text-white">Alterar Posts</button>
+                </li>
+            </ul>
+        </nav>
+    }
 </div>
 
 <div class="my-5 container-sm text-center">
@@ -61,14 +63,14 @@
 
 @code {
     public PostBlog[] PageBlogPosts = new PostBlog[0];
-
     public CategoriaBlog[] PageBlogCategoria = new CategoriaBlog[0];
-
+    private string? user_id { get; set; }
+    private string? app_token { get; set; }
+    public bool isUserConsultor { get; set; } = false;
     [CascadingParameter] public IModalService Modal_Viewer { get; set; } = default!;
-
     [CascadingParameter] public IModalService Modal_Adicionar { get; set; } = default!;
-
     public const string NO_AUTH_FAILURE_STATE = "Você não tem permissão para adicionar posts";
+
     public async Task<int?> CheckUserIsConsultor(string user_id, string app_token)
     {
         int id_consultor;
@@ -92,9 +94,6 @@
 
     public async Task InitAlterarAsync()
     {
-        string? user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
-        string? app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
-
         if (user_id == "" || user_id == String.Empty || user_id == null ||
         app_token == "" || app_token == String.Empty || app_token == null)
         {
@@ -123,9 +122,6 @@
 
     public async Task InitRemoverAsync()
     {
-        string? user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
-        string? app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
-
         if (user_id == "" || user_id == String.Empty || user_id == null ||
         app_token == "" || app_token == String.Empty || app_token == null)
         {
@@ -152,9 +148,6 @@
 
     public async Task InitAdicionarAsync()
     {
-        string? user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
-        string? app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
-
         if (user_id == "" || user_id == String.Empty || user_id == null ||
         app_token == "" || app_token == String.Empty || app_token == null)
         {
@@ -202,7 +195,28 @@
                 nome_categoria = "Falha ao encontrar categoria"
             };
     }
-    
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        user_id = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString());
+        app_token = await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString());
+
+        if (user_id == "" || user_id == String.Empty || user_id == null ||
+        app_token == "" || app_token == String.Empty || app_token == null)
+        {
+            return;
+        }
+
+        int? id_consultor = await CheckUserIsConsultor(user_id, app_token);
+
+        isUserConsultor = !(id_consultor == null);
+
+        StateHasChanged();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         PageBlogPosts = await APIHandler.FetchOrFallbackAsync<PostBlog[]>(
