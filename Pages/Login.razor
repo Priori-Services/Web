@@ -115,20 +115,7 @@
             return;
         }
 
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ID_JWT["jwt_key"]);
-
-        string saldouser = (await APIHandler.FetchOrFallbackAsync<decimal>($"/CarteiraInvestimento/saldo/{ID_JWT["id"]}", 0)).ToString();
-
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
-
-        if (Convert.ToInt32(saldouser) != 0)
-            return;
-
-        var paramsaldo = new ModalParameters();
-        paramsaldo.Add(nameof(InsercaoDeSaldo.saldoUser), saldouser);
-        paramsaldo.Add(nameof(InsercaoDeSaldo.app_token), ID_JWT["jwt_key"]);
-        paramsaldo.Add(nameof(InsercaoDeSaldo.userid), ID_JWT["id"]);
-        Modal_Saldo.Show<InsercaoDeSaldo>("Inserir saldo", paramsaldo);
+        NavigationManager.NavigateTo("/perfil-usuario");
     }
 
     public async Task InitEsqueceuASenhaModal()

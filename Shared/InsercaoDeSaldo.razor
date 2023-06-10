@@ -4,8 +4,7 @@
 @inject ILocalStorageService LocalStorage
 
 <div class="text-dark d-flex flex-column">
-    <h4>Digite o saldo aqui que deve ser inserido </h4>
-    <i>Por enquanto isso só será uma simulação, nada implementado corretamente ainda</i>
+    <h4>@(mensagem_modal)</h4>
 
     <div class="form-outline mb-4">
         <input type="text" @bind="saldoInput" @bind:event="oninput" class="form-control" required maxlength="10" />
@@ -17,9 +16,9 @@
 
 @code {
     private string? saldoInput { get; set; }
+    [Parameter] public string mensagem_modal {get;set;} = default!;
     [Parameter] public string? saldoUser { get; set; }
     [Parameter] public string? userid { get; set; }
-
     [Parameter] public string? app_token { get; set; }
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task InserirSaldo()

@@ -1,0 +1,16 @@
+@page "/blog-viewer"
+
+@using PRIORI_SERVICES_WEB.Data.Model
+@using Markdig
+@using PRIORI_SERVICES_WEB.Data.Types
+
+<NavMenu nav_classes="sticky_top"/>
+
+<div class="card-body text-white px-5">
+    <h3>@(SimulacaoID.PostMain!.titulo)</h3>
+    <h5>@(SimulacaoID.PostMain!.descricao)</h5>
+    <hr>
+    
+    @((MarkupString)(Markdown.ToHtml(SimulacaoID.PostMain!.conteudo!)))
+
+</div>
