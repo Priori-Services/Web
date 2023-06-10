@@ -1,9 +1,9 @@
 @echo off
 
 set PRIORI_API_ENDPOINT=localhost:5135
-set PRIORI_EMAIL_ADDRESS=priori@cyberservices.com
+set PRIORI_EMAIL_USERNAME=priori@cyberservices.com
 set PRIORI_EMAIL_PASSWORD=
-set SMTP_SERVICE_URL=smtp.gmail.com
-set SMTP_SERVICE_PORT=587
+set PRIORI_EMAIL_HOST=smtp.gmail.com
+set PRIORI_EMAIL_PORT=587
 
 dotnet watch
