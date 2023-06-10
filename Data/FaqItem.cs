@@ -9,6 +9,6 @@ public sealed class FaqItem
     }
     public Guid HeadingId { get; }
     public Guid UniqueId { get; }
-    public String? Header { get; set; }
-    public String? Body { get; set; }
+    public string? Header { get; set; }
+    public string? Body { get; set; }
 }
