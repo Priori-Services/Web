@@ -6,60 +6,113 @@
 @inject IToastService Toast
 @inject NavigationManager NavigationManager
 
-<NavMenu />
+<NavMenu nav_classes="sticky-top" />
 
 <style>
     body {
     @BackgroundGradients.BackgroundPrincipal
     }
+    .fonte-blog {
+        font-family: "Poppins", sans-serif;
+        line-height: 2;
+        font-weight: 150;
+        margin-left: 200px;
+        margin-right: 200px;
+        letter-spacing: 2px;
+    }
 </style>
 
-<div class="d-flex flex-row container-fluid">
-    <div class="container">
-        &ensp;
-    </div>
-    <div class="container">
-        &ensp;
-    </div>
-    @if (isUserConsultor)
-    {
-        <nav class="container">
-            <ul class="pagination">
-                <li class="page-item">
-                    <button class="page-link bg-warning text-white"
-                    @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar Posts</button>
-                </li>
-                <li class="page-item">
-                    <button @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))"
-                        class="page-link bg-danger text-white">Remover Posts</button>
-                </li>
-                <li class="page-item">
-                    <button @onclick="@(() => AsyncService.RunTaskAsSync(InitAlterarAsync))"
-                        class="page-link bg-primary text-white">Alterar Posts</button>
-                </li>
-            </ul>
-        </nav>
-    }
-</div>
-
-<div class="my-5 container-sm text-center">
-    <div class="d-flex flex-row flex-wrap">
-        @foreach (var item in PageBlogPosts)
-        {
-            <div class="card px-3 py-4 m-1 bg-light border rounded-4">
-                <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))"
-                    class="text-dark text-decoration-none">
-                <h3 class="fs-4">@item.titulo</h3>
-                <p class="fw-italic">@item.descricao</p>
-                <span class="badge bg-primary rounded-pill">@item.data_criacao</span>
-
-                <span
-                    class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
-                </p>
+    <header class="pb-5 pt-5 border-bottom mb-4 text-light">
+            <div class="container">
+                <div class="text-center text-light">
+                    <h1 class="fw-bolder bd-dark text-light">Bem vindo ao Blog <i>Priori</i>!</h1>
+                    <p class="lead mb-0 bd-dark text-light">Mantenha-se informado com os nossos artigos econômicos e saiba tudo sobre o mercado acompanhando nossas redes publicações.</p>
+                </div>
             </div>
-        }
-    </div>
-</div>
+    </header>
+        <!-- Conteúdo-->
+    <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-14">
+                            <!--Posts-->
+                            <div class="card mb-4">
+                                <img class="card-img-top mt-4" src="assets/Logo_Priori_Services.png" 
+                                alt="..." style="width: 13rem; margin-left: 350px;"/>
+                                <div class="card-body">
+
+                                    @foreach (var item in PageBlogPosts)
+                                    {
+                                        <div class="card px-3 py-3 m-3 border rounded-3 bg-white">
+                                            <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))"
+                                                class="text-dark text-decoration-none">
+
+                                    <div class="small text-muted">@item.data_criacao</div>
+                                    <h2 class="card-title h4">@item.titulo</h2>
+                                    <p class="card-text">@item.descricao</p>
+
+                                            <span
+                                                class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
+                                            </p>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Widgets laterais-->
+                <div class="col-lg-4">
+                    <!-- Widget Cartegorias-->
+                    <div class="card mb-4">
+                        <div class="card-header">Cartegorias</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <ul class="list-unstyled">
+                                        <li class="my-1"><a href="#!">Taxas de Rentabilidade</a></li>
+                                        <li class="my-1"><a href="#!">Programa de Pontos</a></li>
+                                        <li class="my-1"><a href="#!">A Priori</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Side widget-->
+                    <div class="card mb-4">
+                        <div class="card-header"><i>Priori Services</i></div>
+                        <div class="card-body">Sabia que a <i>Priori</i> sempre traz inovação pensando nos nossos clientes? Aproveite!</div>
+                    </div>
+                    <!-- Widget pesquisa-->
+                    <div class="card mb-4">
+                    @if (isUserConsultor)
+                        {
+                            <div class="card-header mb-3">Funções de Consultor</div>
+                            <nav class="container">
+                                <ul class="pagination">
+                                    <li class="page-item me-3">
+                                        <button class="page-link bg-warning text-white"
+                                        @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar Post</button>
+                                    </li>
+                                    <li class="page-item me-3">
+                                        <button @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))"
+                                            class="page-link bg-danger text-white">Remover Post</button>
+                                    </li>
+                                    <li class="page-item">
+                                        <button @onclick="@(() => AsyncService.RunTaskAsSync(InitAlterarAsync))"
+                                            class="page-link bg-primary text-white">Editar Post</button>
+                                    </li>
+                                </ul>
+                            </nav>
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<Footer />
 
 @code {
     public PostBlog[] PageBlogPosts = new PostBlog[0];

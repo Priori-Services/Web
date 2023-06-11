@@ -5,19 +5,18 @@
 
 <div class="card-body text-dark px-5">
     @if (!emailEnviado) {
-        <h1>Espere enquanto estamos enviando um email para confirmação...</h1>
+        <h1>Enviando e-mail para confirmação</h1>
     } else {
         <p class="card-text fs-4 py-2">
-                Digite aqui o código de confirmação do email
+                Digite o código de confirmação enviado ao email informado
             </p>
             <p class="card-text">
-                Email utilizado: @(emailUser)
+                Email inserido: @(emailUser)
             </p>
         <div class="form-outline">
             <input type="text" @bind="codigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
         </div>
-        <button @onclick="() => AsyncService.RunTaskAsSync(CodigoVerification)" class="btn btn-primary w-100">Verificar
-                Código</button>
+        <button @onclick="() => AsyncService.RunTaskAsSync(CodigoVerification)" class="btn btn-primary w-100">Verificar</button>
     }
 </div>
 
@@ -37,13 +36,13 @@
         }
 
         await BlazoredModal.CloseAsync();
-        Toast.ShowSuccess("Email confirmado com sucesso");
+        Toast.ShowSuccess("E-mail confirmado com sucesso");
         return;
     }
 
     protected override async Task OnInitializedAsync()
     {
-        const string FAILURE_STATE = "Falha ao enviar email de confirmação.";
+        const string FAILURE_STATE = "Falha ao enviar e-mail de confirmação.";
 
         if(emailUser == null) {
             Toast.ShowError(FAILURE_STATE);
@@ -62,6 +61,6 @@
         }
 
         emailEnviado = true;
-        Toast.ShowSuccess("Email enviado com sucesso");
+        Toast.ShowSuccess("E-mail enviado com sucesso");
     }
 }
