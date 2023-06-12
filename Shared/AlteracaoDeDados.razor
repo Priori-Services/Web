@@ -15,12 +15,12 @@
     </div>
 
     <div class="form-outline mb-4">
-        <label class="form-label fonteInfo" for="registerPassword">Senha</label>
+        <label class="form-label fonteInfo" for="registerPassword">Confirme ou altere sua senha</label>
         <input type="password" @bind="senhaUsuario" @bind:event="oninput" class="form-control" required />
     </div>
 
     <div class="form-outline mb-4">
-        <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme sua senha</label>
+        <label class="form-label fonteInfo" for="registerRepeatPassword">Confirme novamente sua senha</label>
         <input type="password" @bind="senhaConfirm" @bind:event="oninput" class="form-control" required />
     </div>
     <p>* Somente os dados alterados irão ser modificados, mas confirmar ou alterar a senha é necessário</p>
@@ -36,6 +36,7 @@
     private string senhaUsuario { get; set; } = String.Empty;
     private string senhaConfirm { get; set; } = String.Empty;
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
     private async Task AlterarCliente()
     {
         if (senhaUsuario != senhaConfirm && senhaUsuario == null)
@@ -43,6 +44,13 @@
             Toast.ShowError("As senhas não são iguais");
             return;
         }
+        if (senhaUsuario == null || senhaUsuario == "" || senhaUsuario == String.Empty
+        || senhaConfirm == null || senhaConfirm == "" || senhaConfirm == String.Empty)
+        {
+            Toast.ShowError("As senhas não podem ser nulas");
+            return;
+        }
+
         const string FAILURE_STATE = "Falha ao alterar dados do usuário";
         HttpResponseMessage response;
 

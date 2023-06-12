@@ -62,7 +62,8 @@
                 </div>
                 <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2 text-right"
                     style="background-color: #f4f5f5;">
-                    <li><b>@((contratacao.tipo_investimento == "IPCA" || contratacao.tipo_investimento == "SELIC") ? $"{contratacao.tipo_investimento}+" : "") @(contratacao.rentabilidade_fixa)%</b></li>
+                    <li><b>@((contratacao.tipo_investimento == "IPCA" || contratacao.tipo_investimento == "SELIC") ?
+                                 $"{contratacao.tipo_investimento}+" : "") @(contratacao.rentabilidade_fixa)%</b></li>
                 </div>
             </div>
             <div id="hideAll">
@@ -83,36 +84,35 @@
                 <div class="d-flex flex-column">
                     <label class="text-dark fw-bold p-1 my-2">Valor Investido: ⠀⠀R$ @(InvestidoPeloUsuario)</label>
                     <label class="text-dark fw-bold p-1 my-2">Retorno Bruto: ⠀⠀R$ @(RetornoBruto)</label>
-                    <label class="text-dark fw-bold p-1 mt-3">Imposto de Renda (IR): <div class="text-danger flex-line">R$ @(ImpostoDeRenda)</div></label>
-                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀<div class="text-success">R$ @(RetornoLiquido)</div></label>
+                    <label class="text-dark fw-bold p-1 mt-3">Imposto de Renda (IR): <div class="text-danger flex-line">
+                            R$ @(ImpostoDeRenda)</div></label>
+                    <label class="text-dark fw-bold p-1 my-3">Retorno Líquido: ⠀⠀<div class="text-success">R$
+                            @(RetornoLiquido)</div></label>
                 </div>
                 <button type="submit" @onclick="@(() => AsyncService.RunTaskAsSync(desocultarasync))"
                     class="btn btn-outline-secondary mb-3 mt-2">RE-SIMULAR</button>
-                @if (SaldoUsuario > InvestidoPeloUsuario)
+                @if (SaldoUsuario >= InvestidoPeloUsuario)
                 {
                     <hr class="mx-5 text-dark">
                     <form class="text-dark d-flex-inline flex-row mt-4 mx-5">
-                            <div class="form-check">
-                                <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault" checked @onclick="@(() => { idRadioPont = false; idRadioSaldo = true; })">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    Utilizar apenas saldo para contratar
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault" @onclick="@(() => { idRadioPont = true; idRadioSaldo = false; })">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    Utilizar saldo com pontuação (Consulte FAQ)
-                                </label>
-                            </div>
+                        <div class="form-check">
+                            <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault" checked
+                                @onclick="@(() => { idRadioPont = false; idRadioSaldo = true; })">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Utilizar apenas saldo para contratar
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault"
+                                @onclick="@(() => { idRadioPont = true; idRadioSaldo = false; })">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Utilizar saldo com pontuação (Consulte FAQ)
+                            </label>
+                        </div>
                     </form>
 
-                    @if (idRadioSaldo == true) {
                     <button @onclick="@(() => AsyncService.RunTaskAsSync(ContratarActionAsync))" type="submit"
-                    class="btn btn-outline-primary mt-3 ms-4">CONTRATAR</button>
-                    } else if (idRadioPont == true) {
-                    <button @onclick="@(() => AsyncService.RunTaskAsSync(ContratarPontuacaoActionAsync))" type="submit"
-                    class="btn btn-outline-primary mt-3 ms-4">CONTRATAR</button>
-                    }
+                        class="btn btn-outline-primary mt-3 ms-4">CONTRATAR</button>
                 }
                 else if (user_id != "")
                 {
@@ -133,13 +133,13 @@
     public Cliente? clienteuser { get; set; }
     public double SaldoUsuario { get; set; } = 0;
     private double InvestidoPeloUsuario { get; set; }
-    private bool idRadioSaldo {get;set;} = false;
-    private bool idRadioPont {get;set;} = false;
+    private bool idRadioSaldo { get; set; } = true;
+    private bool idRadioPont { get; set; } = false;
     private double RetornoBruto { get; set; }
     private double ImpostoDeRenda { get; set; }
     private double RetornoLiquido { get; set; }
-    private string app_token {get;set;} = String.Empty;
-    private string user_id {get;set;} = String.Empty;
+    private string app_token { get; set; } = String.Empty;
+    private string user_id { get; set; } = String.Empty;
 
     private string IdInvestimentoToColor(decimal id)
     {
@@ -152,17 +152,33 @@
             case 3:
                 return "danger";
             default:
-                return "danger";
+                return "info";
         }
     }
     private async Task ContratarActionAsync()
     {
-        const string FAILURE_STATE = "Falha ao contratar investimento";
+        bool usarPontuacao = (!idRadioSaldo);
 
-        var pontuacaoInserir = InvestidoPeloUsuario / 15;
+        double? PONTUACAO_MIN = ((double)(clienteuser!.pontuacao!) * (double)(0.2));
+        const string FAILURE_STATE = "Falha ao contratar investimento";
+        const int VALOR_PONTO = 15;
+
+        var pontuacaoFinal = usarPontuacao
+        ? 0
+        : (clienteuser!.pontuacao! + (InvestidoPeloUsuario / VALOR_PONTO));
+
+        var saldoFinal = (usarPontuacao
+        ? (SaldoUsuario - (InvestidoPeloUsuario - clienteuser!.pontuacao!))
+        : (SaldoUsuario - InvestidoPeloUsuario)
+        );
+
+        if (usarPontuacao && InvestidoPeloUsuario < (PONTUACAO_MIN))
+        {
+            Toast.ShowError($"Você deve adicionar ao menos R$ {PONTUACAO_MIN} para contratar.");
+            return;
+        }
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
-
         try
         {
             SaldoUsuario = await APIHandler.FetchAbstractJsonObjectAsync<double>($"/CarteiraInvestimento/saldo/{user_id}");
@@ -188,17 +204,17 @@
         try
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-                {"id_cliente_carteira",user_id},
-                {"id_investimento",SimulacaoID.id_selecionado},
-                {"rentabilidade_fixa",contratacao.rentabilidade_fixa},
-                {"rentabilidade_variavel",contratacao.rentabilidade_variavel},
-                {"valor_aplicado", InvestidoPeloUsuario},
-                {"saldo", SaldoUsuario - InvestidoPeloUsuario}
-            }, "/CarteiraInvestimento");
-            @*ALTERAR PARA UPDATE*@
-            responsePontuacao = await APIHandler.PutRequestAsync(new Dictionary<string,object> {
-                {"pontuacao", pontuacaoInserir}
-            }, "/Auth/Cliente");
+{"id_cliente_carteira",user_id},
+{"id_investimento",SimulacaoID.id_selecionado},
+{"rentabilidade_fixa",contratacao.rentabilidade_fixa},
+{"rentabilidade_variavel",contratacao.rentabilidade_variavel},
+{"valor_aplicado", InvestidoPeloUsuario},
+{"saldo", saldoFinal}
+}, "/CarteiraInvestimento");
+
+            responsePontuacao = await APIHandler.PutRequestAsync(new Dictionary<string, object> {
+{"pontuacao", pontuacaoFinal}
+}, $"/Auth/Cliente/{user_id}");
         }
         catch (Exception)
         {
@@ -218,78 +234,7 @@
 
         Toast.ShowSuccess("Investimento contratado com sucesso!");
 
-        await JSInterop.InvokeVoidAsync("ocultarelemento", "btnCONTRATAR");
-    }
-
-    private async Task ContratarPontuacaoActionAsync()
-    {
-        const string FAILURE_STATE = "Falha ao contratar investimento";
-
-        var saldopontuado = (clienteuser!.pontuacao*0.2);
-
-        if(InvestidoPeloUsuario < saldopontuado) {
-            Toast.ShowError("Você deve adicionar ao menos R$" + saldopontuado + " para contratar.");
-            return;
-        }
-
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
-
-        try
-        {
-            SaldoUsuario = await APIHandler.FetchAbstractJsonObjectAsync<double>($"/CarteiraInvestimento/saldo/{user_id}");
-        }
-        catch (Exception)
-        {
-            Toast.ShowError(FAILURE_STATE);
-            return;
-        }
-        finally
-        {
-            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
-        }
-
-        if (SaldoUsuario <= InvestidoPeloUsuario)
-        {
-            Toast.ShowError("Seu saldo é insuficiente para contratação.");
-            return;
-        }
-
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
-        HttpResponseMessage response, responseCliente;
-        try
-        {
-            response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
-                {"id_cliente_carteira",user_id},
-                {"id_investimento",SimulacaoID.id_selecionado},
-                {"rentabilidade_fixa",contratacao.rentabilidade_fixa},
-                {"rentabilidade_variavel",contratacao.rentabilidade_variavel},
-                {"valor_aplicado", InvestidoPeloUsuario},
-                {"saldo", SaldoUsuario - (InvestidoPeloUsuario - clienteuser!.pontuacao)}
-            }, "/CarteiraInvestimento");
-            @*ALTERAR PARA UPDATE*@
-            responseCliente = await APIHandler.PutRequestAsync(new Dictionary<string,object> {
-                {"pontuacao", 0}
-            }, "/Auth/Cliente");
-        }
-        catch (Exception)
-        {
-            Toast.ShowError(FAILURE_STATE);
-            return;
-        }
-        finally
-        {
-            APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
-        }
-
-        if (!response.IsSuccessStatusCode)
-        {
-            Toast.ShowError(FAILURE_STATE);
-            return;
-        }
-
-        Toast.ShowSuccess("Investimento contratado com sucesso!");
-
-        await JSInterop.InvokeVoidAsync("ocultarelemento", "btnCONTRATAR");
+        NavigationManager.NavigateTo("/perfil-usuario");
     }
 
     public void calcbruto(double investido)
@@ -303,8 +248,10 @@
         RetornoLiquido = Math.Round(RetornoBruto - investido - ImpostoDeRenda);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if(!firstRender) {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
             return;
         }
 
