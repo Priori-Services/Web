@@ -179,8 +179,12 @@
         var modal_remover_post = Modal_Adicionar.Show<PostAlterar>("Remover Post", param);
         var result = await modal_remover_post.Result;
 
-        NavigationManager.NavigateTo("/blog");
+        if (!result.Confirmed)
+            return;
+
+        NavigationManager.NavigateTo("/blog", forceLoad: true);   
     }
+
 
     public async Task InitRemoverAsync()
     {
@@ -203,7 +207,10 @@
         var modal_remover_post = Modal_Adicionar.Show<PostDelete>("Remover Post", param);
         var result = await modal_remover_post.Result;
 
-        NavigationManager.NavigateTo("/blog");
+        if (!result.Confirmed)
+            return;
+
+        NavigationManager.NavigateTo("/blog", forceLoad: true);
     }
 
     public async Task InitAdicionarAsync()
@@ -228,7 +235,10 @@
         var modal_adicionar_post = Modal_Adicionar.Show<PostAdd>("Adicionar Post", param);
         var result = await modal_adicionar_post.Result;
 
-        NavigationManager.NavigateTo("/blog");
+        if (!result.Confirmed)
+            return;
+
+        NavigationManager.NavigateTo("/blog", forceLoad: true);
     }
 
     public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj)
