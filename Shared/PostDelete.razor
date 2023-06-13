@@ -34,6 +34,7 @@
     [Parameter] public PostBlog[]? posts { get; set; }
     [Parameter] public string? app_token { get; set; }
 
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private int selected_post_id { get; set; }
 
     private async Task RemoverPostAsync()
@@ -64,6 +65,6 @@
         }
 
         Toast.ShowSuccess("Post removido com sucesso");
-        StateHasChanged();
+        await BlazoredModal.CloseAsync();
     }
 }
