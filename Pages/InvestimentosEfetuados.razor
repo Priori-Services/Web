@@ -88,6 +88,7 @@
 @code {
     public CarteiraInvestimento[]? invEfetuados = null;
     public Investimento[] invDisponiveis = new Investimento[0];
+    
     private decimal GetRiscoInvestimentoFromID(int? investimento_id) {
         const decimal FAILED_STATE = 1;
         
@@ -134,15 +135,13 @@
         if (!firstRender)
             return;
 
-        Toast.ShowInfo("Carregando...");
-
         string user_id = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.user_id.ToString()));
         string app_token = (await LocalStorage.GetItemAsStringAsync(LocalStorageKeys.app_token.ToString()));
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
-        invEfetuados = await
-        APIHandler.FetchAbstractJsonObjectAsync<CarteiraInvestimento[]?>($"/CarteiraInvestimento/ByUserID/{user_id}");
+        invEfetuados = (await
+        APIHandler.FetchAbstractJsonObjectAsync<CarteiraInvestimento[]?>($"/CarteiraInvestimento/ByUserID/{user_id}"))!.Skip(1).ToArray();
 
         APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
 
@@ -152,8 +151,9 @@ nome = "Falha ao encontrar investimentos."
 }
 });
 
-
-        Toast.ShowSuccess("Carregamento finalizado!");
+        // WORKAROUND: Esse código remove o primeiro investimento do usuário no sistema.
+        // Mas por que? - Pq infelizmente não tem como inserir saldo sem nenhuma carteira ter sido feita
+        // Então, na API, agnt gera um investimento "Default" p/ esse problema não acontecer.
 
         StateHasChanged();
     }
