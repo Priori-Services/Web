@@ -11,82 +11,59 @@
     }
 </style>
 
-<NavMenu nav_classes="sticky_top"/>
+<NavMenu nav_classes="sticky_top" />
 
-    <!-- Page content-->
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- Post content-->
-                <article>
-                    <!-- Post header-->
-                    <header class="mb-4">
+<!-- Page content-->
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-lg-8 mb-3">
+            <!-- Post content-->
+            <article class="card">
+                <!-- Post header-->
+                <header class="pt-4 px-4 card-header">
                     <!-- Post title-->
-                        <h1 class="fw-bolder mb-1">@(SimulacaoID.PostMain!.titulo)</h1>
-                        <!-- Post meta content-->
-                        <div class="text-white fst-italic mb-2">Posted on @(SimulacaoID.PostMain!.data_criacao), por <i>Priori Services</i></div>
-                    </header>
+                    <h1 class="fw-bolder mb-1">@(SimulacaoID.PostMain!.titulo)</h1>
+                    <!-- Post meta content-->
+                    <div class="text-white fst-italic mb-2">Posted on @(SimulacaoID.PostMain!.data_criacao), por
+                        <i>Priori Services</i>
+                    </div>
+                </header>
 
-                        <!-- Post content-->
-                        <section class="mb-5">
-                            <p class="text-justify">
-                            @((MarkupString)(Markdown.ToHtml(SimulacaoID.PostMain!.conteudo!)))
-                        </p>
-                        </section>
+                <!-- Post content-->
+                <section class="mb-5 card-body container px-5">
+                    <p style="text-align: justify;">
+                        @((MarkupString)(Markdown.ToHtml(SimulacaoID.PostMain!.conteudo!)))
+                    </p>
+                </section>
 
-                    <!-- Widgets laterais-->
-                    <div class="col-lg-4">
-                    <!-- Widget Cartegorias-->
-                    <div class="card mb-4">
-                        <div class="card-header">Cartegorias</div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled">
-                                        <li class="my-1"><a href="#!">Taxas de Rentabilidade</a></li>
-                                        <li class="my-1"><a href="#!">Programa de Pontos</a></li>
-                                        <li class="my-1"><a href="#!">A Priori</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+            </article>
+        </div>
+        <!-- Widgets laterais-->
+        <div class="col-lg-4">
+            <!-- Widget Cartegorias-->
+            <div class="card mb-4">
+                <div class="card-header">Cartegorias</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled">
+                                <li class="my-1 bg-primary badge rounded-pill">Taxas de Rentabilidade</li>
+                                <li class="my-1 bg-primary badge rounded-pill">Programa de Pontos</li>
+                                <li class="my-1 bg-primary badge rounded-pill">A Priori</li>
+                            </ul>
                         </div>
                     </div>
-                    <!-- Side widget-->
-                    <div class="card mb-4">
-                        <div class="card-header"><i>Priori Services</i></div>
-                        <div class="card-body">Sabia que a <i>Priori</i> sempre traz inovação pensando nos nossos clientes? Aproveite!</div>
-                    </div>
-                    <!-- Widget pesquisa-->
-                    <div class="card mb-4">
-                    @if (Blog.isUserConsultor)
-                        {
-                            <div class="card-header mb-3">Funções de Consultor</div>
-                            <nav class="container">
-                                <ul class="pagination">
-                                    <li class="page-item me-3">
-                                        <button class="page-link bg-warning text-white"
-                                        @onclick="@(() => AsyncService.RunTaskAsSync(Blog.InitAdicionarAsync))">Adicionar Post</button>
-                                    </li>
-                                    <li class="page-item me-3">
-                                        <button @onclick="@(() => AsyncService.RunTaskAsSync(Blog.InitRemoverAsync))"
-                                            class="page-link bg-danger text-white">Remover Post</button>
-                                    </li>
-                                    <li class="page-item">
-                                        <button @onclick="@(() => AsyncService.RunTaskAsSync(Blog.InitAlterarAsync))"
-                                            class="page-link bg-primary text-white">Editar Post</button>
-                                    </li>
-                                </ul>
-                            </nav>
-                    }
-                    </div>
-                </div>
-
-                </article>
                 </div>
             </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header"><i>Priori Services</i></div>
+                <div class="card-body">Sabia que a <i>Priori</i> sempre traz inovação pensando nos nossos
+                    clientes? Aproveite!</div>
+            </div>
+
         </div>
 
-@code {
-    
 
-}
+    </div>
+</div>
