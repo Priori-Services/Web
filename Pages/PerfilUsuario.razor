@@ -17,19 +17,7 @@
 <NavMenu nav_classes="sticky-top" />
 
 <div class="d-flex flex-row flex-wrap flex-lg-nowrap text-center">
-    @if (clienteuser == null)
-    {
-        <div class="container d-flex flex-row">
-            <div class="container">&ensp;</div>
-            <div class="container-fluid">
-                <button class="btn btn-light m-5" @onclick="@(() => Console.WriteLine(clienteuser!.ToString()))">
-                    Clique aqui para prosseguir
-                </button>
-            </div>
-            <div class="container">&ensp;</div>
-        </div>
-    }
-    else
+    @if (clienteuser != null)
     {
         <div class="container-fluid d-flex flex-column">
             <section style="background-color: #eee;" class="container-fluid bg-transparent d-flex flex-column">
@@ -139,10 +127,10 @@
     public Cliente? clienteuser { get; set; }
     private string saldouser { get; set; } = String.Empty;
     private string? app_token {get;set;}
-    [CascadingParameter]
-    public IModalService Modal_Saldo { get; set; } = default!;
-    [CascadingParameter]
-    public IModalService Modal_Alteracao { get; set; } = default!;
+    [CascadingParameter] public IModalService Modal_Saldo { get; set; } = default!;
+    [CascadingParameter] public IModalService Modal_Alteracao { get; set; } = default!;
+    [CascadingParameter] public IModalService Modal_Check { get; set; } = default!;
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -188,7 +176,7 @@
             Motivo: "Este email foi enviado para confirmar a alteração de seus dados por meio da ferramenta de alteração de dados de nosso sistema WEB, se não foi requirido por você, por favor ignore este email.",
             DigitosCodigo: 6
         ));
-        var confirmEmailModal = Modal_Alteracao.Show<TFAEmail>("Confirmação de Email", param);
+        var confirmEmailModal = Modal_Check.Show<TFAEmail>("Confirmação de Email", param);
         var result = await confirmEmailModal.Result;
 
         if (!result.Confirmed)

@@ -15,19 +15,7 @@
 <NavMenu nav_classes="sticky-top" />
 
 <div class="container">
-    @if (invEfetuados == null)
-    {
-        <div class="container d-flex flex-row">
-            <div class="container">&ensp;</div>
-            <div class="container-fluid">
-                <button class="btn btn-light m-5" @onclick="@(() => Console.WriteLine(invEfetuados!.ToString()))">
-                    clique aqui para prosseguir
-                </button>
-            </div>
-            <div class="container">&ensp;</div>
-        </div>
-    }
-    else
+    @if (invEfetuados != null)
     {
         <div class="my-3 d-flex flex-row flex-wrap text-center justify-content-center align-items-center">
             @if(invEfetuados.Length == 0) {
