@@ -35,7 +35,7 @@
                                     <div class="d-flex flex-column justify-content-center">
                                         <a href="/investimentos-efetuados" class="my-1 mx-1 btn btn-outline-primary">Meus
                                             Investimentos</a>
-                                        <button @onclick="InitModalInsercao"
+                                        <button @onclick="@(() => AsyncService.RunTaskAsSync(InitModalInsercao))"
                                             type="button" class="my-1 mx-3 btn btn-outline-primary">Inserir saldo</button>
                                         <button @onclick="@(() => AsyncService.RunTaskAsSync(InitModalAlteracao))" type="button"
                                             class="my-1 mx-4 btn btn-outline-primary">Alterar dados</button>
@@ -195,13 +195,19 @@
         NavigationManager.NavigateTo("/perfil-usuario", forceLoad: true);
     }
 
-    private void InitModalInsercao()
+    private async Task InitModalInsercao()
     {
         var param = new ModalParameters();
         param.Add(nameof(InsercaoDeSaldo.userid), clienteuser!.id_cliente.ToString());
         param.Add(nameof(InsercaoDeSaldo.saldoUser), saldouser);
         param.Add(nameof(InsercaoDeSaldo.app_token), app_token!);
         param.Add(nameof(InsercaoDeSaldo.mensagem_modal), "Digite aqui o valor a ser inserido");
-        Modal_Saldo.Show<InsercaoDeSaldo>("Inserção de Saldo", param);
+        var modal_insercao = Modal_Saldo.Show<InsercaoDeSaldo>("Inserção de Saldo", param);
+        var result = await modal_insercao.Result;
+
+        if (!result.Confirmed)
+            return;
+        
+        NavigationManager.NavigateTo("/perfil-usuario", forceLoad: true);
     }
 }
