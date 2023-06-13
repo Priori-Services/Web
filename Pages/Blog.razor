@@ -31,18 +31,18 @@
                         <div class="card-body">
                             @foreach (var item in PageBlogPosts)
                             {
-                                <div class="card px-3 py-3 m-3 border rounded-3 bg-white">
-                                    <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))"
-                                        class="text-dark text-decoration-none">
+                                    <div class="card px-3 py-3 m-3 border rounded-3 bg-white">
+                                        <p @onclick="@(() => InitPostViewer(item, GetCategoriaBlogFromID(item.id_categoria)))"
+                                            class="text-dark text-decoration-none">
 
-                                    <div class="small text-muted">@item.data_criacao</div>
-                                    <h2 class="card-title h4">@item.titulo</h2>
-                                    <p class="card-text">@item.descricao</p>
+                                        <div class="small text-muted">@item.data_criacao</div>
+                                        <h2 class="card-title h4">@item.titulo</h2>
+                                        <p class="card-text">@item.descricao</p>
 
-                                    <span
-                                        class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
-                                    </p>
-                                </div>
+                                        <span
+                                            class="badge bg-primary rounded-pill">@GetCategoriaBlogFromID(@item.id_categoria).nome_categoria</span>
+                                        </p>
+                                    </div>
                             }
 
                         </div>
@@ -62,8 +62,8 @@
                 <div class="card-header">Cartegorias
                     @if (CurrentCategoria != null)
                     {
-                        <button class="badge bg-primary"
-                            @onclick="@(() => {
+                            <button class="badge bg-primary"
+                        @onclick="@(() => {
                                 PageBlogPosts = PageBlogPostsIMMUTABLE;
                                 CurrentCategoria = null;
                             })">Limpar</button>
@@ -72,12 +72,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
-                            
+
                             <ul class="list-unstyled text-white">
                                 @foreach (var categoria in PageBlogCategoria)
                                 {
-                                    <li class="m-1 badge bg-primary rounded-pill"
-                                        @onclick="@(() => RefreshBlogPosts(categoria.id_categoria))">
+                                        <li class="m-1 badge bg-primary rounded-pill"
+                                    @onclick="@(() => RefreshBlogPosts(categoria.id_categoria))">
                                         @(categoria.nome_categoria)</li>
                                 }
                             </ul>
@@ -85,28 +85,28 @@
                     </div>
                 </div>
             </div>
-            @if (SimulacaoID.IsUserConsultor != null)
+            @if (SharedAssets.IsUserConsultor != null)
             {
-                <div class="card mb-4">
-                    <div class="card-header mb-3">Funções de Consultor</div>
-                    <nav class="container">
-                        <ul class="pagination">
-                            <li class="page-item me-3">
-                                <button class="page-link bg-warning text-white"
-                                    @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar
-                                    Post</button>
-                            </li>
-                            <li class="page-item me-3">
-                                <button @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))"
-                                    class="page-link bg-danger text-white">Remover Post</button>
-                            </li>
-                            <li class="page-item">
-                                <button @onclick="@(() => AsyncService.RunTaskAsSync(InitAlterarAsync))"
-                                    class="page-link bg-primary text-white">Editar Post</button>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                    <div class="card mb-4">
+                        <div class="card-header mb-3">Funções de Consultor</div>
+                        <nav class="container">
+                            <ul class="pagination">
+                                <li class="page-item me-3">
+                                    <button class="page-link bg-warning text-white"
+                                @onclick="@(() => AsyncService.RunTaskAsSync(InitAdicionarAsync))">Adicionar
+                                        Post</button>
+                                </li>
+                                <li class="page-item me-3">
+                                    <button @onclick="@(() => AsyncService.RunTaskAsSync(InitRemoverAsync))"
+                                        class="page-link bg-danger text-white">Remover Post</button>
+                                </li>
+                                <li class="page-item">
+                                    <button @onclick="@(() => AsyncService.RunTaskAsSync(InitAlterarAsync))"
+                                        class="page-link bg-primary text-white">Editar Post</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
             }
         </div>
     </div>
@@ -165,7 +165,7 @@
             return;
         }
 
-        if (SimulacaoID.IsUserConsultor == null)
+        if (SharedAssets.IsUserConsultor == null)
         {
             Toast.ShowError(NO_AUTH_FAILURE_STATE);
             return;
@@ -173,7 +173,7 @@
 
         var param = new ModalParameters();
         param.Add(nameof(PostAlterar.posts), PageBlogPosts);
-        param.Add(nameof(PostAlterar.autor_post), SimulacaoID.IsUserConsultor.ToString()!);
+        param.Add(nameof(PostAlterar.autor_post), SharedAssets.IsUserConsultor.ToString()!);
         param.Add(nameof(PostAlterar.categorias), PageBlogCategoria);
         param.Add(nameof(PostAlterar.app_token), app_token);
         var modal_remover_post = Modal_Adicionar.Show<PostAlterar>("Remover Post", param);
@@ -182,7 +182,7 @@
         if (!result.Confirmed)
             return;
 
-        NavigationManager.NavigateTo("/blog", forceLoad: true);   
+        NavigationManager.NavigateTo("/blog", forceLoad: true);
     }
 
 
@@ -195,7 +195,7 @@
             return;
         }
 
-        if (SimulacaoID.IsUserConsultor == null)
+        if (SharedAssets.IsUserConsultor == null)
         {
             Toast.ShowError(NO_AUTH_FAILURE_STATE);
             return;
@@ -222,14 +222,14 @@
             return;
         }
 
-        if (SimulacaoID.IsUserConsultor == null)
+        if (SharedAssets.IsUserConsultor == null)
         {
             Toast.ShowError(NO_AUTH_FAILURE_STATE);
             return;
         }
 
         var param = new ModalParameters();
-        param.Add(nameof(PostAdd.autor_post), SimulacaoID.IsUserConsultor);
+        param.Add(nameof(PostAdd.autor_post), SharedAssets.IsUserConsultor);
         param.Add(nameof(PostAdd.app_token), app_token);
         param.Add(nameof(PostAdd.AllCategorias), PageBlogCategoria);
         var modal_adicionar_post = Modal_Adicionar.Show<PostAdd>("Adicionar Post", param);
@@ -243,8 +243,8 @@
 
     public void InitPostViewer(PostBlog post_obj, CategoriaBlog categoria_obj)
     {
-        SimulacaoID.PostMain = post_obj;
-        SimulacaoID.CategoriaMain = categoria_obj;
+        SharedAssets.PostMain = post_obj;
+        SharedAssets.CategoriaMain = categoria_obj;
         NavigationManager.NavigateTo("/blog-viewer");
     }
 
@@ -277,9 +277,9 @@
             return;
         }
 
-        SimulacaoID.IsUserConsultor = await CheckUserIsConsultor();
+        SharedAssets.IsUserConsultor = await CheckUserIsConsultor();
 
-        isUserConsultor = !(SimulacaoID.IsUserConsultor == null);
+        isUserConsultor = !(SharedAssets.IsUserConsultor == null);
 
         StateHasChanged();
     }

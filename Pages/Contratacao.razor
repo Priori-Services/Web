@@ -63,7 +63,7 @@
                 <div class="text-@(IdInvestimentoToColor(contratacao.id_riscoInvestimento)) rounded-4 p-2 text-right"
                     style="background-color: #f4f5f5;">
                     <li><b>@((contratacao.tipo_investimento == "IPCA" || contratacao.tipo_investimento == "SELIC") ?
-                                 $"{contratacao.tipo_investimento}+" : "") @(contratacao.rentabilidade_fixa)%</b></li>
+                                      $"{contratacao.tipo_investimento}+" : "") @(contratacao.rentabilidade_fixa)%</b></li>
                 </div>
             </div>
             <div id="hideAll">
@@ -93,33 +93,33 @@
                     class="btn btn-outline-secondary mb-3 mt-2">RE-SIMULAR</button>
                 @if (SaldoUsuario >= InvestidoPeloUsuario)
                 {
-                    <hr class="mx-5 text-dark">
-                    <form class="text-dark d-flex-inline flex-row mt-4 mx-5">
-                        <div class="form-check">
-                            <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault" checked
-                                @onclick="@(() => { idRadioPont = false; idRadioSaldo = true; })">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Utilizar apenas saldo para contratar
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault"
-                                @onclick="@(() => { idRadioPont = true; idRadioSaldo = false; })">
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Utilizar saldo com pontuação (Consulte FAQ)
-                            </label>
-                        </div>
-                    </form>
+                        <hr class="mx-5 text-dark">
+                        <form class="text-dark d-flex-inline flex-row mt-4 mx-5">
+                            <div class="form-check">
+                                <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault" checked
+                            @onclick="@(() => { idRadioPont = false; idRadioSaldo = true; })">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Utilizar apenas saldo para contratar
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input bg-dark" type="radio" name="flexRadioDefault"
+                            @onclick="@(() => { idRadioPont = true; idRadioSaldo = false; })">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Utilizar saldo com pontuação (Consulte FAQ)
+                                </label>
+                            </div>
+                        </form>
 
-                    <button @onclick="@(() => AsyncService.RunTaskAsSync(ContratarActionAsync))" type="submit"
-                        class="btn btn-outline-primary mt-3 ms-4">CONTRATAR</button>
+                        <button @onclick="@(() => AsyncService.RunTaskAsSync(ContratarActionAsync))" type="submit"
+                            class="btn btn-outline-primary mt-3 ms-4">CONTRATAR</button>
                 }
                 else if (user_id != "")
                 {
-                    <hr class="mx-5 text-dark">
-                    <br>
-                    <p class="text-dark fw-bold">Seu saldo é insulfuciente para contratar este investimento.</p>
-                    <a href="/" class="btn bg-dark text-decoration-none text-white">ADICIONAR SALDO</a>
+                        <hr class="mx-5 text-dark">
+                        <br>
+                        <p class="text-dark fw-bold">Seu saldo é insulfuciente para contratar este investimento.</p>
+                        <a href="/" class="btn bg-dark text-decoration-none text-white">ADICIONAR SALDO</a>
                 }
             </div>
         </ul>
@@ -205,7 +205,7 @@
         {
             response = await APIHandler.PostApiRequestAsync(new Dictionary<string, object> {
 {"id_cliente_carteira",user_id},
-{"id_investimento",SimulacaoID.id_selecionado},
+{"id_investimento",SharedAssets.id_selecionado},
 {"rentabilidade_fixa",contratacao.rentabilidade_fixa},
 {"rentabilidade_variavel",contratacao.rentabilidade_variavel},
 {"valor_aplicado", InvestidoPeloUsuario},
@@ -287,7 +287,7 @@
     protected override async Task OnInitializedAsync()
     {
         contratacao = await APIHandler.FetchOrFallbackAsync<Investimento>(
-        $"/investimento/{SimulacaoID.id_selecionado}",
+        $"/investimento/{SharedAssets.id_selecionado}",
         new Investimento { nome = "Falha ao encontrar investimentos." });
     }
 

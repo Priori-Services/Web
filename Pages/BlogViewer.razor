@@ -22,9 +22,9 @@
                 <!-- Post header-->
                 <header class="pt-4 px-4 card-header">
                     <!-- Post title-->
-                    <h1 class="fw-bolder mb-1">@(SimulacaoID.PostMain!.titulo)</h1>
+                    <h1 class="fw-bolder mb-1">@(SharedAssets.PostMain!.titulo)</h1>
                     <!-- Post meta content-->
-                    <div class="text-white fst-italic mb-2">Posted on @(SimulacaoID.PostMain!.data_criacao), por
+                    <div class="text-white fst-italic mb-2">Posted on @(SharedAssets.PostMain!.data_criacao), por
                         <i>Priori Services</i>
                     </div>
                 </header>
@@ -32,7 +32,7 @@
                 <!-- Post content-->
                 <section class="mb-5 card-body container px-5">
                     <p style="text-align: justify;">
-                        @((MarkupString)(Markdown.ToHtml(SimulacaoID.PostMain!.conteudo!)))
+                        @((MarkupString)(Markdown.ToHtml(SharedAssets.PostMain!.conteudo!)))
                     </p>
                 </section>
 
