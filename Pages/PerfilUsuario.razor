@@ -49,7 +49,7 @@
                                             Investimentos</a>
                                         <button @onclick="InitModalInsercao"
                                             type="button" class="my-1 mx-3 btn btn-outline-primary">Inserir saldo</button>
-                                        <button @onclick="InitModalAlteracao" type="button"
+                                        <button @onclick="@(() => AsyncService.RunTaskAsSync(InitModalAlteracao))" type="button"
                                             class="my-1 mx-4 btn btn-outline-primary">Alterar dados</button>
                                         <button type="button" @onclick="@(() => AsyncService.RunTaskAsSync(UserSair))"
                                             class="my-1 mx-5 btn btn-outline-danger">Sair</button>
@@ -178,11 +178,33 @@
         NavigationManager.NavigateTo("/");
     }
 
-    private void InitModalAlteracao()
+    private async Task InitModalAlteracao()
     {
-        @*TODO: 2FA DO EMAIL AQUI*@
-        var param = new ModalParameters().Add(nameof(AlteracaoDeDados.usuarioFull), clienteuser!);
-        Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados", param);
+        Toast.ShowInfo("Enviando email de confirmação");
+        var param = new ModalParameters();
+        param.Add(nameof(TFAEmail.emailUser), clienteuser!.email!);
+        param.Add(nameof(TFAEmail.MensagemTFA), new PrioriVerificationEmail(
+            Titulo: "Código de verificação de email para confirmação de alteração de dados",
+            Motivo: "Este email foi enviado para confirmar a alteração de seus dados por meio da ferramenta de alteração de dados de nosso sistema WEB, se não foi requirido por você, por favor ignore este email.",
+            DigitosCodigo: 6
+        ));
+        var confirmEmailModal = Modal_Alteracao.Show<TFAEmail>("Confirmação de Email", param);
+        var result = await confirmEmailModal.Result;
+
+        if (!result.Confirmed)
+        {
+            Toast.ShowError("É necessária a confirmação do e-mail para prosseguir");
+            return;
+        } 
+
+        var param_two = new ModalParameters().Add(nameof(AlteracaoDeDados.usuarioFull), clienteuser!);
+        var alteracaoModal = Modal_Alteracao.Show<AlteracaoDeDados>("Alteração de Dados", param_two);
+        var resultAlteracao = await alteracaoModal.Result;
+
+        if (!result.Confirmed) {
+            return;
+        }
+        NavigationManager.NavigateTo("/perfil-usuario", forceLoad: true);
     }
 
     private void InitModalInsercao()
