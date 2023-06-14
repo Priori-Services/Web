@@ -21,9 +21,9 @@
                 Email utilizado: @(UsuarioFull!.email)
             </p>
             <div class="form-outline">
-                <input type="text" @bind="CodigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
+                <input type="number" @bind="CodigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
             </div>
-            <button @onclick="() => { CodigoCorreto = (CodigoInput == CodigoGen); StateHasChanged(); }" class="btn btn-primary w-100">Verificar
+            <button @onclick="() => { CodigoCorreto = (CodigoInput.ToString() == CodigoGen); StateHasChanged(); }" class="btn btn-primary w-100">Verificar
                 Código</button>
         }
         else
@@ -72,7 +72,7 @@
             Motivo: "Estamos lhe enviando um email de confirmação pois foi requisitado uma reinicialização de sua senha. Caso isso não seja uma requisição sua, ignore este email.",
             DigitosCodigo: 6
         );
-
+	CodigoGen = mail.CodigoGen;
         try
         {
             SMTP.SendVerificationMailTo(mail, UsuarioFull!.email);
