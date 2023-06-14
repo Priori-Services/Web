@@ -12,6 +12,21 @@ Este website depende de sua [API](https://github.com/Priori-Services/API), e seu
 2. Altere as variáveis de ambiente para seus valores adequados
 3. Execute!
 
+### Docker
+
+Para rodar o website em nosso ambiente docker, algo como o comando abaixo vai te ajudar!
+
+```sh
+docker run -p 5248:5248 \
+    -e PRIORI_API_ENDPOINT= \
+    -e PRIORI_EMAIL_USERNAME= \ 
+    -e PRIORI_EMAIL_PASSWORD= \ 
+    -e PRIORI_EMAIL_HOST= \ 
+    -e PRIORI_EMAIL_PORT=
+    -d --pull="always" \
+    ghcr.io/priori-services/priori-web:latest
+```
+
 Depois de executar estes três passos, o website deve estar funcionando bem na sua máquina. 
 
 > ALIÁS: Emails só serão enviados se estiverem especificados nas variáveis de ambiente do projeto, favor verifica-las!

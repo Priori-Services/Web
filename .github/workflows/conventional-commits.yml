@@ -2,9 +2,7 @@ name: Conventional Commits
 
 on:
   pull_request:
-    branches: 
-    -   develop
-    -   feat-redesign-geral-index
+    branches: develop
 
 jobs:
   build:
