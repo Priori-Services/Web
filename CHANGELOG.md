@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.2.1](https://github.com/Priori-Services/Web/compare/v2.2.0...v2.2.1) (2023-06-14)
+
+
+### Bug Fixes
+
+* change paths for actions and add container build action ([022503d](https://github.com/Priori-Services/Web/commit/022503d780c1bcb8756762d7a161a714a5a890f2))
+* cosign key for container ([6d75acf](https://github.com/Priori-Services/Web/commit/6d75acf6eca36a1496571ae6e545a6e5f5b7b22b))
+* esqueceu a senha agora funfa! ([9b02564](https://github.com/Priori-Services/Web/commit/9b025647ffe81e87384451547b367b8a5bb79a09))
+* reinicar estado do componente quando código correto em Esqueceu a Senha ([21c09be](https://github.com/Priori-Services/Web/commit/21c09bed1de8a574ff39bdf57ef120fc8f326cfb))
+* saldo pode zerar agora no contratacao ([618594c](https://github.com/Priori-Services/Web/commit/618594ca5fc1a5fe7906167812f32b1bf632dd0d))
+
 ## [2.2.0](https://github.com/Priori-Services/Web/compare/v2.1.0...v2.2.0) (2023-06-14)
 
 
