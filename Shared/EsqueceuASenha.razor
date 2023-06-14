@@ -23,7 +23,7 @@
             <div class="form-outline">
                 <input type="text" @bind="CodigoInput" @bind:event="oninput" id="typeEmail" class="form-control my-3" />
             </div>
-            <button @onclick="() => CodigoCorreto = (CodigoInput == CodigoGen)" class="btn btn-primary w-100">Verificar
+            <button @onclick="() => { CodigoCorreto = (CodigoInput == CodigoGen); StateHasChanged(); }" class="btn btn-primary w-100">Verificar
                 Código</button>
         }
         else
