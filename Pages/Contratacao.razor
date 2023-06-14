@@ -193,7 +193,7 @@
             APIHandler.static_client.DefaultRequestHeaders.Authorization = null;
         }
 
-        if (SaldoUsuario <= InvestidoPeloUsuario)
+        if (SaldoUsuario < InvestidoPeloUsuario)
         {
             Toast.ShowError("Seu saldo é insuficiente para contratação.");
             return;
