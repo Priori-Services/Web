@@ -1,5 +1,60 @@
 # Changelog
 
+## [2.2.0](https://github.com/Priori-Services/Web/compare/v2.1.0...v2.2.0) (2023-06-14)
+
+
+### Features
+
+* 2FA na Alteração de dados ([9578986](https://github.com/Priori-Services/Web/commit/957898627d5975d97bdf8582643113041e0738df))
+* adaptar modal de 2FA p/ ser neutro e adaptar cadastro p/ isso ([4393e01](https://github.com/Priori-Services/Web/commit/4393e013c3dc51044414dbea201cbdba50021334))
+* adicionar campos p/ SimulacaoID ([be4e9e3](https://github.com/Priori-Services/Web/commit/be4e9e32ee0b7ff26e65f08694bcd4eb3e1b57ab))
+* adicionar gerador de emails priori no SMTPService ([a1e3d89](https://github.com/Priori-Services/Web/commit/a1e3d89f8a2153fff991bcbd64c51ef398334fb4))
+* adicionar solução C# ao projeto ([6194914](https://github.com/Priori-Services/Web/commit/619491459c186c17c68e71c4cf583c9f2a297a5e))
+* adicionar visualizador de posts p/ blog ([645769a](https://github.com/Priori-Services/Web/commit/645769a6127f0e935dc20b99a209603bcc1978d8))
+* alteração de dados funcional ([f5a2539](https://github.com/Priori-Services/Web/commit/f5a25397977f989206d5924dfac880bed64e84af))
+* autenticação de dois fatores no cadastro ([4b0c3c6](https://github.com/Priori-Services/Web/commit/4b0c3c6d0f71d94a3e1c4af709035c5229bce97f))
+* classes e records especificos p/ emails de verificação priori ([f5b13f3](https://github.com/Priori-Services/Web/commit/f5b13f3d2db3dc5d2f0e8dd49213a1c559a09da7))
+* inserção de saldo completo com parâmetros ([e42916e](https://github.com/Priori-Services/Web/commit/e42916eaff30e3e9dc516e84e9ee47d3037e8b4d))
+* inserção de saldo no login quando o usuário é novo ([38c9ab7](https://github.com/Priori-Services/Web/commit/38c9ab761549d552e347e9b8ee25f32ee97d77e9))
+* modal de alteração de dados no blogt ([cf2461d](https://github.com/Priori-Services/Web/commit/cf2461d8afca7e1768681791c9ddda5ac206d919))
+* modal de contratação de investimentos quando não tiver nenhum no invefetuados ([e60f584](https://github.com/Priori-Services/Web/commit/e60f584316ed359a560fce71d63811812c902e2f))
+* modal de inserção de saldo no perfil de usuário ([5d19277](https://github.com/Priori-Services/Web/commit/5d192777754341aa2d5dc4b97adf6bcfe9f2e3e1))
+* modal de remoção de post e authentication no APIHandler ([91f69a6](https://github.com/Priori-Services/Web/commit/91f69a67b277a9a3f4ada4777dc329975bcdaab5))
+* modal p/ gráfico de histórico de investimentos ([57fedc7](https://github.com/Priori-Services/Web/commit/57fedc79a9700f379753ef4e043fc36f02b094d3))
+* new design for blog posts // with error ([2ce8004](https://github.com/Priori-Services/Web/commit/2ce8004da9c3571cf3188990d7c3aaa57e6e56d3))
+* pagina dedicada p/ ler blogposts ([2769439](https://github.com/Priori-Services/Web/commit/27694395a374f7334cbb5aaf7ef8c164f437be1a))
+* re-design home blog ([2c07458](https://github.com/Priori-Services/Web/commit/2c074584188156b5fad479b7db96f394b56db580))
+* recuperação de senha totalmente funcional ([ebb6907](https://github.com/Priori-Services/Web/commit/ebb69072769f004ef21e6b9c04861d7d42ed67c0))
+* selecionar categoria no Blog ([8f164a8](https://github.com/Priori-Services/Web/commit/8f164a8bf7ceaa5096ae15adc6e93f507d1a4f6e))
+* visualizador e writer de posts implementados ([6a74f7d](https://github.com/Priori-Services/Web/commit/6a74f7dabd88a31b97313ea7bffb2946908d25f5))
+
+
+### Bug Fixes
+
+* atualizar estado da aplicação quando carregamentos estiverem prontos ([34458e5](https://github.com/Priori-Services/Web/commit/34458e5b645112aa65034046167db61c728890ae))
+* cadastro não recusando inputs incorretos ([783e4b5](https://github.com/Priori-Services/Web/commit/783e4b5ae48eb35f4aa6b9b21cc642905b3759a7))
+* checks e nomeclatura correta no modal de Esqueceu a senha ([a428bc1](https://github.com/Priori-Services/Web/commit/a428bc1698dabc4ab59e02e783f9e7384f6c5181))
+* código gerado pelo priori_email não acessivel ([8ab7094](https://github.com/Priori-Services/Web/commit/8ab70944c28584565252cae1dbb0c71448c7fa54))
+* contratação adiciona e remove pontuação corretamente ([cbb9c70](https://github.com/Priori-Services/Web/commit/cbb9c708fdb0c9c3bb21bafd243743515dba8378))
+* desabilitar botões de consultor quando não for consultor no blog ([1b1a75a](https://github.com/Priori-Services/Web/commit/1b1a75ab8bfb5fd93857ac3dc548fca4ec8acbeb))
+* design do BlogViewer e funcionalidade sample do mesmo ([13eaddd](https://github.com/Priori-Services/Web/commit/13eadddd220ea1ab04c2fb8a9d2caaadf76e5063))
+* **design:** reiniciar página pós inserção de saldo do bglh ([f3b5154](https://github.com/Priori-Services/Web/commit/f3b51545e3aed10f93a35cdac765575604d24068))
+* **design:** remover botões de "carregando" das páginas que tem isso ([8e4d475](https://github.com/Priori-Services/Web/commit/8e4d4755129f169cfdde63abf4fe4da01e11a0cf))
+* **design:** remover text muted e faded do perfil ([4c5bfb2](https://github.com/Priori-Services/Web/commit/4c5bfb22bdce14f14a3aa9ed30fee2ba8c2525ac))
+* **design:** responsividade na área da contratação ([f1c927d](https://github.com/Priori-Services/Web/commit/f1c927d82d6603998343aff87a0b25ba4ac5e19e))
+* erros de variaveis de ambiente SMTP ([3cc1355](https://github.com/Priori-Services/Web/commit/3cc1355b98daa558616e36fd927e54821d716a76))
+* fechar modal de deletar quando terminar de delketar post ([483fddd](https://github.com/Priori-Services/Web/commit/483fddd78081971fec13eb233718f477b89261d2))
+* footer no index ([497dc42](https://github.com/Priori-Services/Web/commit/497dc429111d812da018299145a77c959685a9b5))
+* **ignore:** remover sln files ([019cd89](https://github.com/Priori-Services/Web/commit/019cd8999ca989deffd611931bb916dccbdf0e2c))
+* implementação de contratação com pontuação -- não finalizada ([936117c](https://github.com/Priori-Services/Web/commit/936117c71f892a5ea35f290d244be98c14d5fd0e))
+* inserção de saldo [@tuliliorockes](https://github.com/tuliliorockes) ([269c680](https://github.com/Priori-Services/Web/commit/269c680489631b006bf7cadd6443e8d9548c3255))
+* lag nas toasts do cadastro ([36a0d0e](https://github.com/Priori-Services/Web/commit/36a0d0e28133aa39b79a97d0faa60fa409aa0a93))
+* login rediceriona usuário pós login ([ac980cf](https://github.com/Priori-Services/Web/commit/ac980cf59250b5474fb6fe33ae8f07409dd7c5f5))
+* redirecionamento em perfil caso não esteja logado ([b82f413](https://github.com/Priori-Services/Web/commit/b82f41345d089d9ebb8a783f8009e6449527ed95))
+* refresh página quando ações de consultor serem aplicadas ([29b2eb8](https://github.com/Priori-Services/Web/commit/29b2eb8127f7a295611ce632a0ec0509668020dc))
+* remover investimento "fantasma" nos inv. efetuados ([d554872](https://github.com/Priori-Services/Web/commit/d55487243737d3f3fe8b54e2bca8741e92ab0511))
+* variaveis de ambiente nos examples p/ execução do aplicativo ([314c7ef](https://github.com/Priori-Services/Web/commit/314c7ef2bb7cbb985bde8bb14d5c5d15b3a9f03f))
+
 ## [2.1.0](https://github.com/Priori-Services/Web/compare/v2.0.0...v2.1.0) (2023-06-04)
 
 
