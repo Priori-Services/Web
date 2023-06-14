@@ -2,25 +2,71 @@
 @using PRIORI_SERVICES_WEB.Handler
 @inject IAsyncService AsyncService
 @inject ILocalStorageService LocalStorage
+@using System.Net.Http.Headers
 
 <div class="text-dark d-flex flex-column">
     <h4>@(mensagem_modal)</h4>
-
-    <div class="form-outline mb-4">
-        <input type="text" @bind="saldoInput" @bind:event="oninput" class="form-control" required maxlength="10" />
+    <div class="card-body mx-1 my-2">
+        <div class="pt-3">
+            <div class="d-flex flex-row pb-3">
+                <div class="rounded border border-primary border-2 d-flex w-100 p-3 align-items-center"
+                    style="background-color: rgba(18, 101, 241, 0.07);">
+                    <div class="d-flex align-items-center pe-3">
+                        <input class="form-check-input" type="radio" name="radioNoLabelX" id="radioNoLabel11" value=""
+                            aria-label="..." checked />
+                    </div>
+                    <div class="d-flex flex-column" @onclick="@(() => saldoInput = MINIMO_PONTUACAO.ToString())">
+                        <p class="mb-1 small text-primary">Mímino para utilização de pontuação</p>
+                        <h6 class="mb-0 text-primary">R$@(MINIMO_PONTUACAO)</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row pb-3">
+                <div class="rounded border d-flex w-100 px-3 py-2 align-items-center">
+                    <div class="d-flex align-items-center pe-3">
+                        <input class="form-check-input" type="radio" name="radioNoLabelX" id="radioNoLabel22" value=""
+                            aria-label="..." />
+                    </div>
+                    <div class="d-flex flex-column py-1">
+                        <p class="mb-1 small text-primary">Outro valor</p>
+                        <div class="d-flex flex-row align-items-center">
+                            <h6 class="mb-0 text-primary pe-1">$</h6>
+                            <input type="number" @bind="saldoInput" @bind:event="oninput"
+                            @onchange="@(() => StateHasChanged())" class="form-control form-control-sm"
+                                id="numberExample" style="width: 55px;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Convert.ToDouble(saldoInput) < (MINIMO_PONTUACAO))
+            {
+                <p class="text-warning">* Valor menor do que o mínimo para utilização de pontuação!</p>
+            }
+        </div>
+        <div class="d-flex justify-content-between align-items-center pb-1">
+            <a href="#!" class="text-muted">Voltar</a>
+            <button type="button" class="btn btn-primary btn-lg"
+            @onclick="() => AsyncService.RunTaskAsSync(InserirSaldo)">Inserir Saldo</button>
+        </div>
     </div>
-
-    <button @onclick="() => AsyncService.RunTaskAsSync(InserirSaldo)" class="btn btn-primary w-100">INSERIR
-        SALDO</button>
 </div>
 
 @code {
+    private double MINIMO_PONTUACAO { get; set; }
     private string? saldoInput { get; set; }
-    [Parameter] public string mensagem_modal {get;set;} = default!;
+    [Parameter] public string mensagem_modal { get; set; } = default!;
     [Parameter] public string? saldoUser { get; set; }
+    [Parameter] public float? pontuacaoUser { get; set; }
     [Parameter] public string? userid { get; set; }
     [Parameter] public string? app_token { get; set; }
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        MINIMO_PONTUACAO = pontuacaoUser!.Value * 0.2;
+        saldoInput = MINIMO_PONTUACAO!.ToString();
+    }
+
     private async Task InserirSaldo()
     {
         if (userid == null || saldoInput == null)
@@ -34,7 +80,7 @@
 
         HttpResponseMessage response;
 
-        APIHandler.static_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", app_token);
+        APIHandler.static_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", app_token);
 
         try
         {
@@ -56,7 +102,7 @@
         if (!response.IsSuccessStatusCode)
         {
             Toast.ShowError(FAILURE_STATE);
-            Console.WriteLine("{0},{1}",response.StatusCode, await response.Content.ReadAsStringAsync());
+            Console.WriteLine("{0},{1}", response.StatusCode, await response.Content.ReadAsStringAsync());
             return;
         }
 
